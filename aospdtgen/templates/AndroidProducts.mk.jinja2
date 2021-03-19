@@ -1,0 +1,10 @@
+{% include 'LICENSE.jinja2' %}
+
+PRODUCT_MAKEFILES := \
+    $(LOCAL_DIR)/lineage_{{ device_info.codename }}.mk
+
+COMMON_LUNCH_CHOICES := \
+    lineage_{{ device_info.codename }}-user \
+    lineage_{{ device_info.codename }}-userdebug \
+    lineage_{{ device_info.codename }}-eng
+

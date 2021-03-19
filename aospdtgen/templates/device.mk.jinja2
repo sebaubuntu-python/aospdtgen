@@ -1,0 +1,9 @@
+{% include 'LICENSE.jinja2' %}
+
+# Soong namespaces
+PRODUCT_SOONG_NAMESPACES += \
+    $(LOCAL_PATH)
+
+# Inherit the proprietary files
+$(call inherit-product, vendor/{{ device_info.manufacturer }}/{{ device_info.codename }}/{{ device_info.codename }}-vendor.mk)
+
