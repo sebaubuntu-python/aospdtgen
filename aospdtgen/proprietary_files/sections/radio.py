@@ -4,7 +4,10 @@ class RadioSection(Section):
 	name = "Radio"
 	interfaces = [
 		"android.hardware.radio",
+		"mtkfusionrild",
 		"qcrild",
+		"vendor.mediatek.hardware.mtkradioex",
+		"vendor.mediatek.hardware.radio",
 		"vendor.qti.hardware.radio.am",
 		"vendor.qti.hardware.radio.atcmdfwd",
 		"vendor.qti.hardware.radio.internal.deviceinfo",
