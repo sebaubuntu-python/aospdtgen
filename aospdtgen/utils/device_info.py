@@ -8,7 +8,7 @@ from aospdtgen.lib.libprop import BuildProp
 from distutils.util import strtobool
 
 PARTITIONS = [
-	".",
+	"",
 	"bootimage.",
 	"odm.",
 	"odm_dlkm.",
@@ -26,12 +26,12 @@ DEVICE_CODENAME = get_product_props("device")
 DEVICE_MANUFACTURER = get_product_props("manufacturer")
 DEVICE_BRAND = get_product_props("brand")
 DEVICE_MODEL = get_product_props("model")
-DEVICE_ARCH = ["ro.product.cpu.abi", "ro.product.cpu.abilist"] + [f"ro.{partition}product.cpu.abi" for partition in PARTITIONS] + [f"ro.{partition}product.cpu.abilist" for partition in PARTITIONS]
+DEVICE_ARCH = [f"ro.{partition}product.cpu.abi" for partition in PARTITIONS] + [f"ro.{partition}product.cpu.abilist" for partition in PARTITIONS]
 DEVICE_IS_AB = ["ro.build.ab_update"]
 DEVICE_PLATFORM = ["ro.board.platform"]
 DEVICE_PIXEL_FORMAT = ["ro.minui.pixel_format"]
-BUILD_FINGERPRINT = ["ro.build.fingerprint"] + [f"ro.{partition}build.fingerprint" for partition in PARTITIONS]
-BUILD_DESCRIPTION = ["ro.build.description"] + [f"ro.{partition}build.description" for partition in PARTITIONS]
+BUILD_FINGERPRINT = [f"ro.{partition}build.fingerprint" for partition in PARTITIONS]
+BUILD_DESCRIPTION = [f"ro.{partition}build.description" for partition in PARTITIONS]
 GMS_CLIENTID_BASE = ["ro.com.google.clientidbase.ms", "ro.com.google.clientidbase"]
 FIRST_ARCH_CPU_VARIANT = ["ro.bionic.cpu_variant"]
 SECOND_ARCH_CPU_VARIANT = ["ro.bionic.2nd_cpu_variant"]
