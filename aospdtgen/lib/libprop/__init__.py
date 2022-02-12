@@ -25,6 +25,17 @@ class BuildProp(dict):
 
 		self.import_props(file)
 
+	def __str__(self):
+		return self.get_readable_list()
+
+	def get_readable_list(self, excluded_props: list[str] = []):
+		ordered_props = dict(sorted(self.items()))
+
+		for excluded_prop in excluded_props:
+			ordered_props.pop(excluded_prop, None)
+
+		return "\n".join(f"{key}={value}" for key, value in ordered_props.items()) + "\n"
+
 	def import_props(self, file: Union[Path, BuildProp]):
 		if isinstance(file, BuildProp):
 			text = str(file)
@@ -40,11 +51,6 @@ class BuildProp(dict):
 				continue
 			else:
 				self.set_prop(prop_name, prop_value)
-
-	def __str__(self):
-		props = dict(sorted(self.items()))
-
-		return "\n".join(f"{key}={value}" for key, value in props.items()) + "\n"
 
 	def get_prop(self, key: str, default: str = None):
 		if key in self:
