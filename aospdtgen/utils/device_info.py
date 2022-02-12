@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-from aospdtgen.utils.buildprop import BuildProp
+from aospdtgen.lib.libprop import BuildProp
 from distutils.util import strtobool
 
 PARTITIONS = [

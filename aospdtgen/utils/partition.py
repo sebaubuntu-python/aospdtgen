@@ -4,10 +4,9 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+from aospdtgen.lib.libprop import BuildProp
 from aospdtgen.proprietary_files.ignore import is_blob_allowed
 from pathlib import Path
-
-from aospdtgen.utils.buildprop import BuildProp
 
 (
 	SYSTEM,

@@ -4,9 +4,9 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+from aospdtgen.lib.libprop import BuildProp
 from aospdtgen.proprietary_files.proprietary_files_list import ProprietaryFilesList
 from aospdtgen.templates import render_template
-from aospdtgen.utils.buildprop import BuildProp
 from aospdtgen.utils.device_info import DeviceInfo
 from aospdtgen.utils.reorder import reorder_key
 from aospdtgen.utils.partition import BUILD_PROP_LOCATION, AndroidPartition, PARTITION_STRING
