@@ -32,7 +32,8 @@ class Section:
 		self.files: list[str] = []
 
 	def add_files(self, partition: AndroidPartition):
-		matched, not_matched = [], []
+		matched: list[str] = []
+		not_matched: list[str] = []
 
 		for file in partition.files:
 			if self.file_match(file):
@@ -42,8 +43,6 @@ class Section:
 
 		# Handle shared libs
 		for file in matched:
-			file: str
-
 			# Check only ELFs
 			if (not file.startswith("bin/")
 					and not file.startswith("lib/")
