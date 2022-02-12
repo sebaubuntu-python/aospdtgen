@@ -607,6 +607,9 @@ IGNORE_FOLDERS = [
 	# Kernel modules
 	"lib/modules",
 
+	# ADSP tests
+	"lib/rfsa/adsp/tests",
+
 	# RRO overlays
 	"overlay",
 
