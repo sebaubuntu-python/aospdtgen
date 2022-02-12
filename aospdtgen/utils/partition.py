@@ -14,22 +14,28 @@ from pathlib import Path
 	SYSTEM_EXT,
 	VENDOR,
 	ODM,
-) = range(5)
+	ODM_DLKM,
+	VENDOR_DLKM,
+) = range(7)
 
 PARTITION_STRING = {
 	SYSTEM: "system",
-	SYSTEM_EXT: "system_ext",
 	PRODUCT: "product",
-	ODM: "odm",
+	SYSTEM_EXT: "system_ext",
 	VENDOR: "vendor",
+	ODM: "odm",
+	ODM_DLKM: "odm_dlkm",
+	VENDOR_DLKM: "vendor_dlkm",
 }
 
 PROPRIETARY_FILES_PARTITION_PREFIX = {
 	SYSTEM: "",
-	SYSTEM_EXT: "system_ext/",
 	PRODUCT: "product/",
-	ODM: "odm/",
+	SYSTEM_EXT: "system_ext/",
 	VENDOR: "vendor/",
+	ODM: "odm/",
+	ODM_DLKM: "odm_dlkm/",
+	VENDOR_DLKM: "vendor_dlkm/",
 }
 
 (
@@ -46,6 +52,8 @@ SSI_PARTITIONS = [
 TREBLE_PARTITIONS = [
 	VENDOR,
 	ODM,
+	ODM_DLKM,
+	VENDOR_DLKM,
 ]
 
 BUILD_PROP_LOCATION = ["default.prop", "etc/default.prop", "build.prop", "etc/build.prop"]

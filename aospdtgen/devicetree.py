@@ -10,7 +10,7 @@ from aospdtgen.templates import render_template
 from aospdtgen.utils.device_info import DeviceInfo
 from aospdtgen.utils.reorder import reorder_key
 from aospdtgen.utils.partition import BUILD_PROP_LOCATION, AndroidPartition, PARTITION_STRING
-from aospdtgen.utils.partition import ODM, PRODUCT, SYSTEM, SYSTEM_EXT, VENDOR
+from aospdtgen.utils.partition import SYSTEM, PRODUCT, SYSTEM_EXT, VENDOR, ODM, ODM_DLKM, VENDOR_DLKM
 from datetime import datetime
 from pathlib import Path
 from shutil import rmtree
@@ -57,6 +57,8 @@ class DeviceTree:
 		self.product = self.search_for_partition(PRODUCT)
 		self.system_ext = self.search_for_partition(SYSTEM_EXT)
 		self.odm = self.search_for_partition(ODM)
+		self.odm_dlkm = self.search_for_partition(ODM_DLKM)
+		self.vendor_dlkm = self.search_for_partition(VENDOR_DLKM)
 
 		self.partitions: list[AndroidPartition] = [
 			partition for partition in [
@@ -65,6 +67,8 @@ class DeviceTree:
 				self.system_ext,
 				self.vendor,
 				self.odm,
+				self.odm_dlkm,
+				self.vendor_dlkm,
 			] if partition is not None
 		]
 
