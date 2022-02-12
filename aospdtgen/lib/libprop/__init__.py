@@ -42,7 +42,9 @@ class BuildProp(dict):
 				self.set_prop(prop_name, prop_value)
 
 	def __str__(self):
-		return "\n".join(f"{key}={value}" for key, value in self.items()) + "\n"
+		props = dict(sorted(self.items()))
+
+		return "\n".join(f"{key}={value}" for key, value in props.items()) + "\n"
 
 	def get_prop(self, key: str, default: str = None):
 		if key in self:
