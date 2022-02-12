@@ -11,12 +11,15 @@ from aospdtgen.utils.device_info import DeviceInfo
 from aospdtgen.utils.reorder import reorder_key
 from aospdtgen.utils.partition import BUILD_PROP_LOCATION, AndroidPartition, PARTITION_STRING
 from aospdtgen.utils.partition import ODM, PRODUCT, SYSTEM, SYSTEM_EXT, VENDOR
+from datetime import datetime
 from pathlib import Path
 from shutil import rmtree
 
 class DeviceTree:
 	def __init__(self, path: Path):
 		self.path = path
+
+		self.current_year = str(datetime.now().year)
 
 		self.all_files_txt = self.path / "all_files.txt"
 		self.all_files = [file for file in self.all_files_txt.open().read().splitlines()
@@ -119,6 +122,7 @@ class DeviceTree:
 
 	def render_template(self, *args, **kwargs):
 		return render_template(*args,
+		                       current_year=self.current_year,
 		                       device_info=self.device_info,
 		                       **kwargs)
 
