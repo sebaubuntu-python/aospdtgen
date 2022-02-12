@@ -9,6 +9,9 @@ class MediaSection(Section):
 		"android.hardware.media.omx",
 		"vendor.qti.media.c2",
 	]
+	filenames = [
+		"c2_manifest_vendor.xml",
+	]
 	patterns = [
 		"lib(64)?/libOmx.*\.so",
 	]
