@@ -9,16 +9,16 @@ from ctypes import Union
 from distutils.util import strtobool
 from pathlib import Path
 
-class BuildProp:
+class BuildProp(dict):
 	"""
 	A class representing a build prop.
 	This class basically mimics Android props system, with both getprop and setprop commands
 	"""
-	def __init__(self, file: Path = None):
+	def __init__(self, *args, file: Path = None, **kwargs):
 		"""
 		Create a dictionary containing all the key-value from a build prop.
 		"""
-		self.props: dict[str, str] = {}
+		super().__init__(*args, **kwargs)
 
 		if not file:
 			return
@@ -41,15 +41,12 @@ class BuildProp:
 			else:
 				self.set_prop(prop_name, prop_value)
 
-	def __bool__(self):
-		return bool(self.props)
-
 	def __str__(self):
-		return "\n".join(f"{key}={value}" for key, value in self.props.items()) + "\n"
+		return "\n".join(f"{key}={value}" for key, value in self.items()) + "\n"
 
 	def get_prop(self, key: str, default: str = None):
-		if key in self.props:
-			return self.props[key]
+		if key in self:
+			return self[key]
 		else:
 			return default
 
@@ -78,4 +75,4 @@ class BuildProp:
 			return default
 
 	def set_prop(self, key: str, value: str):
-		self.props[key] = value
+		self[key] = value
