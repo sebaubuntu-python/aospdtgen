@@ -41,8 +41,11 @@ class BuildProp:
 			else:
 				self.set_prop(prop_name, prop_value)
 
+	def __bool__(self):
+		return bool(self.props)
+
 	def __str__(self):
-		return "\n".join(f"{key}={value}" for key, value in self.props.items())
+		return "\n".join(f"{key}={value}" for key, value in self.props.items()) + "\n"
 
 	def get_prop(self, key: str, default: str = None):
 		if key in self.props:

@@ -61,6 +61,13 @@ TARGET_ENABLE_MEDIADRM_64 := true
 # Platform
 TARGET_BOARD_PLATFORM := {{ device_info.platform }}
 
+# Properties{{ '\n' }}
+{%- for partition in partitions %}
+{% if partition.build_prop %}
+TARGET_{{ partition.name_upper }}_PROP += $(DEVICE_PATH)/{{ partition.name }}.prop
+{% endif %}
+{% endfor %}
+
 # Recovery
 {% if device_pixel_format != None %}
 TARGET_RECOVERY_PIXEL_FORMAT := {{ device_info.device_pixel_format }}

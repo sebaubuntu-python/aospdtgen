@@ -120,11 +120,18 @@ class DeviceTree:
 		self.render_template(folder, "README.md")
 		self.render_template(folder, "setup-makefiles.sh")
 
+		for partition in self.partitions:
+			if not partition.build_prop:
+				continue
+
+			(folder / f"{partition.name}.prop").write_text(str(partition.build_prop))
+
 	def render_template(self, *args, comment_prefix: str = "#", **kwargs):
 		return render_template(*args,
 		                       comment_prefix=comment_prefix,
 		                       current_year=self.current_year,
 		                       device_info=self.device_info,
+		                       partitions=self.partitions,
 		                       **kwargs)
 
 	def write_proprietary_files(self, file: Path):
