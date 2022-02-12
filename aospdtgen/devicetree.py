@@ -120,8 +120,9 @@ class DeviceTree:
 		self.render_template(folder, "README.md")
 		self.render_template(folder, "setup-makefiles.sh")
 
-	def render_template(self, *args, **kwargs):
+	def render_template(self, *args, comment_prefix: str = "#", **kwargs):
 		return render_template(*args,
+		                       comment_prefix=comment_prefix,
 		                       current_year=self.current_year,
 		                       device_info=self.device_info,
 		                       **kwargs)

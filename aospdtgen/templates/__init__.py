@@ -6,10 +6,10 @@ from typing import Optional
 jinja_env = Environment(loader=FileSystemLoader(module_path / 'templates'),
                         autoescape=True, trim_blocks=True, lstrip_blocks=True)
 
-def render_template(path: Optional[Path], template_file: str, comment_prefix: str = "#",
+def render_template(path: Optional[Path], template_file: str,
                     out_file: str = '', to_file=True, **kwargs):
 	template = jinja_env.get_template(f"{template_file}.jinja2")
-	rendered_template = template.render(comment_prefix=comment_prefix, **kwargs)
+	rendered_template = template.render(**kwargs)
 
 	if to_file:
 		if not out_file:
