@@ -8,5 +8,9 @@ class AlarmSection(Section):
 	apps = [
 		"PowerOffAlarm",
 	]
+	binaries = [
+		"power_off_alarm",
+		"poweroffm64",
+	]
 
 register_section(AlarmSection)
