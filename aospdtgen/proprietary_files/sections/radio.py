@@ -15,6 +15,8 @@ class RadioSection(Section):
 		"vendor.qti.hardware.radio.qcrilhook",
 		"vendor.qti.hardware.radio.qtiradio",
 		"vendor.qti.hardware.radio.uim",
+		"vendor.qti.rmt_storage",
+		"vendor.qti.tftp",
 	]
 	hardware_modules = [
 		"radio",
@@ -40,10 +42,14 @@ class RadioSection(Section):
 		"ssgtzd",
 		"tftp_server",
 	]
+	filenames = [
+		"init-qcril-data.rc",
+	]
 	folders = [
 		"radio/qcril_database",
 	]
 	patterns = [
+		"etc/init/data.*.\.rc",
 		"etc/seccomp_policy/atfwd(@[0-9]+\.[0-9]+)?.policy",
 	]
 
@@ -62,8 +68,22 @@ class RadioImsSection(Section):
 	apps = [
 		"ims",
 	]
+	binaries = [
+		"ims_rtp_daemon",
+		"imsdatadaemon",
+		"imsqmidaemon",
+		"imsrcsd",
+	]
+	libraries = [
+		"lib-rcsconfig",
+		"lib-siputility",
+		"lib-uceservice",
+	]
 	filenames = [
 		"imsrtp.policy",
+	]
+	patterns = [
+		"lib(64)?/lib-ims.*.\.so",
 	]
 
 register_section(RadioSection)
