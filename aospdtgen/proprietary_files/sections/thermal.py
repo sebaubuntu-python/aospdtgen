@@ -8,6 +8,12 @@ class ThermalSection(Section):
 	hardware_modules = [
 		"thermal",
 	]
+	binaries = [
+		"thermal-engine",
+	]
+	libraries = [
+		"libthermalclient",
+	]
 
 class ThermalXiaomiSection(Section):
 	name = "Thermal (Xiaomi)"
@@ -15,5 +21,12 @@ class ThermalXiaomiSection(Section):
 		"mi_thermald",
 	]
 
+class ThermalConfigsSection(Section):
+	name = "Thermal configs"
+	patterns = [
+		"etc/thermal.*.\.conf",
+	]
+
 register_section(ThermalSection)
 register_section(ThermalXiaomiSection)
+register_section(ThermalConfigsSection)
