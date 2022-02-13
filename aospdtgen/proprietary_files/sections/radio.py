@@ -43,6 +43,9 @@ class RadioSection(Section):
 	folders = [
 		"radio/qcril_database",
 	]
+	patterns = [
+		"etc/seccomp_policy/atfwd(@[0-9]+\.[0-9]+)?.policy",
+	]
 
 class RadioImsSection(Section):
 	name = "Radio (IMS)"
@@ -58,6 +61,9 @@ class RadioImsSection(Section):
 	]
 	apps = [
 		"ims",
+	]
+	filenames = [
+		"imsrtp.policy",
 	]
 
 register_section(RadioSection)

@@ -9,11 +9,17 @@ class MediaCodec2Section(Section):
 	filenames = [
 		"c2_manifest_vendor.xml",
 	]
+	patterns = [
+		"etc/seccomp_policy/codec2.vendor.*.-arm\.policy",
+	]
 
 class MediaOmxSection(Section):
 	name = "Media (OMX)"
 	interfaces = [
 		"android.hardware.media.omx",
+	]
+	filenames = [
+		"mediacodec.policy",
 	]
 	patterns = [
 		"lib(64)?/libOmx.*\.so",

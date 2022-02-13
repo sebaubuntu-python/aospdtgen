@@ -8,5 +8,8 @@ class DspSection(Section):
 	binaries = [
 		"dspservice",
 	]
+	filenames = [
+		"vendor.qti.hardware.dsp.policy",
+	]
 
 register_section(DspSection)

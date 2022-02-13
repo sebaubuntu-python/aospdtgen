@@ -15,5 +15,11 @@ class WifiDisplaySection(Section):
 		"wfdvndservice",
 		"wifidisplayhalservice",
 	]
+	filenames = [
+		"wifidisplayhalservice.policy",
+	]
+	patterns = [
+		"etc/seccomp_policy/wfd.*.service\.policy",
+	]
 
 register_section(WifiDisplaySection)
