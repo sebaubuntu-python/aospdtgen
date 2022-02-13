@@ -90,7 +90,7 @@ class Section:
 		# Interfaces
 		for interface in self.interfaces:
 			# Service binary (we try)
-			if match(f"bin/hw/.*{interface}.*", file):
+			if match(f"bin(/hw)?/.*{interface}.*", file):
 				return True
 
 			# Service init script (we try)
