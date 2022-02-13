@@ -7,10 +7,10 @@ class ChargerSection(Section):
 	]
 	binaries = [
 		"hvdcp_opti",
+		"init.qti.chg_policy.sh",
 	]
 	filenames = [
 		"charger_fstab.qti",
-		"init.qti.chg_policy.sh",
 	]
 
 class ChargerXiaomiSection(Section):
