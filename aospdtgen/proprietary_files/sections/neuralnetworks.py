@@ -5,5 +5,16 @@ class NeuralNetworksSection(Section):
 	interfaces = [
 		"android.hardware.neuralnetworks",
 	]
+	binaries = [
+		"nn_device_test",
+		"npu_launcher",
+	]
+	libraries = [
+		"libhexagon_nn_stub",
+	]
+	patterns = [
+		"lib(64)?/libhta(_.*.)?\.so",
+		"lib(64)?/unnhal.*.\.so",
+	]
 
 register_section(NeuralNetworksSection)
