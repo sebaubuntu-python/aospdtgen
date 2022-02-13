@@ -5,6 +5,10 @@ class DolbySection(Section):
 	interfaces = [
 		"vendor.dolby.hardware.dms",
 	]
+	libraries = [
+		"libdapparamstorage",
+		"libdeccfg",
+	]
 	folders = [
 		"etc/dolby",
 	]
