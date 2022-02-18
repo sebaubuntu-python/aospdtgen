@@ -5,5 +5,8 @@ class DolbySection(Section):
 	interfaces = [
 		"vendor.dolby.hardware.dms",
 	]
+	folders = [
+		"etc/dolby",
+	]
 
 register_section(DolbySection)
