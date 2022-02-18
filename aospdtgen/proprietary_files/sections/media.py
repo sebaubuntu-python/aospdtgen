@@ -16,4 +16,12 @@ class MediaSection(Section):
 		"lib(64)?/libOmx.*\.so",
 	]
 
+class MediaConfigsSection(Section):
+	name = "Media configs"
+	patterns = [
+		"etc/media_codecs.*\.xml",
+		"etc/media_profiles.*\.xml",
+	]
+
 register_section(MediaSection)
+register_section(MediaConfigsSection)
