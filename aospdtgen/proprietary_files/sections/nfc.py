@@ -14,6 +14,7 @@ class NfcConfigsSection(Section):
 	name = "NFC configs"
 	patterns = [
 		"etc/libnfc-.*\.conf"
+		"etc/sn100u_.*\.pnscr"
 	]
 
 register_section(NfcSection)
