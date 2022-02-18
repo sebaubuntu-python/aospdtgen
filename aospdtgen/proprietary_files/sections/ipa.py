@@ -20,7 +20,7 @@ class IpaFirmwareSection(Section):
 		"ipa_fws.rc",
 	]
 	patterns = [
-		"firmware/.*ipa_fws*.",
+		"firmware/.*ipa_(fws|uc)*.",
 	]
 
 register_section(IpaSection)
