@@ -22,5 +22,13 @@ class WifiConfigsSection(Section):
 		"etc/wifi",
 	]
 
+class WifiFirmwareSection(Section):
+	name = "Wi-Fi firmware"
+	folders = [
+		"firmware/wigig",
+		"firmware/wlan",
+	]
+
 register_section(WifiSection)
 register_section(WifiConfigsSection)
+register_section(WifiFirmwareSection)
