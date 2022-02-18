@@ -14,6 +14,7 @@ class MediaSection(Section):
 	]
 	patterns = [
 		"lib(64)?/libOmx.*\.so",
+		"lib(64)?/libstagefright.*\.so",
 	]
 
 class MediaConfigsSection(Section):
