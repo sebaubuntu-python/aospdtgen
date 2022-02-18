@@ -22,12 +22,21 @@ class AudioFxModulesSection(Section):
 
 class AudioConfigsSection(Section):
 	name = "Audio configs"
+	filenames = [
+		"audio_io_policy.conf",
+		"audio_tuning_mixer.txt",
+		"default_volume_tables.xml",
+	]
+	folders = [
+		"etc/audio",
+	]
 	patterns = [
 		"etc/audio_configs.*\.xml",
 		"etc/audio_effects.*\.(conf|xml)",
-		"etc/audio_io_policy\.conf",
+		"etc/audio_platform_info.*\.xml",
 		"etc/.*audio_policy.*\.xml",
-		"etc/audio_tuning_mixer\.txt",
+		"etc/mixer_paths.*\.xml",
+		"etc/sound_trigger_.*\.xml",
 	]
 
 register_section(AudioSection)
