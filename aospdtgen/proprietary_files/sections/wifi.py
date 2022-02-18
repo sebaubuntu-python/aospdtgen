@@ -16,4 +16,11 @@ class WifiSection(Section):
 		"wpa_supplicant",
 	]
 
+class WifiConfigsSection(Section):
+	name = "Wi-Fi configs"
+	folders = [
+		"etc/wifi",
+	]
+
 register_section(WifiSection)
+register_section(WifiConfigsSection)
