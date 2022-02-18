@@ -16,5 +16,13 @@ class VibratorXiaomiSection(Section):
 		"vendor.xiaomi.hardware.vibratorfeature",
 	]
 
+class VibratorFirmwareSection(Section):
+	name = "Vibrator firmware"
+	patterns = [
+		"firmware/.*(rtp|RTP)\.bin",
+		"firmware/aw8697.*\.bin",
+	]
+
 register_section(VibratorSection)
 register_section(VibratorXiaomiSection)
+register_section(VibratorFirmwareSection)
