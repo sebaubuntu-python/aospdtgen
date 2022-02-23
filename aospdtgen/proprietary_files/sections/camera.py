@@ -45,6 +45,13 @@ class CameraMotorSection(Section):
 		"lib(64)?/libmivendor_module_.*\.so",
 	]
 
+class CameraChromatix(Section):
+        name = "Camera Chromatix"
+        patterns = [
+                "lib(64)?/libchromatix_.*\.so"
+        ]
+
 register_section(CameraSection)
 register_section(CameraConfigsSection)
 register_section(CameraMotorSection)
+register_section(CameraChromatix)
