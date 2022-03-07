@@ -1,5 +1,7 @@
 # aospdtgen
 
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/8dc4d00653654b1aa19eeff284d4aa15)](https://www.codacy.com/gh/SebaUbuntu/aospdtgen/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=SebaUbuntu/aospdtgen&amp;utm_campaign=Badge_Grade)
+
 ## Installation
 
 ```
