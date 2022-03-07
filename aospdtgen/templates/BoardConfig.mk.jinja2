@@ -69,7 +69,7 @@ TARGET_{{ partition.name_upper }}_PROP += $(DEVICE_PATH)/{{ partition.name }}.pr
 {% endfor %}
 
 # Recovery
-{% if device_pixel_format != None %}
+{% if device_info.device_pixel_format %}
 TARGET_RECOVERY_PIXEL_FORMAT := {{ device_info.device_pixel_format }}
 {% endif %}
 TARGET_USERIMAGES_USE_EXT4 := true
