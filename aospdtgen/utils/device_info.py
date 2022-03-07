@@ -39,6 +39,8 @@ DEVICE_PIXEL_FORMAT = ["ro.minui.pixel_format"]
 BUILD_FINGERPRINT = [f"ro.{partition}build.fingerprint" for partition in PARTITIONS]
 BUILD_DESCRIPTION = [f"ro.{partition}build.description" for partition in PARTITIONS]
 GMS_CLIENTID_BASE = ["ro.com.google.clientidbase.ms", "ro.com.google.clientidbase"]
+BUILD_SECURITY_PATCH = ["ro.build.version.security_patch"]
+BUILD_VENDOR_SECURITY_PATCH = ["ro.vendor.build.security_patch"]
 
 class _DeviceArch:
 	def __init__(self,
@@ -126,6 +128,9 @@ class DeviceInfo:
 		self.device_uses_dynamic_partitions = bool(strtobool(self.get_prop(DEVICE_USES_DYNAMIC_PARTITIONS, default="false")))
 		self.device_pixel_format = self.get_prop(DEVICE_PIXEL_FORMAT, raise_exception=False)
 		self.gms_clientid_base = self.get_prop(GMS_CLIENTID_BASE, default=f"android-{self.manufacturer}")
+
+		self.build_security_patch = self.get_prop(BUILD_SECURITY_PATCH)
+		self.vendor_build_security_patch = self.get_prop(BUILD_VENDOR_SECURITY_PATCH, default=self.build_security_patch)
 
 	def get_prop(self, props: list, default: str = None, raise_exception: bool = True):
 		for prop in props:

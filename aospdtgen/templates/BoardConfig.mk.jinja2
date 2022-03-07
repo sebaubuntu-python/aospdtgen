@@ -129,6 +129,11 @@ TARGET_RECOVERY_PIXEL_FORMAT := {{ device_info.device_pixel_format }}
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
 
+{% if device_info.vendor_build_security_patch %}
+# Security patch level
+VENDOR_SECURITY_PATCH := 2021-08-01
+
+{% endif %}
 # Inherit the proprietary files
 include vendor/{{ device_info.manufacturer }}/{{ device_info.codename }}/BoardConfigVendor.mk
 
