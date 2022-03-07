@@ -104,6 +104,10 @@ BOARD_DTBOIMAGE_PARTITION_SIZE := {{ boot_configuration.dtbo.stat().st_size }}
 {% if boot_configuration.vendor_boot_image_info %}
 BOARD_VENDOR_BOOTIMAGE_PARTITION_SIZE := {{ boot_configuration.vendor_boot_image_info.origsize }}
 {% endif %}
+{% if device_info.device_uses_dynamic_partitions %}
+BOARD_SUPER_PARTITION_GROUPS := {{ device_info.manufacturer }}_dynamic_partitions
+BOARD_{{ device_info.manufacturer|upper }}_DYNAMIC_PARTITIONS_PARTITION_LIST := # TODO
+{% endif %}
 
 # Platform
 TARGET_BOARD_PLATFORM := {{ device_info.platform }}

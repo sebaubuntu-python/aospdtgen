@@ -33,6 +33,7 @@ DEVICE_SECOND_ARCH = ["ro.bionic.2nd_arch"]
 DEVICE_SECOND_CPU_VARIANT = ["ro.bionic.2nd_cpu_variant"]
 
 DEVICE_IS_AB = ["ro.build.ab_update"]
+DEVICE_USES_DYNAMIC_PARTITIONS = ["ro.boot.dynamic_partitions"]
 DEVICE_PLATFORM = ["ro.board.platform"]
 DEVICE_PIXEL_FORMAT = ["ro.minui.pixel_format"]
 BUILD_FINGERPRINT = [f"ro.{partition}build.fingerprint" for partition in PARTITIONS]
@@ -122,6 +123,7 @@ class DeviceInfo:
 
 		self.platform = self.get_prop(DEVICE_PLATFORM, default="default")
 		self.device_is_ab = bool(strtobool(self.get_prop(DEVICE_IS_AB, default="false")))
+		self.device_uses_dynamic_partitions = bool(strtobool(self.get_prop(DEVICE_USES_DYNAMIC_PARTITIONS, default="false")))
 		self.device_pixel_format = self.get_prop(DEVICE_PIXEL_FORMAT, raise_exception=False)
 		self.gms_clientid_base = self.get_prop(GMS_CLIENTID_BASE, default=f"android-{self.manufacturer}")
 
