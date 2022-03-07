@@ -4,9 +4,11 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+from aospdtgen.lib.libaik import AIKManager
 from aospdtgen.lib.libprop import BuildProp
 from aospdtgen.proprietary_files.proprietary_files_list import ProprietaryFilesList
 from aospdtgen.templates import render_template
+from aospdtgen.utils.boot_configuration import BootConfiguration
 from aospdtgen.utils.device_info import DeviceInfo
 from aospdtgen.utils.reorder import reorder_key
 from aospdtgen.utils.partition import BUILD_PROP_LOCATION, AndroidPartition, PARTITION_STRING
@@ -89,6 +91,11 @@ class DeviceTree:
 		# Generate proprietary files list
 		self.proprietary_files_list = ProprietaryFilesList(self.partitions, self.device_info.build_description)
 
+		# Extract boot image
+		self.boot_configuration = BootConfiguration(self.path / "boot.img",
+		                                            self.path / "dtbo.img",
+		                                            self.path / "vendor_boot.img")
+
 	def search_for_partition(self, partition: int):
 		result = None
 		possible_locations = [f"{self.system}/{PARTITION_STRING[partition]}",
@@ -138,8 +145,15 @@ class DeviceTree:
 
 			(folder / f"{partition.name}.prop").write_text(str(partition.build_prop))
 
+		# Dump boot image prebuilt files
+		prebuilts_path = folder / "prebuilts"
+		prebuilts_path.mkdir()
+
+		self.boot_configuration.copy_files_to_folder(prebuilts_path)
+
 	def render_template(self, *args, comment_prefix: str = "#", **kwargs):
 		return render_template(*args,
+		                       boot_configuration=self.boot_configuration,
 		                       comment_prefix=comment_prefix,
 		                       current_year=self.current_year,
 		                       device_info=self.device_info,
