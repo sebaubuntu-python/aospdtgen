@@ -21,6 +21,7 @@ class DeviceTree:
 
 		self.current_year = str(datetime.now().year)
 
+		# All files
 		self.all_files_txt = self.path / "all_files.txt"
 		self.all_files = [file for file in self.all_files_txt.open().read().splitlines()
 		                  if (self.path / file).is_file()]
@@ -34,6 +35,7 @@ class DeviceTree:
 		self.vendor = None
 		self.odm = None
 
+		# Find system
 		for system in ["system", "system/system"]:
 			for build_prop_location in BUILD_PROP_LOCATION:
 				if not (f"{system}/{build_prop_location}" in self.all_files):
@@ -44,6 +46,7 @@ class DeviceTree:
 		if self.system is None:
 			raise FileNotFoundError("System not found")
 
+		# Find vendor
 		for vendor in [f"{self.system.real_path}/vendor", "vendor"]:
 			for build_prop_location in BUILD_PROP_LOCATION:
 				if not (f"{vendor}/{build_prop_location}" in self.all_files):
@@ -54,6 +57,7 @@ class DeviceTree:
 		if self.vendor is None:
 			raise FileNotFoundError("Vendor not found")
 
+		# Find all the other partitions
 		self.product = self.search_for_partition(PRODUCT)
 		self.system_ext = self.search_for_partition(SYSTEM_EXT)
 		self.odm = self.search_for_partition(ODM)
@@ -72,14 +76,17 @@ class DeviceTree:
 			] if partition is not None
 		]
 
+		# Associate files with partitions
 		for partition in self.partitions:
 			partition.fill_files(self.all_files)
 
+		# Parse build prop and device info
 		self.build_prop = BuildProp()
 		for partition in self.partitions:
 			self.build_prop.import_props(partition.build_prop)
 		self.device_info = DeviceInfo(self.build_prop)
 
+		# Generate proprietary files list
 		self.proprietary_files_list = ProprietaryFilesList(self.partitions, self.device_info.build_description)
 
 	def search_for_partition(self, partition: int):
@@ -124,6 +131,7 @@ class DeviceTree:
 		self.render_template(folder, "README.md")
 		self.render_template(folder, "setup-makefiles.sh")
 
+		# Dump build props
 		for partition in self.partitions:
 			if not partition.build_prop:
 				continue
