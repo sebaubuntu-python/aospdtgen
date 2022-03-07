@@ -26,54 +26,58 @@ DEVICE_CODENAME = get_product_props("device")
 DEVICE_MANUFACTURER = get_product_props("manufacturer")
 DEVICE_BRAND = get_product_props("brand")
 DEVICE_MODEL = get_product_props("model")
-DEVICE_ARCH = [f"ro.{partition}product.cpu.abi" for partition in PARTITIONS] + [f"ro.{partition}product.cpu.abilist" for partition in PARTITIONS]
+
+DEVICE_ARCH = ["ro.bionic.arch"]
+DEVICE_CPU_VARIANT = ["ro.bionic.cpu_variant"]
+DEVICE_SECOND_ARCH = ["ro.bionic.2nd_arch"]
+DEVICE_SECOND_CPU_VARIANT = ["ro.bionic.2nd_cpu_variant"]
+
 DEVICE_IS_AB = ["ro.build.ab_update"]
 DEVICE_PLATFORM = ["ro.board.platform"]
 DEVICE_PIXEL_FORMAT = ["ro.minui.pixel_format"]
 BUILD_FINGERPRINT = [f"ro.{partition}build.fingerprint" for partition in PARTITIONS]
 BUILD_DESCRIPTION = [f"ro.{partition}build.description" for partition in PARTITIONS]
 GMS_CLIENTID_BASE = ["ro.com.google.clientidbase.ms", "ro.com.google.clientidbase"]
-FIRST_ARCH_CPU_VARIANT = ["ro.bionic.cpu_variant"]
-SECOND_ARCH_CPU_VARIANT = ["ro.bionic.2nd_cpu_variant"]
 
 class _DeviceArch:
-	def __init__(self, arch: int, string: str, kernel_name: str):
+	def __init__(self,
+	             arch: str,
+	             arch_variant: str,
+	             cpu_abi: str,
+	             cpu_abi2: str = "",
+	             kernel_name: str = "Image"):
 		self.arch = arch
-		self.string = string
+		self.arch_variant = arch_variant
+		self.cpu_abi = cpu_abi
+		self.cpu_abi2 = cpu_abi2
 		self.kernel_name = kernel_name
 
+	def __bool__(self):
+		return self.arch != "unknown"
+
 	def __str__(self):
-		return self.string
+		return self.arch
 
 class DeviceArch(_DeviceArch):
-	(
-		_ARM,
-		_ARM64,
-		_X86,
-		_X86_64,
-		_MIPS,
-		_UNKNOWN,
-	) = range(6)
-
-	ARM = _DeviceArch(_ARM, "arm", "zImage")
-	ARM64 = _DeviceArch(_ARM64, "arm64", "Image.gz")
-	X86 = _DeviceArch(_X86, "x86", "bzImage")
-	X86_64 = _DeviceArch(_X86_64, "x86_64", "bzImage")
-	MIPS = _DeviceArch(_MIPS, "mips", "Image")
-	UNKNOWN = _DeviceArch(_UNKNOWN, "unknown", "Image")
+	ARM = _DeviceArch("arm", "armv7-a-neon", "armeabi-v7a", "armeabi", "zImage")
+	ARM64 = _DeviceArch("arm64", "armv8-a", "arm64-v8a", "", "Image.gz")
+	X86 = _DeviceArch("x86", "generic", "x86", "", "bzImage")
+	X86_64 = _DeviceArch("x86_64", "generic", "x86_64", "", "bzImage")
+	UNKNOWN = _DeviceArch("unknown", "generic", "unknown")
 
 	@classmethod
 	def from_arch_string(cls, arch: str):
-		if arch.startswith("arm64"):
+		if not arch:
+			return None
+
+		if arch == "arm64":
 			return cls.ARM64
-		if arch.startswith("armeabi"):
+		if arch == "arm":
 			return cls.ARM
-		if arch.startswith("x86"):
+		if arch == "x86":
 			return cls.X86
-		if arch.startswith("x86_64"):
+		if arch == "x86_64":
 			return cls.X86_64
-		if arch.startswith("mips"):
-			return cls.MIPS
 
 		return cls.UNKNOWN
 
@@ -109,9 +113,13 @@ class DeviceInfo:
 		self.build_description = self.get_prop(BUILD_DESCRIPTION, default=fingerprint_to_description(self.build_fingerprint))
 
 		self.arch = DeviceArch.from_arch_string(self.get_prop(DEVICE_ARCH))
-		self.first_arch_cpu_variant = self.get_prop(FIRST_ARCH_CPU_VARIANT, default="generic")
-		self.second_arch_cpu_variant = self.get_prop(SECOND_ARCH_CPU_VARIANT, default="generic")
+		self.second_arch = DeviceArch.from_arch_string(self.get_prop(DEVICE_SECOND_ARCH))
+		self.cpu_variant = self.get_prop(DEVICE_CPU_VARIANT, default="generic")
+		self.second_cpu_variant = self.get_prop(DEVICE_SECOND_CPU_VARIANT, default="generic")
 		self.device_has_64bit_arch = self.arch in (DeviceArch.ARM64, DeviceArch.X86_64)
+		# TODO: Add 32binder64 detection (it only involves 8.0/8.1 devices so :shrug:)
+		self.device_has_64bit_binder = True
+
 		self.platform = self.get_prop(DEVICE_PLATFORM, default="default")
 		self.device_is_ab = bool(strtobool(self.get_prop(DEVICE_IS_AB, default="false")))
 		self.device_pixel_format = self.get_prop(DEVICE_PIXEL_FORMAT, raise_exception=False)

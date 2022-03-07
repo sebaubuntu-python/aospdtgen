@@ -3,56 +3,28 @@
 DEVICE_PATH := device/{{ device_info.manufacturer }}/{{ device_info.codename }}
 
 # Architecture
-{% if device_info.arch.string == "arm" %}
-TARGET_ARCH := arm
-TARGET_ARCH_VARIANT := armv7-a-neon
-TARGET_CPU_ABI := armeabi-v7a
-TARGET_CPU_ABI2 := armeabi
+{% if device_info.arch %}
+TARGET_ARCH := {{ device_info.arch.arch }}
+TARGET_ARCH_VARIANT := {{ device_info.arch.arch_variant }}
+TARGET_CPU_ABI := {{ device_info.arch.cpu_abi }}
+TARGET_CPU_ABI2 := {{ device_info.arch.cpu_abi2 }}
 TARGET_CPU_VARIANT := generic
-TARGET_CPU_VARIANT_RUNTIME := {{ device_info.first_arch_cpu_variant }}
+TARGET_CPU_VARIANT_RUNTIME := {{ device_info.cpu_variant }}
 
-TARGET_USES_64_BIT_BINDER := true
 {% endif %}
-{% if device_info.arch.string == "arm64" %}
-TARGET_ARCH := arm64
-TARGET_ARCH_VARIANT := armv8-a
-TARGET_CPU_ABI := arm64-v8a
-TARGET_CPU_ABI2 :=
-TARGET_CPU_VARIANT := generic
-TARGET_CPU_VARIANT_RUNTIME := {{ device_info.first_arch_cpu_variant }}
-
-TARGET_2ND_ARCH := arm
-TARGET_2ND_ARCH_VARIANT := armv7-a-neon
-TARGET_2ND_CPU_ABI := armeabi-v7a
-TARGET_2ND_CPU_ABI2 := armeabi
+{% if device_info.second_arch %}
+TARGET_2ND_ARCH := {{ device_info.second_arch.arch }}
+TARGET_2ND_ARCH_VARIANT := {{ device_info.second_arch.arch_variant }}
+TARGET_2ND_CPU_ABI := {{ device_info.second_arch.cpu_abi }}
+TARGET_2ND_CPU_ABI2 := {{ device_info.second_arch.cpu_abi2 }}
 TARGET_2ND_CPU_VARIANT := generic
-TARGET_2ND_CPU_VARIANT_RUNTIME := {{ device_info.second_arch_cpu_variant }}
-{% endif %}
-{% if device_info.arch.string == "x86" %}
-TARGET_ARCH := x86
-TARGET_ARCH_VARIANT := generic
-TARGET_CPU_ABI := x86
-TARGET_CPU_ABI2 := armeabi-v7a
-TARGET_CPU_VARIANT := generic
-TARGET_CPU_VARIANT_RUNTIME := {{ device_info.first_arch_cpu_variant }}
+TARGET_2ND_CPU_VARIANT_RUNTIME := {{ device_info.second_cpu_variant }}
 
+{% endif %}
+{% if not device_info.device_has_64bit_arch and device_info.device_has_64bit_binder %}
 TARGET_USES_64_BIT_BINDER := true
-{% endif %}
-{% if device_info.arch.string == "x86_64" %}
-TARGET_ARCH := x86_64
-TARGET_ARCH_VARIANT := x86_64
-TARGET_CPU_ABI := x86_64
-TARGET_CPU_ABI2 :=
-TARGET_CPU_VARIANT := generic
-TARGET_CPU_VARIANT_RUNTIME := {{ device_info.first_arch_cpu_variant }}
 
-TARGET_2ND_ARCH := x86
-TARGET_2ND_ARCH_VARIANT := x86
-TARGET_2ND_CPU_ABI := x86
-TARGET_2ND_CPU_VARIANT := generic
-TARGET_2ND_CPU_VARIANT_RUNTIME := {{ device_info.second_arch_cpu_variant }}
 {% endif %}
-
 {% if device_info.device_has_64bit_arch %}
 # DRM
 TARGET_ENABLE_MEDIADRM_64 := true
