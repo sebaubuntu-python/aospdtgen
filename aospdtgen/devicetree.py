@@ -10,6 +10,7 @@ from aospdtgen.proprietary_files.proprietary_files_list import ProprietaryFilesL
 from aospdtgen.templates import render_template
 from aospdtgen.utils.boot_configuration import BootConfiguration
 from aospdtgen.utils.device_info import DeviceInfo
+from aospdtgen.utils.fstab import Fstab
 from aospdtgen.utils.reorder import reorder_key
 from aospdtgen.utils.partition import BUILD_PROP_LOCATION, AndroidPartition, PARTITION_STRING
 from aospdtgen.utils.partition import SYSTEM, PRODUCT, SYSTEM_EXT, VENDOR, ODM, ODM_DLKM, VENDOR_DLKM
@@ -88,6 +89,19 @@ class DeviceTree:
 			self.build_prop.import_props(partition.build_prop)
 		self.device_info = DeviceInfo(self.build_prop)
 
+		# Parse fstab
+		fstab = None
+		for file in [file for file in self.vendor.files if file.startswith("etc/fstab.")]:
+			_fstab = self.path / self.vendor.real_path / file
+			if _fstab.is_file():
+				fstab = _fstab
+				break
+		self.fstab = Fstab(fstab)
+
+		# Get list of rootdir files
+		self.rootdir_bin_files = [Path(file) for file in self.vendor.files if file.startswith("bin/") and file.endswith(".sh")]
+		self.rootdir_etc_files = [Path(file) for file in self.vendor.files if file.startswith("etc/init/hw/")]
+
 		# Generate proprietary files list
 		self.proprietary_files_list = ProprietaryFilesList(self.partitions, self.device_info.build_description)
 
@@ -151,12 +165,37 @@ class DeviceTree:
 
 		self.boot_configuration.copy_files_to_folder(prebuilts_path)
 
+		# Dump rootdir
+		rootdir_path = folder / "rootdir"
+		rootdir_path.mkdir()
+
+		self.render_template(rootdir_path, "rootdir_Android.bp", "Android.bp", comment_prefix="//")
+
+		# rootdir/bin
+		rootdir_bin_path = rootdir_path / "bin"
+		rootdir_bin_path.mkdir()
+
+		for file in self.rootdir_bin_files:
+			(rootdir_bin_path / file.name).write_bytes((self.path / self.vendor.real_path / file).read_bytes())
+
+		# rootdir/etc
+		rootdir_etc_path = rootdir_path / "etc"
+		rootdir_etc_path.mkdir()
+
+		for file in self.rootdir_etc_files:
+			(rootdir_etc_path / file.name).write_bytes((self.path / self.vendor.real_path / file).read_bytes())
+
+		(rootdir_etc_path / self.fstab.fstab.name).write_bytes(self.fstab.fstab.read_bytes())
+
 	def render_template(self, *args, comment_prefix: str = "#", **kwargs):
 		return render_template(*args,
 		                       boot_configuration=self.boot_configuration,
 		                       comment_prefix=comment_prefix,
 		                       current_year=self.current_year,
 		                       device_info=self.device_info,
+		                       fstab=self.fstab,
+		                       rootdir_bin_files=self.rootdir_bin_files,
+		                       rootdir_etc_files=self.rootdir_etc_files,
 		                       partitions=self.partitions,
 		                       **kwargs)
 

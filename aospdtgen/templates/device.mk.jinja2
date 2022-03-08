@@ -20,6 +20,18 @@ PRODUCT_PACKAGES += \
     fastbootd
 
 {% endif %}
+# Rootdir
+PRODUCT_PACKAGES += \{{ '\n' }}
+{%- for file in rootdir_bin_files %}
+    {{ file.name }} \
+{% endfor %}
+
+PRODUCT_PACKAGES += \
+    {{ fstab.fstab.name }} \{{ '\n' }}
+{%- for file in rootdir_etc_files %}
+    {{ file.name }} \
+{% endfor %}
+
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
     $(LOCAL_PATH)

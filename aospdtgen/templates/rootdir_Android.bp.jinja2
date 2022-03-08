@@ -1,0 +1,30 @@
+{% include 'LICENSE.jinja2' %}
+
+// Init scripts{{ '\n' }}
+{%- for file in rootdir_bin_files %}
+sh_binary {
+    name: "{{ file.name }}",
+    src: "bin/{{ file.name }}",
+    vendor: true,
+}
+
+{% endfor %}
+// Init configuration files{{ '\n' }}
+{%- for file in rootdir_etc_files %}
+{% if not file.name.startswith('fstab.') %}
+prebuilt_etc {
+    name: "{{ file.name }}",
+    src: "etc/{{ file.name }}",
+    sub_dir: "init/hw",
+    vendor: true,
+}
+
+{% endif %}
+{% endfor %}
+// fstab
+prebuilt_etc {
+    name: "{{ fstab.fstab.name }}",
+    src: "etc/{{ fstab.fstab.name }}",
+    vendor: true,
+}
+

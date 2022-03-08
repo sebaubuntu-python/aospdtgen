@@ -120,6 +120,7 @@ TARGET_{{ partition.name_upper }}_PROP += $(DEVICE_PATH)/{{ partition.name }}.pr
 {% endfor %}
 
 # Recovery
+TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/rootdir/etc/{{ fstab.fstab.name }}
 {% if boot_configuration.dtbo %}
 BOARD_INCLUDE_RECOVERY_DTBO := true
 {% endif %}
