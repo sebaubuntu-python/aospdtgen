@@ -5,6 +5,7 @@ from platform import system
 from shutil import which
 from subprocess import check_output, STDOUT, CalledProcessError
 from tempfile import TemporaryDirectory
+import re
 
 AIK_REPO = "https://github.com/SebaUbuntu/AIK-Linux-mirror"
 
@@ -124,7 +125,7 @@ class AIKManager:
 		for name in ["cmdline", "vendor_cmdline"]:
 			_cmdline = self._read_recovery_file(prefix, name)
 			if _cmdline:
-				cmdline = _cmdline
+				cmdline = re.sub("buildvariant=(user|userdebug|eng)", '', _cmdline).strip()
 
 		dt = self._get_extracted_info(prefix, "dt")
 		dt = dt if dt.is_file() else None
