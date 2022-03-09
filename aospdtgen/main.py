@@ -14,13 +14,13 @@ def main():
 	setup_logging()
 
 	print(f"Android device tree generator\n"
-		  f"Version {version}\n")
+	      f"Version {version}\n")
 
 	parser = ArgumentParser(prog='python3 -m aospdtgen')
 	parser.add_argument("dump_path", type=Path,
-						help="path to an Android dump made with dumpyara")
+	                    help="path to an Android dump made with dumpyara")
 	parser.add_argument("-o", "--output", type=Path, default=current_path / "output",
-						help="custom output folder")
+	                    help="custom output folder")
 
 	args = parser.parse_args()
 
