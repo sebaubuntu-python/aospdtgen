@@ -42,6 +42,7 @@ BUILD_DESCRIPTION = [f"ro.{partition}build.description" for partition in PARTITI
 GMS_CLIENTID_BASE = ["ro.com.google.clientidbase.ms", "ro.com.google.clientidbase"]
 BUILD_SECURITY_PATCH = ["ro.build.version.security_patch"]
 BUILD_VENDOR_SECURITY_PATCH = ["ro.vendor.build.security_patch"]
+FIRST_API_LEVEL = ["ro.product.first_api_level"]
 
 class _DeviceArch:
 	def __init__(self,
@@ -130,6 +131,7 @@ class DeviceInfo:
 		self.device_pixel_format = self.get_prop(DEVICE_PIXEL_FORMAT, raise_exception=False)
 		self.screen_density = self.get_prop(SCREEN_DENSITY, raise_exception=False)
 		self.gms_clientid_base = self.get_prop(GMS_CLIENTID_BASE, default=f"android-{self.manufacturer}")
+		self.first_api_level = self.get_prop(FIRST_API_LEVEL)
 
 		self.build_security_patch = self.get_prop(BUILD_SECURITY_PATCH)
 		self.vendor_build_security_patch = self.get_prop(BUILD_VENDOR_SECURITY_PATCH, default=self.build_security_patch)
