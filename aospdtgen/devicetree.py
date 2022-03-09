@@ -147,7 +147,7 @@ class DeviceTree:
 		self.render_template(folder, "device.mk")
 		self.render_template(folder, "extract-files.sh")
 		self.render_template(folder, "lineage_device.mk", out_file=f"lineage_{self.device_info.codename}.mk")
-		self.write_proprietary_files(folder / "proprietary-files.txt")
+		(folder / "proprietary-files.txt").write_text(str(self.proprietary_files_list))
 		self.render_template(folder, "README.md")
 		self.render_template(folder, "setup-makefiles.sh")
 
@@ -197,7 +197,3 @@ class DeviceTree:
 		                       rootdir_etc_files=self.rootdir_etc_files,
 		                       partitions=self.partitions,
 		                       **kwargs)
-
-	def write_proprietary_files(self, file: Path):
-		with file.open("w") as f:
-			f.write(str(self.proprietary_files_list))
