@@ -25,6 +25,11 @@ TARGET_2ND_CPU_VARIANT_RUNTIME := {{ device_info.second_cpu_variant }}
 TARGET_USES_64_BIT_BINDER := true
 
 {% endif %}
+{% if device_info.screen_density %}
+# Display
+TARGET_SCREEN_DENSITY := {{ device_info.screen_density }}
+
+{% endif %}
 {% if device_info.device_has_64bit_arch %}
 # DRM
 TARGET_ENABLE_MEDIADRM_64 := true

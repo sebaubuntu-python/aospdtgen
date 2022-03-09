@@ -36,6 +36,7 @@ DEVICE_IS_AB = ["ro.build.ab_update"]
 DEVICE_USES_DYNAMIC_PARTITIONS = ["ro.boot.dynamic_partitions"]
 DEVICE_PLATFORM = ["ro.board.platform"]
 DEVICE_PIXEL_FORMAT = ["ro.minui.pixel_format"]
+SCREEN_DENSITY = ["ro.sf.lcd_density"]
 BUILD_FINGERPRINT = [f"ro.{partition}build.fingerprint" for partition in PARTITIONS]
 BUILD_DESCRIPTION = [f"ro.{partition}build.description" for partition in PARTITIONS]
 GMS_CLIENTID_BASE = ["ro.com.google.clientidbase.ms", "ro.com.google.clientidbase"]
@@ -127,6 +128,7 @@ class DeviceInfo:
 		self.device_is_ab = bool(strtobool(self.get_prop(DEVICE_IS_AB, default="false")))
 		self.device_uses_dynamic_partitions = bool(strtobool(self.get_prop(DEVICE_USES_DYNAMIC_PARTITIONS, default="false")))
 		self.device_pixel_format = self.get_prop(DEVICE_PIXEL_FORMAT, raise_exception=False)
+		self.screen_density = self.get_prop(SCREEN_DENSITY, raise_exception=False)
 		self.gms_clientid_base = self.get_prop(GMS_CLIENTID_BASE, default=f"android-{self.manufacturer}")
 
 		self.build_security_patch = self.get_prop(BUILD_SECURITY_PATCH)
