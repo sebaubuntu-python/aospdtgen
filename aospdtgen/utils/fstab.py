@@ -101,6 +101,13 @@ class Fstab:
 
 		return string
 
+	def get_partition_by_mount_point(self, mount_point: str):
+		for entry in self.entries:
+			if entry.mount_point == mount_point:
+				return entry
+
+		return None
+
 	def get_logical_partitions(self):
 		return [entry for entry in self.entries if entry.is_logical()]
 
