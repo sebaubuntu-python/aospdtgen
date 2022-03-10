@@ -45,6 +45,16 @@ PRODUCT_PACKAGES += \
     fastbootd
 
 {% endif %}
+# Health Hal
+PRODUCT_PACKAGES += \
+    android.hardware.health@2.1-impl \
+    android.hardware.health@2.1-service
+
+{% if not device_info.device_is_ab %}
+PRODUCT_PACKAGES += \
+    android.hardware.health@2.1-impl.recovery
+
+{% endif %}
 # Rootdir
 PRODUCT_PACKAGES += \{{ '\n' }}
 {%- for file in rootdir_bin_files %}
