@@ -2,6 +2,12 @@
 
 DEVICE_PATH := device/{{ device_info.manufacturer }}/{{ device_info.codename }}
 
+{% if device_info.device_is_ab %}
+# A/B
+AB_OTA_UPDATER := true
+AB_OTA_PARTITIONS += # TODO
+
+{% endif %}
 # Architecture
 {% if device_info.arch %}
 TARGET_ARCH := {{ device_info.arch.arch }}
@@ -23,6 +29,11 @@ TARGET_2ND_CPU_VARIANT_RUNTIME := {{ device_info.second_cpu_variant }}
 {% endif %}
 {% if not device_info.device_has_64bit_arch and device_info.device_has_64bit_binder %}
 TARGET_USES_64_BIT_BINDER := true
+
+{% endif %}
+{% if device_info.screen_density %}
+# Display
+TARGET_SCREEN_DENSITY := {{ device_info.screen_density }}
 
 {% endif %}
 {% if device_info.device_has_64bit_arch %}
@@ -94,6 +105,9 @@ BOARD_KERNEL_SEPARATED_DTBO :=
 endif
 
 # Partitions
+{% if device_info.device_uses_system_as_root %}
+BOARD_BUILD_SYSTEM_ROOT_IMAGE := true
+{% endif %}
 {% if boot_configuration.pagesize %}
 BOARD_FLASH_BLOCK_SIZE := {{ boot_configuration.pagesize|int * 64 }} # (BOARD_KERNEL_PAGESIZE * 64)
 {% endif %}
@@ -106,7 +120,8 @@ BOARD_VENDOR_BOOTIMAGE_PARTITION_SIZE := {{ boot_configuration.vendor_boot_image
 {% endif %}
 {% if device_info.device_uses_dynamic_partitions %}
 BOARD_SUPER_PARTITION_GROUPS := {{ device_info.manufacturer }}_dynamic_partitions
-BOARD_{{ device_info.manufacturer|upper }}_DYNAMIC_PARTITIONS_PARTITION_LIST := # TODO
+BOARD_{{ device_info.manufacturer|upper }}_DYNAMIC_PARTITIONS_PARTITION_LIST := {%- for partition in fstab.get_logical_partitions() %} {{ partition.src }}{% endfor %}
+
 {% endif %}
 
 # Platform
@@ -115,13 +130,13 @@ TARGET_BOARD_PLATFORM := {{ device_info.platform }}
 # Properties{{ '\n' }}
 {%- for partition in partitions %}
 {% if partition.build_prop %}
-TARGET_{{ partition.name_upper }}_PROP += $(DEVICE_PATH)/{{ partition.name }}.prop
+TARGET_{{ partition.name|upper }}_PROP += $(DEVICE_PATH)/{{ partition.name }}.prop
 {% endif %}
 {% endfor %}
 
 # Recovery
 TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/rootdir/etc/{{ fstab.fstab.name }}
-{% if boot_configuration.dtbo %}
+{% if boot_configuration.dtbo and not device_info.device_is_ab %}
 BOARD_INCLUDE_RECOVERY_DTBO := true
 {% endif %}
 {% if device_info.device_pixel_format %}

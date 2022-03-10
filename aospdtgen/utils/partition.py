@@ -29,13 +29,15 @@ PARTITION_STRING = {
 }
 
 PROPRIETARY_FILES_PARTITION_PREFIX = {
-	SYSTEM: "",
-	PRODUCT: "product/",
-	SYSTEM_EXT: "system_ext/",
-	VENDOR: "vendor/",
-	ODM: "odm/",
-	ODM_DLKM: "odm_dlkm/",
-	VENDOR_DLKM: "vendor_dlkm/",
+	partition: Path(prefix) for partition, prefix in {
+		SYSTEM: "",
+		PRODUCT: "product",
+		SYSTEM_EXT: "system_ext",
+		VENDOR: "vendor",
+		ODM: "odm",
+		ODM_DLKM: "odm_dlkm",
+		VENDOR_DLKM: "vendor_dlkm",
+	}.items()
 }
 
 (
@@ -65,38 +67,39 @@ def get_dir(path: Path):
 	return dir
 
 class AndroidPartition:
-	def __init__(self, partition: int, real_path: str, dump_path: Path):
+	def __init__(self, partition: int, real_path: Path, dump_path: Path):
 		self.partition = partition
 		self.real_path = real_path
 		self.dump_path = dump_path
 
 		self.name = PARTITION_STRING[partition]
-		self.name_upper = self.name.upper()
-		self.files: list[str] = []
+		self.files: list[Path] = []
 		self.proprietary_files_prefix = PROPRIETARY_FILES_PARTITION_PREFIX[self.partition]
 		self.group = SSI if self.partition in SSI_PARTITIONS else TREBLE
 
 		self.build_prop = BuildProp()
 		for possible_paths in BUILD_PROP_LOCATION:
-			if not (dump_path / real_path / possible_paths).is_file():
+			build_prop_path = self.real_path / possible_paths
+			if not build_prop_path.is_file():
 				continue
 
-			self.build_prop.import_props(dump_path / real_path / possible_paths)
+			self.build_prop.import_props(build_prop_path)
 
-	def fill_files(self, files: list[str]):
-		path_prefix = f"{self.real_path}/"
+	def get_relative_path(self):
+		return self.real_path.relative_to(self.dump_path)
+
+	def fill_files(self, files: list[Path]):
 		for file in files:
-			if not file.startswith(path_prefix):
+			if not file.is_relative_to(self.real_path):
 				continue
 
-			file = file.removeprefix(path_prefix)
-			if not is_blob_allowed(file):
+			if not is_blob_allowed(file.relative_to(self.real_path)):
 				continue
 
 			self.files.append(file)
 
-	def get_formatted_file(self, file: str):
-		return f"{self.proprietary_files_prefix}{file}"
+	def get_formatted_file(self, file: Path):
+		return self.proprietary_files_prefix / file.relative_to(self.real_path)
 
 	def get_formatted_files(self):
 		return [self.get_formatted_file(file) for file in self.files]

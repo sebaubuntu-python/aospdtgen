@@ -4,23 +4,11 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-from aospdtgen.lib.libprop import BuildProp
+from aospdtgen.lib.libprop import BuildProp, get_partition_props
 from distutils.util import strtobool
 
-PARTITIONS = [
-	"",
-	"bootimage.",
-	"odm.",
-	"odm_dlkm.",
-	"product.",
-	"system.",
-	"system_ext.",
-	"vendor.",
-	"vendor_dlkm.",
-]
-
 def get_product_props(value: str):
-	return [f"ro.product.{partition}{value}" for partition in PARTITIONS]
+	return get_partition_props("ro.product.{}" + value, add_empty=True)
 
 DEVICE_CODENAME = get_product_props("device")
 DEVICE_MANUFACTURER = get_product_props("manufacturer")
@@ -34,13 +22,18 @@ DEVICE_SECOND_CPU_VARIANT = ["ro.bionic.2nd_cpu_variant"]
 
 DEVICE_IS_AB = ["ro.build.ab_update"]
 DEVICE_USES_DYNAMIC_PARTITIONS = ["ro.boot.dynamic_partitions"]
+DEVICE_USES_VIRTUAL_AB = ["ro.virtual_ab.enabled"]
+DEVICE_USES_SYSTEM_AS_ROOT = ["ro.build.system_root_image"]
+
 DEVICE_PLATFORM = ["ro.board.platform"]
 DEVICE_PIXEL_FORMAT = ["ro.minui.pixel_format"]
-BUILD_FINGERPRINT = [f"ro.{partition}build.fingerprint" for partition in PARTITIONS]
-BUILD_DESCRIPTION = [f"ro.{partition}build.description" for partition in PARTITIONS]
+SCREEN_DENSITY = ["ro.sf.lcd_density"]
+BUILD_FINGERPRINT = get_partition_props("ro.{}build.fingerprint", add_empty=True)
+BUILD_DESCRIPTION = get_partition_props("ro.{}build.description", add_empty=True)
 GMS_CLIENTID_BASE = ["ro.com.google.clientidbase.ms", "ro.com.google.clientidbase"]
 BUILD_SECURITY_PATCH = ["ro.build.version.security_patch"]
 BUILD_VENDOR_SECURITY_PATCH = ["ro.vendor.build.security_patch"]
+FIRST_API_LEVEL = ["ro.product.first_api_level"]
 
 class _DeviceArch:
 	def __init__(self,
@@ -126,8 +119,13 @@ class DeviceInfo:
 		self.platform = self.get_prop(DEVICE_PLATFORM, default="default")
 		self.device_is_ab = bool(strtobool(self.get_prop(DEVICE_IS_AB, default="false")))
 		self.device_uses_dynamic_partitions = bool(strtobool(self.get_prop(DEVICE_USES_DYNAMIC_PARTITIONS, default="false")))
+		self.device_uses_virtual_ab = bool(strtobool(self.get_prop(DEVICE_USES_VIRTUAL_AB, default="false")))
+		self.device_uses_system_as_root = bool(strtobool(self.get_prop(DEVICE_USES_SYSTEM_AS_ROOT, default="false")))
+
 		self.device_pixel_format = self.get_prop(DEVICE_PIXEL_FORMAT, raise_exception=False)
+		self.screen_density = self.get_prop(SCREEN_DENSITY, raise_exception=False)
 		self.gms_clientid_base = self.get_prop(GMS_CLIENTID_BASE, default=f"android-{self.manufacturer}")
+		self.first_api_level = self.get_prop(FIRST_API_LEVEL)
 
 		self.build_security_patch = self.get_prop(BUILD_SECURITY_PATCH)
 		self.vendor_build_security_patch = self.get_prop(BUILD_VENDOR_SECURITY_PATCH, default=self.build_security_patch)

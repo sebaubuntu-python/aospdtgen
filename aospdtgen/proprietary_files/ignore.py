@@ -626,12 +626,10 @@ IGNORE_PATTERNS = [re.compile(pattern) for pattern in [
 	"lib(64)?/libprotobuf-cpp-(full|lite)-.*.so",
 ]]
 
-def is_blob_allowed(file: str) -> bool:
+def is_blob_allowed(file: Path) -> bool:
 	"""
 	Check if the lib is not in the disallowed list.
 	"""
-	file: Path = Path(file)
-
 	if file.name in IGNORE_BINARIES:
 		return False
 
