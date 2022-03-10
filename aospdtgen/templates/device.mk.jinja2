@@ -4,6 +4,10 @@
 PRODUCT_SHIPPING_API_LEVEL := {{ device_info.first_api_level }}
 
 {% endif %}
+{% if device_info.product_characteristics %}
+PRODUCT_CHARACTERISTICS := {{ device_info.product_characteristics }}
+
+{% endif %}
 {% if device_info.device_uses_dynamic_partitions %}
 PRODUCT_BUILD_SUPER_PARTITION := false
 PRODUCT_USE_DYNAMIC_PARTITIONS := true
