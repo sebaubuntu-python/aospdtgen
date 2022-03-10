@@ -97,7 +97,6 @@ class DeviceTree:
 				fstab = file
 				break
 		self.fstab = Fstab(fstab)
-		assert self.fstab is not None
 
 		# Get list of rootdir files
 		self.rootdir_bin_files = [file for file in self.vendor.files if file.relative_to(self.vendor.real_path).is_relative_to("bin") and file.suffix == ".sh"]
