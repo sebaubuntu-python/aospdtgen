@@ -10,6 +10,7 @@ from aospdtgen.templates import render_template
 from aospdtgen.utils.boot_configuration import BootConfiguration
 from aospdtgen.utils.device_info import DeviceInfo
 from aospdtgen.utils.fstab import Fstab
+from aospdtgen.utils.ignored_props import IGNORED_PROPS
 from aospdtgen.utils.reorder import reorder_key
 from aospdtgen.utils.partition import BUILD_PROP_LOCATION, AndroidPartition, PARTITION_STRING
 from aospdtgen.utils.partition import SYSTEM, PRODUCT, SYSTEM_EXT, VENDOR, ODM, ODM_DLKM, VENDOR_DLKM
@@ -157,7 +158,7 @@ class DeviceTree:
 			if not partition.build_prop:
 				continue
 
-			(folder / f"{partition.name}.prop").write_text(str(partition.build_prop))
+			(folder / f"{partition.name}.prop").write_text(partition.build_prop.get_readable_list(IGNORED_PROPS))
 
 		# Dump boot image prebuilt files
 		prebuilts_path = folder / "prebuilts"
