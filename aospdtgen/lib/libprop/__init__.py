@@ -5,9 +5,9 @@
 #
 
 from __future__ import annotations
-from ctypes import Union
 from distutils.util import strtobool
 from pathlib import Path
+from typing import Union
 
 class BuildProp(dict):
 	"""
