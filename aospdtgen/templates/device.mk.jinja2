@@ -57,6 +57,15 @@ PRODUCT_PACKAGES += \
     {{ file.name }} \
 {% endfor %}
 
+{% if device_info.device_uses_dynamic_partitions %}
+PRODUCT_COPY_FILES += \
+{% if device_info.device_uses_virtual_ab %}
+    $(LOCAL_PATH)/rootdir/etc/{{ fstab.fstab.name }}:$(TARGET_VENDOR_RAMDISK_OUT)/first_stage_ramdisk/{{ fstab.fstab.name }}
+{% else %}
+    $(LOCAL_PATH)/rootdir/etc/{{ fstab.fstab.name }}:$(TARGET_COPY_OUT_RAMDISK)/{{ fstab.fstab.name }}
+{% endif %}
+
+{% endif %}
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
     $(LOCAL_PATH)
