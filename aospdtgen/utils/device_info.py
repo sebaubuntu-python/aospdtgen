@@ -4,23 +4,11 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-from aospdtgen.lib.libprop import BuildProp
+from aospdtgen.lib.libprop import BuildProp, get_partition_props
 from distutils.util import strtobool
 
-PARTITIONS = [
-	"",
-	"bootimage.",
-	"odm.",
-	"odm_dlkm.",
-	"product.",
-	"system.",
-	"system_ext.",
-	"vendor.",
-	"vendor_dlkm.",
-]
-
 def get_product_props(value: str):
-	return [f"ro.product.{partition}{value}" for partition in PARTITIONS]
+	return get_partition_props("ro.product.{}" + value, add_empty=True)
 
 DEVICE_CODENAME = get_product_props("device")
 DEVICE_MANUFACTURER = get_product_props("manufacturer")
@@ -37,8 +25,8 @@ DEVICE_USES_DYNAMIC_PARTITIONS = ["ro.boot.dynamic_partitions"]
 DEVICE_PLATFORM = ["ro.board.platform"]
 DEVICE_PIXEL_FORMAT = ["ro.minui.pixel_format"]
 SCREEN_DENSITY = ["ro.sf.lcd_density"]
-BUILD_FINGERPRINT = [f"ro.{partition}build.fingerprint" for partition in PARTITIONS]
-BUILD_DESCRIPTION = [f"ro.{partition}build.description" for partition in PARTITIONS]
+BUILD_FINGERPRINT = get_partition_props("ro.{}build.fingerprint", add_empty=True)
+BUILD_DESCRIPTION = get_partition_props("ro.{}build.description", add_empty=True)
 GMS_CLIENTID_BASE = ["ro.com.google.clientidbase.ms", "ro.com.google.clientidbase"]
 BUILD_SECURITY_PATCH = ["ro.build.version.security_patch"]
 BUILD_VENDOR_SECURITY_PATCH = ["ro.vendor.build.security_patch"]
