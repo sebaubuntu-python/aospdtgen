@@ -126,6 +126,9 @@ BOARD_BOOTIMAGE_PARTITION_SIZE := {{ boot_configuration.boot_image_info.origsize
 {% if boot_configuration.dtbo %}
 BOARD_DTBOIMAGE_PARTITION_SIZE := {{ boot_configuration.dtbo.stat().st_size }}
 {% endif %}
+{% if boot_configuration.recovery_image_info %}
+BOARD_RECOVERYIMAGE_PARTITION_SIZE := {{ boot_configuration.recovery_image_info.origsize }}
+{% endif %}
 {% if boot_configuration.vendor_boot_image_info %}
 BOARD_VENDOR_BOOTIMAGE_PARTITION_SIZE := {{ boot_configuration.vendor_boot_image_info.origsize }}
 {% endif %}

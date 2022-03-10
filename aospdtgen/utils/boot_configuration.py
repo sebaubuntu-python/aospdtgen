@@ -11,14 +11,23 @@ class BootConfiguration:
 	def __init__(self,
 	             boot: Path,
 	             dtbo: Path = None,
+	             recovery: Path = None,
 	             vendor_boot: Path = None,
 	            ):
 		self.boot = boot
 		self.dtbo = dtbo
+		self.recovery = recovery
 		self.vendor_boot = vendor_boot
 
 		self.boot_aik_manager = AIKManager()
 		self.boot_image_info = self.boot_aik_manager.unpackimg(self.boot)
+
+		if self.recovery and self.recovery.is_file():
+			self.recovery_aik_manager = AIKManager()
+			self.recovery_image_info = self.recovery_aik_manager.unpackimg(self.recovery)
+		else:
+			self.recovery_aik_manager = None
+			self.recovery_image_info = None
 
 		if self.vendor_boot and self.vendor_boot.is_file():
 			self.vendor_boot_aik_manager = AIKManager()

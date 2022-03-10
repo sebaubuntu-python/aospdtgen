@@ -121,6 +121,7 @@ class DeviceTree:
 		# Extract boot image
 		self.boot_configuration = BootConfiguration(self.path / "boot.img",
 		                                            self.path / "dtbo.img",
+		                                            self.path / "recovery.img",
 		                                            self.path / "vendor_boot.img")
 
 	def search_for_partition(self, partition: PartitionModel):
