@@ -105,6 +105,9 @@ BOARD_KERNEL_SEPARATED_DTBO :=
 endif
 
 # Partitions
+{% if device_info.device_uses_system_as_root %}
+BOARD_BUILD_SYSTEM_ROOT_IMAGE := true
+{% endif %}
 {% if boot_configuration.pagesize %}
 BOARD_FLASH_BLOCK_SIZE := {{ boot_configuration.pagesize|int * 64 }} # (BOARD_KERNEL_PAGESIZE * 64)
 {% endif %}
