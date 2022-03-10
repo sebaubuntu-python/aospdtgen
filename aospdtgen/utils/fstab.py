@@ -101,8 +101,8 @@ class Fstab:
 
 		return string
 
-	def get_all_logical_partitions(self):
+	def get_logical_partitions(self):
 		return [entry for entry in self.entries if entry.is_logical()]
 
-	def get_all_slotselect_partitions(self):
+	def get_slotselect_partitions(self):
 		return [entry for entry in self.entries if entry.is_slotselect()]
