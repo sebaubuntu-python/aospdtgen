@@ -29,28 +29,30 @@ class Section:
 	"""List of basic patterns (use regex)"""
 
 	def __init__(self):
-		self.files: list[str] = []
+		self.files: list[Path] = []
 
 	def add_files(self, partition: AndroidPartition):
-		matched: list[str] = []
-		not_matched: list[str] = []
+		matched: list[Path] = []
+		not_matched: list[Path] = []
 
 		for file in partition.files:
-			if self.file_match(file):
+			file_relative = file.relative_to(partition.real_path)
+			if self.file_match(file_relative):
 				matched.append(file)
 			else:
 				not_matched.append(file)
 
 		# Handle shared libs
 		for file in matched:
+			file_relative = file.relative_to(partition.real_path)
 			# Check only ELFs
-			if (not file.startswith("bin/")
-					and not file.startswith("lib/")
-					and not file.startswith("lib64/")):
+			if (not file_relative.is_relative_to("bin")
+					and not file_relative.is_relative_to("lib")
+					and not file_relative.is_relative_to("lib64")):
 				continue
 
 			# Add shared libs used by the section ELFs
-			needed_libs = get_needed_shared_libs(f"{partition.dump_path}/{partition.real_path}/{file}")
+			needed_libs = get_needed_shared_libs(file)
 			for lib in needed_libs:
 				# Skip the lib if it belongs to another section
 				skip = False
@@ -69,84 +71,83 @@ class Section:
 				# Recursively handle shared libs' shared libs as well
 				unmatched_shared_libs = get_shared_libs(not_matched)
 				for file in unmatched_shared_libs:
-					if Path(file).name != lib:
+					if file.name != lib:
 						continue
 
 					# Move from unmatched to matched
 					not_matched.remove(file)
 					matched.append(file)
 
-		self.files.extend([f"{partition.proprietary_files_prefix}{file}" for file in matched])
+		self.files.extend([partition.proprietary_files_prefix / file.relative_to(partition.real_path) for file in matched])
 		self.files.sort(key=reorder_key)
-		partition.files = not_matched
+
+		partition.files.clear()
+		partition.files.extend(not_matched)
 		partition.files.sort(key=reorder_key)
 
 		return not_matched
 
-	def file_match(self, file: str):
+	def file_match(self, file: Path):
 		if self.name == "Miscellaneous":
 			return True
 
 		# Interfaces
 		for interface in self.interfaces:
 			# Service binary (we try)
-			if match(f"bin(/hw)?/.*{interface}.*", file):
+			if file.is_relative_to("bin") and interface in file.name:
 				return True
 
 			# Service init script (we try)
-			if match(f"etc/init/.*{interface}.*\.rc", file):
+			if file.is_relative_to("etc/init") and interface in file.name:
 				return True
 
 			# VINTF fragment (again, we try)
-			if match(f"etc/vintf/manifest/.*{interface}.*\.xml", file):
+			if file.is_relative_to("etc/vintf/manifest") and interface in file.name:
 				return True
 
 			# Passthrough impl (only HIDL)
-			if match(f"lib(64)?/hw/{interface}@[0-9]+\.[0-9]+-impl\.so", file):
+			if (file.is_relative_to("lib/hw") or file.is_relative_to("lib64/hw")) and match(f"{interface}@[0-9]+\.[0-9]+-impl\.so", file.name):
 				return True
 
 			# Interface libs (AIDL and HIDL)
-			if match(f"lib(64)?/{interface}(@[0-9]+\.[0-9]+|-).*\.so", file):
+			if (file.is_relative_to("lib") or file.is_relative_to("lib64")) and match(f"{interface}(@[0-9]+\.[0-9]+|-).*\.so", file.name):
 				return True
 
 		# Hardware modules
-		if file.startswith("lib/hw/") or file.startswith("lib64/hw/"):
+		if file.is_relative_to("lib/hw") or file.is_relative_to("lib64/hw"):
 			for hardware_module in self.hardware_modules:
-				if match(f"lib(64)?/hw/{hardware_module}\..*\.so", file):
+				if file.name.startswith(f"{hardware_module}.") and file.suffix == ".so":
 					return True
 
 		# Apps
-		if file.startswith("app/") or file.startswith("priv-app/"):
-			app_name = file.removeprefix("app/" if file.startswith("app/") else "priv-app/")
-			app_name = list(Path(app_name).parts)[0]
+		if file.is_relative_to("app") or file.is_relative_to("priv-app"):
+			app_name = file.relative_to("app" if file.is_relative_to("app") else "priv-app")
+			app_name = list(app_name.parts)[0]
 			if app_name in self.apps:
 				return True
 
 		# Binaries
-		if file.startswith("bin/"):
-			binary_name = file.removeprefix("bin/hw/" if file.startswith("bin/hw/") else "bin/")
-			if binary_name in self.binaries:
+		if file.is_relative_to("bin"):
+			if file.name in self.binaries:
 				return True
 
 		# Init scripts
-		if file.startswith("etc/init/"):
-			init_name = Path(file).name
+		if file.is_relative_to("etc/init"):
 			for binary in self.binaries:
-				if match(f"(init)?(.)?{binary}\.rc", init_name):
+				if match(f"(init)?(.)?{binary}\.rc", file.name):
 					return True
 
 		# Libraries
-		if file.startswith("lib/") or file.startswith("lib64/"):
-			library_name = Path(file).name
-			if library_name.endswith(".so") and library_name.removesuffix(".so") in self.libraries:
+		if file.is_relative_to("lib/") or file.is_relative_to("lib64/"):
+			if file.suffix == ".so" and file.stem in self.libraries:
 				return True
 
 		# Filenames
-		if Path(file).name in self.filenames:
+		if file.name in self.filenames:
 			return True
 
 		# Folders
-		for folder in [str(folder) for folder in Path(file).parents]:
+		for folder in [str(folder) for folder in file.parents]:
 			if folder in self.folders:
 				return True
 

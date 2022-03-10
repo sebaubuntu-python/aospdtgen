@@ -29,6 +29,7 @@ class DeviceTree:
 		                  if (self.path / file).is_file()]
 		self.all_files = list(dict.fromkeys(self.all_files))
 		self.all_files.sort(key=reorder_key)
+		self.all_files = [self.path / file for file in self.all_files]
 
 		# Determine partitions
 		self.system = None
@@ -38,9 +39,9 @@ class DeviceTree:
 		self.odm = None
 
 		# Find system
-		for system in ["system", "system/system"]:
+		for system in [self.path / "system", self.path / "system/system"]:
 			for build_prop_location in BUILD_PROP_LOCATION:
-				if not (f"{system}/{build_prop_location}" in self.all_files):
+				if system / build_prop_location not in self.all_files:
 					continue
 
 				self.system = AndroidPartition(SYSTEM, system, self.path)
@@ -49,9 +50,9 @@ class DeviceTree:
 			raise FileNotFoundError("System not found")
 
 		# Find vendor
-		for vendor in [f"{self.system.real_path}/vendor", "vendor"]:
+		for vendor in [self.system.real_path / "vendor", self.path / "vendor"]:
 			for build_prop_location in BUILD_PROP_LOCATION:
-				if not (f"{vendor}/{build_prop_location}" in self.all_files):
+				if vendor / build_prop_location not in self.all_files:
 					continue
 
 				self.vendor = AndroidPartition(VENDOR, vendor, self.path)
@@ -90,16 +91,16 @@ class DeviceTree:
 
 		# Parse fstab
 		fstab = None
-		for file in [file for file in self.vendor.files if file.startswith("etc/fstab.")]:
-			_fstab = self.path / self.vendor.real_path / file
-			if _fstab.is_file():
-				fstab = _fstab
+		for file in [file for file in self.vendor.files if file.relative_to(self.vendor.real_path).is_relative_to("etc") and file.name.startswith("fstab.")]:
+			if file.is_file():
+				fstab = file
 				break
 		self.fstab = Fstab(fstab)
+		assert self.fstab is not None
 
 		# Get list of rootdir files
-		self.rootdir_bin_files = [Path(file) for file in self.vendor.files if file.startswith("bin/") and file.endswith(".sh")]
-		self.rootdir_etc_files = [Path(file) for file in self.vendor.files if file.startswith("etc/init/hw/")]
+		self.rootdir_bin_files = [file for file in self.vendor.files if file.relative_to(self.vendor.real_path).is_relative_to("bin") and file.suffix == ".sh"]
+		self.rootdir_etc_files = [file for file in self.vendor.files if file.relative_to(self.vendor.real_path).is_relative_to("etc/init/hw")]
 
 		# Generate proprietary files list
 		self.proprietary_files_list = ProprietaryFilesList(self.partitions, self.device_info.build_description)
@@ -111,13 +112,13 @@ class DeviceTree:
 
 	def search_for_partition(self, partition: int):
 		result = None
-		possible_locations = [f"{self.system}/{PARTITION_STRING[partition]}",
-							  f"{self.vendor}/{PARTITION_STRING[partition]}",
-							  PARTITION_STRING[partition]]
+		possible_locations = [self.system.real_path / PARTITION_STRING[partition],
+							  self.vendor.real_path / PARTITION_STRING[partition],
+							  self.path / PARTITION_STRING[partition]]
 
 		for location in possible_locations:
 			for build_prop_location in BUILD_PROP_LOCATION:
-				if not (f"{location}/{build_prop_location}" in self.all_files):
+				if location / build_prop_location not in self.all_files:
 					continue
 
 				result = AndroidPartition(partition, location, self.path)

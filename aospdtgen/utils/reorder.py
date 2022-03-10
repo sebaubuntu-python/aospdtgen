@@ -10,6 +10,9 @@ from locale import LC_ALL, setlocale, strcoll
 setlocale(LC_ALL, "C")
 
 def strcoll_custom(string1: str, string2: str) -> int:
+    string1 = str(string1)
+    string2 = str(string2)
+
     # Skip logic if one of the string if empty
     if not string1 or not string2:
         return strcoll(string1, string2)

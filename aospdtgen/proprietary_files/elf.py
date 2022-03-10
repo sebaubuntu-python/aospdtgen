@@ -15,5 +15,5 @@ def get_needed_shared_libs(file: Path) -> list[str]:
 
 	return shared_libs
 
-def get_shared_libs(files: list[str]):
-	return [lib for lib in files if lib.endswith(".so")]
+def get_shared_libs(files: list[Path]):
+	return [lib for lib in files if lib.suffix == ".so"]

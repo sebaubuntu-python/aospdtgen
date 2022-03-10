@@ -31,7 +31,7 @@ class ProprietaryFilesList:
 				continue
 
 			result += (f"\n# {section.name}\n")
-			result += "\n".join(section.files)
+			result += "\n".join([str(file) for file in section.files])
 			result += "\n"
 
 		return result
