@@ -131,7 +131,7 @@ TARGET_BOARD_PLATFORM := {{ device_info.platform }}
 # Properties{{ '\n' }}
 {%- for partition in partitions %}
 {% if partition.build_prop %}
-TARGET_{{ partition.name|upper }}_PROP += $(DEVICE_PATH)/{{ partition.name }}.prop
+TARGET_{{ partition.model.name|upper }}_PROP += $(DEVICE_PATH)/{{ partition.model.name }}.prop
 {% endif %}
 {% endfor %}
 

@@ -12,8 +12,7 @@ from aospdtgen.utils.device_info import DeviceInfo
 from aospdtgen.utils.fstab import Fstab
 from aospdtgen.utils.ignored_props import IGNORED_PROPS
 from aospdtgen.utils.reorder import reorder_key
-from aospdtgen.utils.partition import BUILD_PROP_LOCATION, AndroidPartition, PARTITION_STRING
-from aospdtgen.utils.partition import SYSTEM, PRODUCT, SYSTEM_EXT, VENDOR, ODM, ODM_DLKM, VENDOR_DLKM
+from aospdtgen.utils.partition import BUILD_PROP_LOCATION, AndroidPartition, PartitionModel
 from datetime import datetime
 from pathlib import Path
 from shutil import rmtree
@@ -45,7 +44,7 @@ class DeviceTree:
 				if system / build_prop_location not in self.all_files:
 					continue
 
-				self.system = AndroidPartition(SYSTEM, system, self.path)
+				self.system = AndroidPartition(PartitionModel.SYSTEM, system, self.path)
 
 		if self.system is None:
 			raise FileNotFoundError("System not found")
@@ -56,17 +55,17 @@ class DeviceTree:
 				if vendor / build_prop_location not in self.all_files:
 					continue
 
-				self.vendor = AndroidPartition(VENDOR, vendor, self.path)
+				self.vendor = AndroidPartition(PartitionModel.VENDOR, vendor, self.path)
 
 		if self.vendor is None:
 			raise FileNotFoundError("Vendor not found")
 
 		# Find all the other partitions
-		self.product = self.search_for_partition(PRODUCT)
-		self.system_ext = self.search_for_partition(SYSTEM_EXT)
-		self.odm = self.search_for_partition(ODM)
-		self.odm_dlkm = self.search_for_partition(ODM_DLKM)
-		self.vendor_dlkm = self.search_for_partition(VENDOR_DLKM)
+		self.product = self.search_for_partition(PartitionModel.PRODUCT)
+		self.system_ext = self.search_for_partition(PartitionModel.SYSTEM_EXT)
+		self.odm = self.search_for_partition(PartitionModel.ODM)
+		self.odm_dlkm = self.search_for_partition(PartitionModel.ODM_DLKM)
+		self.vendor_dlkm = self.search_for_partition(PartitionModel.VENDOR_DLKM)
 
 		self.partitions: list[AndroidPartition] = [
 			partition for partition in [
@@ -110,11 +109,11 @@ class DeviceTree:
 		                                            self.path / "dtbo.img",
 		                                            self.path / "vendor_boot.img")
 
-	def search_for_partition(self, partition: int):
+	def search_for_partition(self, partition: PartitionModel):
 		result = None
-		possible_locations = [self.system.real_path / PARTITION_STRING[partition],
-							  self.vendor.real_path / PARTITION_STRING[partition],
-							  self.path / PARTITION_STRING[partition]]
+		possible_locations = [self.system.real_path / partition.name,
+							  self.vendor.real_path / partition.name,
+							  self.path / partition.name]
 
 		for location in possible_locations:
 			for build_prop_location in BUILD_PROP_LOCATION:
@@ -157,7 +156,7 @@ class DeviceTree:
 			if not partition.build_prop:
 				continue
 
-			(folder / f"{partition.name}.prop").write_text(partition.build_prop.get_readable_list(IGNORED_PROPS))
+			(folder / f"{partition.model.name}.prop").write_text(partition.build_prop.get_readable_list(IGNORED_PROPS))
 
 		# Dump boot image prebuilt files
 		prebuilts_path = folder / "prebuilts"

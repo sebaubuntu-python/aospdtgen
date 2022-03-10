@@ -78,7 +78,7 @@ class Section:
 					not_matched.remove(file)
 					matched.append(file)
 
-		self.files.extend([partition.proprietary_files_prefix / file.relative_to(partition.real_path) for file in matched])
+		self.files.extend([partition.model.proprietary_files_prefix / file.relative_to(partition.real_path) for file in matched])
 		self.files.sort(key=reorder_key)
 
 		partition.files.clear()

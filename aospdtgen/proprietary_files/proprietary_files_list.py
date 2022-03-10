@@ -1,5 +1,5 @@
 from aospdtgen.proprietary_files.section import Section, sections
-from aospdtgen.utils.partition import AndroidPartition, TREBLE_PARTITIONS
+from aospdtgen.utils.partition import TREBLE, AndroidPartition
 
 class ProprietaryFilesList:
 	def __init__(self, partitions: list[AndroidPartition], build_description: str = None):
@@ -14,7 +14,7 @@ class ProprietaryFilesList:
 		misc_section = Section()
 
 		for partition in self.partitions:
-			if partition.partition not in TREBLE_PARTITIONS:
+			if partition.model.group != TREBLE:
 				continue
 
 			misc_section.add_files(partition)
