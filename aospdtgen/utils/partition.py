@@ -73,7 +73,6 @@ class AndroidPartition:
 		self.dump_path = dump_path
 
 		self.name = PARTITION_STRING[partition]
-		self.name_upper = self.name.upper()
 		self.files: list[Path] = []
 		self.proprietary_files_prefix = PROPRIETARY_FILES_PARTITION_PREFIX[self.partition]
 		self.group = SSI if self.partition in SSI_PARTITIONS else TREBLE
