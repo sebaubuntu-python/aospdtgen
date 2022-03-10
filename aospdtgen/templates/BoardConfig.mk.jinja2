@@ -36,6 +36,12 @@ TARGET_2ND_CPU_VARIANT_RUNTIME := {{ device_info.second_cpu_variant }}
 TARGET_USES_64_BIT_BINDER := true
 
 {% endif %}
+# Bootloader
+{% if device_info.bootloader_board_name %}
+TARGET_BOOTLOADER_BOARD_NAME := {{ device_info.bootloader_board_name }}
+{% endif %}
+TARGET_NO_BOOTLOADER := true
+
 {% if device_info.screen_density %}
 # Display
 TARGET_SCREEN_DENSITY := {{ device_info.screen_density }}

@@ -25,6 +25,7 @@ DEVICE_USES_DYNAMIC_PARTITIONS = ["ro.boot.dynamic_partitions"]
 DEVICE_USES_VIRTUAL_AB = ["ro.virtual_ab.enabled"]
 DEVICE_USES_SYSTEM_AS_ROOT = ["ro.build.system_root_image"]
 
+BOOTLOADER_BOARD_NAME = ["ro.product.board"]
 DEVICE_PLATFORM = ["ro.board.platform"]
 DEVICE_PIXEL_FORMAT = ["ro.minui.pixel_format"]
 SCREEN_DENSITY = ["ro.sf.lcd_density"]
@@ -117,6 +118,7 @@ class DeviceInfo:
 		# TODO: Add 32binder64 detection (it only involves 8.0/8.1 devices so :shrug:)
 		self.device_has_64bit_binder = True
 
+		self.bootloader_board_name = self.get_prop(BOOTLOADER_BOARD_NAME)
 		self.platform = self.get_prop(DEVICE_PLATFORM, default="default")
 		self.device_is_ab = bool(strtobool(self.get_prop(DEVICE_IS_AB, default="false")))
 		self.device_uses_dynamic_partitions = bool(strtobool(self.get_prop(DEVICE_USES_DYNAMIC_PARTITIONS, default="false")))
