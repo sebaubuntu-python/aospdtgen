@@ -85,3 +85,12 @@ IGNORED_PROPS.append("dalvik.vm.isa.x86.features")
 IGNORED_PROPS.append("dalvik.vm.isa.x86.variant")
 IGNORED_PROPS.append("dalvik.vm.isa.x86_64.features")
 IGNORED_PROPS.append("dalvik.vm.isa.x86_64.variant")
+
+# Characteristics
+IGNORED_PROPS.append("ro.build.characteristics")
+
+# Board
+IGNORED_PROPS.append("ro.product.board")
+
+# Locale
+IGNORED_PROPS.append("ro.product.locale")
