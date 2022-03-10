@@ -5,7 +5,11 @@ DEVICE_PATH := device/{{ device_info.manufacturer }}/{{ device_info.codename }}
 {% if device_info.device_is_ab %}
 # A/B
 AB_OTA_UPDATER := true
-AB_OTA_PARTITIONS += # TODO
+AB_OTA_PARTITIONS +=
+{%- for partition in ab_partitions %} \
+    {{ partition.name }}
+{%- endfor %}
+
 BOARD_USES_RECOVERY_AS_BOOT := true
 
 {% endif %}

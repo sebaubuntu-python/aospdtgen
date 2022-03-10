@@ -97,6 +97,20 @@ class DeviceTree:
 				break
 		self.fstab = Fstab(fstab)
 
+		# Let the partitions know their fstab entries if any
+		for partition in self.partitions:
+			partition.fill_fstab_entry(self.fstab)
+
+		# Get a list of A/B partitions
+		self.ab_partitions: list[PartitionModel] = []
+		if self.device_info.device_is_ab:
+			for fstab_entry in self.fstab.get_slotselect_partitions():
+				partition_model = PartitionModel.from_mount_point(fstab_entry.mount_point)
+				if partition_model is None:
+					continue
+
+				self.ab_partitions.append(partition_model)
+
 		# Get list of rootdir files
 		self.rootdir_bin_files = [file for file in self.vendor.files if file.relative_to(self.vendor.real_path).is_relative_to("bin") and file.suffix == ".sh"]
 		self.rootdir_etc_files = [file for file in self.vendor.files if file.relative_to(self.vendor.real_path).is_relative_to("etc/init/hw")]
@@ -188,6 +202,7 @@ class DeviceTree:
 
 	def render_template(self, *args, comment_prefix: str = "#", **kwargs):
 		return render_template(*args,
+		                       ab_partitions=self.ab_partitions,
 		                       boot_configuration=self.boot_configuration,
 		                       comment_prefix=comment_prefix,
 		                       current_year=self.current_year,

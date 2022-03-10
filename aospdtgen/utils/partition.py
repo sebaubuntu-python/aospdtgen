@@ -7,6 +7,7 @@
 from __future__ import annotations
 from aospdtgen.lib.libprop import BuildProp
 from aospdtgen.proprietary_files.ignore import is_blob_allowed
+from aospdtgen.utils.fstab import Fstab, FstabEntry
 from pathlib import Path
 
 (
@@ -95,6 +96,7 @@ class AndroidPartition:
 		self.dump_path = dump_path
 
 		self.files: list[Path] = []
+		self.fstab_entry: FstabEntry = None
 
 		self.build_prop = BuildProp()
 		for possible_paths in BUILD_PROP_LOCATION:
@@ -116,6 +118,12 @@ class AndroidPartition:
 				continue
 
 			self.files.append(file)
+
+	def fill_fstab_entry(self, fstab: Fstab):
+		for mount_point in self.model.mount_points:
+			self.fstab_entry = fstab.get_partition_by_mount_point(mount_point)
+			if self.fstab_entry is not None:
+				return
 
 	def get_formatted_file(self, file: Path):
 		return self.model.proprietary_files_prefix / file.relative_to(self.real_path)
