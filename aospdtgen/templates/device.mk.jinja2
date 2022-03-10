@@ -17,6 +17,27 @@ PRODUCT_ENFORCE_RRO_TARGETS := *
 $(call inherit-product, $(SRC_TARGET_DIR)/product/gsi_keys.mk)
 
 {% endif %}
+{% if device_info.device_is_ab %}
+# A/B
+{% if device_info.device_uses_virtual_ab %}
+$(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota.mk)
+
+{% endif %}
+PRODUCT_PACKAGES += \
+    android.hardware.boot@1.2-impl \
+    android.hardware.boot@1.2-impl.recovery \
+    android.hardware.boot@1.2-service
+
+PRODUCT_PACKAGES += \
+    update_engine \
+    update_engine_sideload \
+    update_verifier
+
+PRODUCT_PACKAGES += \
+    checkpoint_gc \
+    otapreopt_script
+
+{% endif %}
 {% if device_info.device_uses_dynamic_partitions %}
 # fastbootd
 PRODUCT_PACKAGES += \

@@ -2,6 +2,12 @@
 
 DEVICE_PATH := device/{{ device_info.manufacturer }}/{{ device_info.codename }}
 
+{% if device_info.device_is_ab %}
+# A/B
+AB_OTA_UPDATER := true
+AB_OTA_PARTITIONS += # TODO
+
+{% endif %}
 # Architecture
 {% if device_info.arch %}
 TARGET_ARCH := {{ device_info.arch.arch }}
@@ -127,7 +133,7 @@ TARGET_{{ partition.name|upper }}_PROP += $(DEVICE_PATH)/{{ partition.name }}.pr
 
 # Recovery
 TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/rootdir/etc/{{ fstab.fstab.name }}
-{% if boot_configuration.dtbo %}
+{% if boot_configuration.dtbo and not device_info.device_is_ab %}
 BOARD_INCLUDE_RECOVERY_DTBO := true
 {% endif %}
 {% if device_info.device_pixel_format %}
