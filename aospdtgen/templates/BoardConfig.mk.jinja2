@@ -139,6 +139,10 @@ TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/rootdir/etc/{{ fstab.fstab.name }}
 {% if boot_configuration.dtbo and not device_info.device_is_ab %}
 BOARD_INCLUDE_RECOVERY_DTBO := true
 {% endif %}
+{% if device_info.device_is_ab %}
+BOARD_USES_RECOVERY_AS_BOOT := true
+TARGET_NO_RECOVERY := true
+{% endif %}
 {% if device_info.device_pixel_format %}
 TARGET_RECOVERY_PIXEL_FORMAT := {{ device_info.device_pixel_format }}
 {% endif %}
