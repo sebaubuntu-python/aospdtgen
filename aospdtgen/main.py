@@ -26,3 +26,5 @@ def main():
 
 	dump = DeviceTree(args.dump_path)
 	dump.dump_to_folder(args.output)
+
+	print(f"\nDone! You can find the device tree in {str(args.output)}")
