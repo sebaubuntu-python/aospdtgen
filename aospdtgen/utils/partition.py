@@ -81,7 +81,8 @@ class PartitionModel(_PartitionModel):
 	CACHE = _PartitionModel("cache", DATA)
 	METADATA = _PartitionModel("metadata", DATA)
 
-BUILD_PROP_LOCATION = ["default.prop", "etc/default.prop", "build.prop", "etc/build.prop"]
+BUILD_PROP_LOCATION = ["build.prop", "etc/build.prop"]
+DEFAULT_PROP_LOCATION = ["default.prop", "etc/default.prop"]
 
 def get_dir(path: Path):
 	dir = {}
@@ -99,7 +100,7 @@ class AndroidPartition:
 		self.fstab_entry: FstabEntry = None
 
 		self.build_prop = BuildProp()
-		for possible_paths in BUILD_PROP_LOCATION:
+		for possible_paths in BUILD_PROP_LOCATION + DEFAULT_PROP_LOCATION:
 			build_prop_path = self.real_path / possible_paths
 			if not build_prop_path.is_file():
 				continue

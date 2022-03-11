@@ -144,7 +144,7 @@ BOARD_{{ device_info.manufacturer|upper }}_DYNAMIC_PARTITIONS_SIZE := 9122611200
 TARGET_BOARD_PLATFORM := {{ device_info.platform }}
 
 # Properties{{ '\n' }}
-{%- for partition in partitions %}
+{%- for partition in partitions.get_all_partitions() %}
 {% if partition.build_prop %}
 TARGET_{{ partition.model.name|upper }}_PROP += $(DEVICE_PATH)/{{ partition.model.name }}.prop
 {% endif %}

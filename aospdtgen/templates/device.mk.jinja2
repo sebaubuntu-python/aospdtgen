@@ -37,25 +37,22 @@ PRODUCT_PACKAGES += \
     update_engine_sideload \
     update_verifier
 
-{% for partition in partitions %}
-{% if partition.fstab_entry and partition.fstab_entry.is_slotselect() %}
-{% if partition.model.name == "system" %}
+{% if partitions.system.fstab_entry and partitions.system.fstab_entry.is_slotselect() %}
 AB_OTA_POSTINSTALL_CONFIG += \
     RUN_POSTINSTALL_system=true \
     POSTINSTALL_PATH_system=system/bin/otapreopt_script \
-    FILESYSTEM_TYPE_system={{ partition.fstab_entry.fs_type }} \
+    FILESYSTEM_TYPE_system={{ partitions.system.fstab_entry.fs_type }} \
     POSTINSTALL_OPTIONAL_system=true
 
-{% elif partition.model.name == "vendor" %}
+{% endif %}
+{% if partitions.vendor.fstab_entry and partitions.vendor.fstab_entry.is_slotselect() %}
 AB_OTA_POSTINSTALL_CONFIG += \
     RUN_POSTINSTALL_vendor=true \
     POSTINSTALL_PATH_vendor=bin/checkpoint_gc \
-    FILESYSTEM_TYPE_vendor={{ partition.fstab_entry.fs_type }} \
+    FILESYSTEM_TYPE_vendor={{ partitions.vendor.fstab_entry.fs_type }} \
     POSTINSTALL_OPTIONAL_vendor=true
 
 {% endif %}
-{% endif %}
-{% endfor %}
 PRODUCT_PACKAGES += \
     checkpoint_gc \
     otapreopt_script

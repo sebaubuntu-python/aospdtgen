@@ -11,8 +11,9 @@ from aospdtgen.utils.boot_configuration import BootConfiguration
 from aospdtgen.utils.device_info import DeviceInfo
 from aospdtgen.utils.fstab import Fstab
 from aospdtgen.utils.ignored_props import IGNORED_PROPS
+from aospdtgen.utils.partition import PartitionModel
+from aospdtgen.utils.partitions import Partitions
 from aospdtgen.utils.reorder import reorder_key
-from aospdtgen.utils.partition import BUILD_PROP_LOCATION, AndroidPartition, PartitionModel
 from datetime import datetime
 from pathlib import Path
 from shutil import rmtree
@@ -31,61 +32,18 @@ class DeviceTree:
 		self.all_files.sort(key=reorder_key)
 		self.all_files = [self.path / file for file in self.all_files]
 
-		# Determine partitions
-		self.system = None
-		self.product = None
-		self.system_ext = None
-		self.vendor = None
-		self.odm = None
+		self.partitions = Partitions(self.path)
 
-		# Find system
-		for system in [self.path / "system", self.path / "system/system"]:
-			for build_prop_location in BUILD_PROP_LOCATION:
-				if system / build_prop_location not in self.all_files:
-					continue
-
-				self.system = AndroidPartition(PartitionModel.SYSTEM, system, self.path)
-
-		if self.system is None:
-			raise FileNotFoundError("System not found")
-
-		# Find vendor
-		for vendor in [self.system.real_path / "vendor", self.path / "vendor"]:
-			for build_prop_location in BUILD_PROP_LOCATION:
-				if vendor / build_prop_location not in self.all_files:
-					continue
-
-				self.vendor = AndroidPartition(PartitionModel.VENDOR, vendor, self.path)
-
-		if self.vendor is None:
-			raise FileNotFoundError("Vendor not found")
-
-		# Find all the other partitions
-		self.product = self.search_for_partition(PartitionModel.PRODUCT)
-		self.system_ext = self.search_for_partition(PartitionModel.SYSTEM_EXT)
-		self.odm = self.search_for_partition(PartitionModel.ODM)
-		self.odm_dlkm = self.search_for_partition(PartitionModel.ODM_DLKM)
-		self.vendor_dlkm = self.search_for_partition(PartitionModel.VENDOR_DLKM)
-
-		self.partitions: list[AndroidPartition] = [
-			partition for partition in [
-				self.system,
-				self.product,
-				self.system_ext,
-				self.vendor,
-				self.odm,
-				self.odm_dlkm,
-				self.vendor_dlkm,
-			] if partition is not None
-		]
+		self.system = self.partitions.get_partition(PartitionModel.SYSTEM)
+		self.vendor = self.partitions.get_partition(PartitionModel.VENDOR)
 
 		# Associate files with partitions
-		for partition in self.partitions:
+		for partition in self.partitions.get_all_partitions():
 			partition.fill_files(self.all_files)
 
 		# Parse build prop and device info
 		self.build_prop = BuildProp()
-		for partition in self.partitions:
+		for partition in self.partitions.get_all_partitions():
 			self.build_prop.import_props(partition.build_prop)
 		self.device_info = DeviceInfo(self.build_prop)
 
@@ -98,7 +56,7 @@ class DeviceTree:
 		self.fstab = Fstab(fstab)
 
 		# Let the partitions know their fstab entries if any
-		for partition in self.partitions:
+		for partition in self.partitions.get_all_partitions():
 			partition.fill_fstab_entry(self.fstab)
 
 		# Get a list of A/B partitions
@@ -116,39 +74,13 @@ class DeviceTree:
 		self.rootdir_etc_files = [file for file in self.vendor.files if file.relative_to(self.vendor.real_path).is_relative_to("etc/init/hw")]
 
 		# Generate proprietary files list
-		self.proprietary_files_list = ProprietaryFilesList(self.partitions, self.device_info.build_description)
+		self.proprietary_files_list = ProprietaryFilesList(self.partitions.get_all_partitions(), self.device_info.build_description)
 
 		# Extract boot image
 		self.boot_configuration = BootConfiguration(self.path / "boot.img",
 		                                            self.path / "dtbo.img",
 		                                            self.path / "recovery.img",
 		                                            self.path / "vendor_boot.img")
-
-	def search_for_partition(self, partition: PartitionModel):
-		result = None
-		possible_locations = [self.system.real_path / partition.name,
-							  self.vendor.real_path / partition.name,
-							  self.path / partition.name]
-
-		for location in possible_locations:
-			for build_prop_location in BUILD_PROP_LOCATION:
-				if location / build_prop_location not in self.all_files:
-					continue
-
-				result = AndroidPartition(partition, location, self.path)
-
-		return result
-
-	def search_file_in_partitions(self, file: str):
-		files = []
-
-		for file in [f"{partition.real_path}/{file}" for partition in self.partitions]:
-			if not (file in self.all_files):
-				continue
-
-			files.append(file)
-
-		return files
 
 	def dump_to_folder(self, folder: Path):
 		if folder.is_dir():
@@ -167,7 +99,7 @@ class DeviceTree:
 		self.render_template(folder, "setup-makefiles.sh")
 
 		# Dump build props
-		for partition in self.partitions:
+		for partition in self.partitions.get_all_partitions():
 			if not partition.build_prop:
 				continue
 
