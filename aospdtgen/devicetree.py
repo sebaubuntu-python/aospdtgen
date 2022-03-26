@@ -122,14 +122,14 @@ class DeviceTree:
 		rootdir_bin_path.mkdir()
 
 		for file in self.rootdir_bin_files:
-			(rootdir_bin_path / file.name).write_bytes((self.path / self.vendor.real_path / file).read_bytes())
+			(rootdir_bin_path / file.name).write_bytes(file.read_bytes())
 
 		# rootdir/etc
 		rootdir_etc_path = rootdir_path / "etc"
 		rootdir_etc_path.mkdir()
 
 		for file in self.rootdir_etc_files:
-			(rootdir_etc_path / file.name).write_bytes((self.path / self.vendor.real_path / file).read_bytes())
+			(rootdir_etc_path / file.name).write_bytes(file.read_bytes())
 
 		(rootdir_etc_path / self.fstab.fstab.name).write_bytes(self.fstab.fstab.read_bytes())
 
