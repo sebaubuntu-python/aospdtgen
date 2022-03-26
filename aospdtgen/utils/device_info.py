@@ -29,6 +29,7 @@ BOOTLOADER_BOARD_NAME = ["ro.product.board"]
 DEVICE_PLATFORM = ["ro.board.platform"]
 DEVICE_PIXEL_FORMAT = ["ro.minui.pixel_format"]
 SCREEN_DENSITY = ["ro.sf.lcd_density"]
+USE_VULKAN = ["ro.hwui.use_vulkan"]
 BUILD_FINGERPRINT = get_partition_props("ro.{}build.fingerprint", add_empty=True)
 BUILD_DESCRIPTION = get_partition_props("ro.{}build.description", add_empty=True)
 GMS_CLIENTID_BASE = ["ro.com.google.clientidbase.ms", "ro.com.google.clientidbase"]
@@ -129,6 +130,7 @@ class DeviceInfo:
 
 		self.device_pixel_format = self.get_prop(DEVICE_PIXEL_FORMAT, raise_exception=False)
 		self.screen_density = self.get_prop(SCREEN_DENSITY, raise_exception=False)
+		self.use_vulkan = bool(strtobool(self.get_prop(USE_VULKAN, default="false")))
 		self.gms_clientid_base = self.get_prop(GMS_CLIENTID_BASE, default=f"android-{self.manufacturer}")
 		self.first_api_level = self.get_prop(FIRST_API_LEVEL)
 		self.product_characteristics = self.get_prop(PRODUCT_CHARACTERISTICS)

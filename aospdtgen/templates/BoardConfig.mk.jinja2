@@ -49,9 +49,14 @@ TARGET_BOOTLOADER_BOARD_NAME := {{ device_info.bootloader_board_name }}
 {% endif %}
 TARGET_NO_BOOTLOADER := true
 
-{% if device_info.screen_density %}
+{% if device_info.screen_density or device_info.use_vulkan %}
 # Display
+{% if device_info.screen_density %}
 TARGET_SCREEN_DENSITY := {{ device_info.screen_density }}
+{% endif %}
+{% if device_info.use_vulkan %}
+TARGET_USES_VULKAN := true
+{% endif %}
 
 {% endif %}
 {% if device_info.device_has_64bit_arch %}

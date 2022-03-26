@@ -97,3 +97,6 @@ IGNORED_PROPS.append("ro.product.locale")
 
 # APEX
 IGNORED_PROPS.append("ro.apex.updatable")
+
+# Vulkan
+IGNORED_PROPS.append("ro.hwui.use_vulkan")
