@@ -94,3 +94,6 @@ IGNORED_PROPS.append("ro.product.board")
 
 # Locale
 IGNORED_PROPS.append("ro.product.locale")
+
+# APEX
+IGNORED_PROPS.append("ro.apex.updatable")

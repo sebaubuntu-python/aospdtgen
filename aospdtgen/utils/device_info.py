@@ -36,6 +36,7 @@ BUILD_SECURITY_PATCH = ["ro.build.version.security_patch"]
 BUILD_VENDOR_SECURITY_PATCH = ["ro.vendor.build.security_patch"]
 FIRST_API_LEVEL = ["ro.product.first_api_level"]
 PRODUCT_CHARACTERISTICS = ["ro.build.characteristics"]
+APEX_UPDATABLE = ["ro.apex.updatable"]
 
 class _DeviceArch:
 	def __init__(self,
@@ -124,6 +125,7 @@ class DeviceInfo:
 		self.device_uses_dynamic_partitions = bool(strtobool(self.get_prop(DEVICE_USES_DYNAMIC_PARTITIONS, default="false")))
 		self.device_uses_virtual_ab = bool(strtobool(self.get_prop(DEVICE_USES_VIRTUAL_AB, default="false")))
 		self.device_uses_system_as_root = bool(strtobool(self.get_prop(DEVICE_USES_SYSTEM_AS_ROOT, default="false")))
+		self.device_uses_updatable_apex = bool(strtobool(self.get_prop(APEX_UPDATABLE, default="false")))
 
 		self.device_pixel_format = self.get_prop(DEVICE_PIXEL_FORMAT, raise_exception=False)
 		self.screen_density = self.get_prop(SCREEN_DENSITY, raise_exception=False)
