@@ -130,7 +130,7 @@ class DeviceInfo:
 
 		self.device_pixel_format = self.get_prop(DEVICE_PIXEL_FORMAT, raise_exception=False)
 		self.screen_density = self.get_prop(SCREEN_DENSITY, raise_exception=False)
-		self.use_vulkan = bool(strtobool(self.get_prop(USE_VULKAN, default="false")))
+		self.use_vulkan = bool(strtobool(self.get_prop(USE_VULKAN, default="false", treat_empty_string_as_none=True)))
 		self.gms_clientid_base = self.get_prop(GMS_CLIENTID_BASE, default=f"android-{self.manufacturer}")
 		self.first_api_level = self.get_prop(FIRST_API_LEVEL)
 		self.product_characteristics = self.get_prop(PRODUCT_CHARACTERISTICS)
@@ -138,10 +138,11 @@ class DeviceInfo:
 		self.build_security_patch = self.get_prop(BUILD_SECURITY_PATCH)
 		self.vendor_build_security_patch = self.get_prop(BUILD_VENDOR_SECURITY_PATCH, default=self.build_security_patch)
 
-	def get_prop(self, props: list, default: str = None, raise_exception: bool = True):
+	def get_prop(self, props: list, default: str = None, raise_exception: bool = True,
+	             treat_empty_string_as_none: bool = False):
 		for prop in props:
 			prop_value = self.buildprop.get_prop(prop)
-			if prop_value is not None:
+			if prop_value is not None and not (treat_empty_string_as_none and not prop_value):
 				return prop_value
 
 		if default is None and raise_exception:
