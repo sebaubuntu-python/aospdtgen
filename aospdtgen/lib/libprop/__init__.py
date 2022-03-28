@@ -68,7 +68,7 @@ class BuildProp(dict):
 		if isinstance(file, BuildProp):
 			text = str(file)
 		else:
-			text = file.read_text()
+			text = file.read_text(encoding="utf-8")
 
 		for prop in text.splitlines():
 			if prop.startswith("#"):
