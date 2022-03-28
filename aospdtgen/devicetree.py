@@ -87,16 +87,16 @@ class DeviceTree:
 			rmtree(folder)
 		folder.mkdir(parents=True)
 
-		self.render_template(folder, "Android.bp", comment_prefix="//")
-		self.render_template(folder, "Android.mk")
-		self.render_template(folder, "AndroidProducts.mk")
-		self.render_template(folder, "BoardConfig.mk")
-		self.render_template(folder, "device.mk")
-		self.render_template(folder, "extract-files.sh")
-		self.render_template(folder, "lineage_device.mk", out_file=f"lineage_{self.device_info.codename}.mk")
+		self._render_template(folder, "Android.bp", comment_prefix="//")
+		self._render_template(folder, "Android.mk")
+		self._render_template(folder, "AndroidProducts.mk")
+		self._render_template(folder, "BoardConfig.mk")
+		self._render_template(folder, "device.mk")
+		self._render_template(folder, "extract-files.sh")
+		self._render_template(folder, "lineage_device.mk", out_file=f"lineage_{self.device_info.codename}.mk")
 		(folder / "proprietary-files.txt").write_text(str(self.proprietary_files_list))
-		self.render_template(folder, "README.md")
-		self.render_template(folder, "setup-makefiles.sh")
+		self._render_template(folder, "README.md")
+		self._render_template(folder, "setup-makefiles.sh")
 
 		# Dump build props
 		for partition in self.partitions.get_all_partitions():
@@ -115,7 +115,7 @@ class DeviceTree:
 		rootdir_path = folder / "rootdir"
 		rootdir_path.mkdir()
 
-		self.render_template(rootdir_path, "rootdir_Android.bp", "Android.bp", comment_prefix="//")
+		self._render_template(rootdir_path, "rootdir_Android.bp", "Android.bp", comment_prefix="//")
 
 		# rootdir/bin
 		rootdir_bin_path = rootdir_path / "bin"
@@ -137,7 +137,7 @@ class DeviceTree:
 		"""Cleanup all the temporary files."""
 		self.boot_configuration.cleanup()
 
-	def render_template(self, *args, comment_prefix: str = "#", **kwargs):
+	def _render_template(self, *args, comment_prefix: str = "#", **kwargs):
 		return render_template(*args,
 		                       ab_partitions=self.ab_partitions,
 		                       boot_configuration=self.boot_configuration,
