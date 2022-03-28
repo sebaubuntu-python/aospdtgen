@@ -133,6 +133,10 @@ class DeviceTree:
 
 		(rootdir_etc_path / self.fstab.fstab.name).write_bytes(self.fstab.fstab.read_bytes())
 
+	def cleanup(self) -> None:
+		"""Cleanup all the temporary files."""
+		self.boot_configuration.cleanup()
+
 	def render_template(self, *args, comment_prefix: str = "#", **kwargs):
 		return render_template(*args,
 		                       ab_partitions=self.ab_partitions,

@@ -76,5 +76,8 @@ class BootConfiguration:
 	def cleanup(self):
 		self.boot_aik_manager.cleanup()
 
+		if self.recovery_aik_manager:
+			self.recovery_aik_manager.cleanup()
+
 		if self.vendor_boot_aik_manager:
 			self.vendor_boot_aik_manager.cleanup()
