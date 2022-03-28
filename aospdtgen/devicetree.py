@@ -136,6 +136,9 @@ class DeviceTree:
 
 		(rootdir_etc_path / self.fstab.fstab.name).write_bytes(self.fstab.fstab.read_bytes())
 
+		# Manifest
+		(folder / "manifest.xml").write_text(str(self.vendor.manifest))
+
 	def cleanup(self) -> None:
 		"""
 		Cleanup all the temporary files.

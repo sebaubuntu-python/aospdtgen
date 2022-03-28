@@ -178,6 +178,9 @@ TARGET_USERIMAGES_USE_F2FS := true
 VENDOR_SECURITY_PATCH := 2021-08-01
 
 {% endif %}
+# VINTF
+DEVICE_MANIFEST_FILE += $(DEVICE_PATH)/manifest.xml
+
 # Inherit the proprietary files
 include vendor/{{ device_info.manufacturer }}/{{ device_info.codename }}/BoardConfigVendor.mk
 

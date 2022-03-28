@@ -6,6 +6,7 @@
 
 from __future__ import annotations
 from aospdtgen.lib.libprop import BuildProp
+from aospdtgen.lib.libvintf.manifest import Manifest
 from aospdtgen.proprietary_files.ignore import is_blob_allowed
 from aospdtgen.utils.fstab import Fstab, FstabEntry
 from pathlib import Path
@@ -106,6 +107,14 @@ class AndroidPartition:
 				continue
 
 			self.build_prop.import_props(build_prop_path)
+
+		self.manifest = Manifest()
+		for possible_paths in ["etc/vintf/manifest.xml", "manifest.xml"]:
+			manifest_path = self.real_path / possible_paths
+			if not manifest_path.is_file():
+				continue
+
+			self.manifest.import_file(manifest_path)
 
 	def get_relative_path(self):
 		return self.real_path.relative_to(self.dump_path)
