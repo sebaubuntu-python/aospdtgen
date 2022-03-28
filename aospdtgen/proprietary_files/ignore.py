@@ -598,6 +598,9 @@ IGNORE_FOLDERS = [
 	# Hostapd config
 	"etc/hostapd",
 
+	# Device init scripts
+	"etc/init/hw",
+
 	# Permissions
 	"etc/permissions",
 
@@ -618,6 +621,9 @@ IGNORE_FOLDERS = [
 ]
 
 IGNORE_PATTERNS = [re.compile(pattern) for pattern in [
+	# Shell scripts
+	"bin/.*\.sh",
+
 	# TODO: Find a cleaner way to exclude AOSP interfaces libs,
 	# We're currently excluding all AOSP interfaces libs except impl
 	"^(?!lib(64)?/(hw/)?android\..*\..*-impl.so)lib(64)?/(hw/)?android\..*\..*.so",
