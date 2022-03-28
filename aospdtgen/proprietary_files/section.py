@@ -1,6 +1,7 @@
 from aospdtgen.lib.libexception import format_exception
 from aospdtgen.lib.liblogging import LOGE
 from aospdtgen.proprietary_files.elf import get_needed_shared_libs, get_shared_libs
+from aospdtgen.proprietary_files.ignore import is_blob_allowed
 from aospdtgen.utils.partition import AndroidPartition
 from aospdtgen.utils.reorder import reorder_key
 from importlib import import_module
@@ -34,10 +35,13 @@ class Section:
 	def add_files(self, partition: AndroidPartition):
 		matched: list[Path] = []
 		not_matched: list[Path] = []
+		ignored: list[Path] = []
 
 		for file in partition.files:
 			file_relative = file.relative_to(partition.real_path)
-			if self.file_match(file_relative):
+			if not is_blob_allowed(file_relative):
+				ignored.append(file)
+			elif self.file_match(file_relative):
 				matched.append(file)
 			else:
 				not_matched.append(file)
@@ -83,6 +87,7 @@ class Section:
 
 		partition.files.clear()
 		partition.files.extend(not_matched)
+		partition.files.extend(ignored)
 		partition.files.sort(key=reorder_key)
 
 		return not_matched

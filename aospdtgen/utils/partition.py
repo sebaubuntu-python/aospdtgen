@@ -7,7 +7,6 @@
 from __future__ import annotations
 from aospdtgen.lib.libprop import BuildProp
 from aospdtgen.lib.libvintf.manifest import Manifest
-from aospdtgen.proprietary_files.ignore import is_blob_allowed
 from aospdtgen.utils.fstab import Fstab, FstabEntry
 from pathlib import Path
 
@@ -122,9 +121,6 @@ class AndroidPartition:
 	def fill_files(self, files: list[Path]):
 		for file in files:
 			if not file.is_relative_to(self.real_path):
-				continue
-
-			if not is_blob_allowed(file.relative_to(self.real_path)):
 				continue
 
 			self.files.append(file)
