@@ -19,7 +19,9 @@ from pathlib import Path
 from shutil import rmtree
 
 class DeviceTree:
+	"""Class representing an Android device tree."""
 	def __init__(self, path: Path):
+		"""Given a path to a dumpyara dump path, generate a device tree by parsing it."""
 		self.path = path
 
 		self.current_year = str(datetime.now().year)
@@ -83,6 +85,7 @@ class DeviceTree:
 		                                            self.path / "vendor_boot.img")
 
 	def dump_to_folder(self, folder: Path):
+		"""Dump all makefiles, blueprint and prebuilts to a folder."""
 		if folder.is_dir():
 			rmtree(folder)
 		folder.mkdir(parents=True)
@@ -134,7 +137,11 @@ class DeviceTree:
 		(rootdir_etc_path / self.fstab.fstab.name).write_bytes(self.fstab.fstab.read_bytes())
 
 	def cleanup(self) -> None:
-		"""Cleanup all the temporary files."""
+		"""
+		Cleanup all the temporary files.
+
+		After you call this, you should throw away this object and never use it anymore.
+		"""
 		self.boot_configuration.cleanup()
 
 	def _render_template(self, *args, comment_prefix: str = "#", **kwargs):

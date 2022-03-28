@@ -8,12 +8,17 @@ from aospdtgen.lib.libaik import AIKManager
 from pathlib import Path
 
 class BootConfiguration:
+	"""Class representing a device's boot configuration."""
 	def __init__(self,
 	             boot: Path,
 	             dtbo: Path = None,
 	             recovery: Path = None,
 	             vendor_boot: Path = None,
 	            ):
+		"""
+		Given paths to bootloader partition images, parse all the images
+		and generate a boot configuration.
+		"""
 		self.boot = boot
 		self.dtbo = dtbo
 		self.recovery = recovery
@@ -61,6 +66,7 @@ class BootConfiguration:
 		self.pagesize = self.pagesize if self.pagesize else self.boot_image_info.pagesize
 
 	def copy_files_to_folder(self, folder: Path) -> None:
+		"""Copy all prebuilts to a folder."""
 		if self.kernel:
 			(folder / "kernel").write_bytes(self.kernel.read_bytes())
 
@@ -74,6 +80,7 @@ class BootConfiguration:
 			(folder / "dtbo.img").write_bytes(self.dtbo.read_bytes())
 
 	def cleanup(self):
+		"""Cleanup all the temporary files. Do not use this object anymore after calling this."""
 		self.boot_aik_manager.cleanup()
 
 		if self.recovery_aik_manager:

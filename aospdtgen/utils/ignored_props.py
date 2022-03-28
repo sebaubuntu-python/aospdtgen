@@ -7,6 +7,7 @@
 from aospdtgen.lib.libprop import get_partition_props
 
 IGNORED_PROPS: list[str] = []
+"""A list of build props that should be ignored because automatically generated."""
 
 # Build info
 IGNORED_PROPS.extend(get_partition_props("ro.{}build.date", add_empty=True))
