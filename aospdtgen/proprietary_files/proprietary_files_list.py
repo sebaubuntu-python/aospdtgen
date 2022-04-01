@@ -2,9 +2,8 @@ from aospdtgen.proprietary_files.section import Section, sections
 from aospdtgen.utils.partition import TREBLE, AndroidPartition
 
 class ProprietaryFilesList:
-	def __init__(self, partitions: list[AndroidPartition], build_description: str = None):
+	def __init__(self, partitions: list[AndroidPartition]):
 		self.partitions = partitions
-		self.build_description = build_description
 
 		self.sections: list[Section] = [section() for section in sections]
 		for section in self.sections:
@@ -22,9 +21,12 @@ class ProprietaryFilesList:
 		self.sections.append(misc_section)
 
 	def __str__(self) -> str:
+		return self.get_formatted_list()
+
+	def get_formatted_list(self, build_description: str = None) -> str:
 		result = ""
-		if self.build_description:
-			result += f"# Unpinned blobs from {self.build_description}\n"
+		if build_description:
+			result += f"# Unpinned blobs from {build_description}\n"
 
 		for section in self.sections:
 			if not section.files:

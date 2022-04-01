@@ -76,7 +76,7 @@ class DeviceTree:
 		self.rootdir_etc_files = [file for file in self.vendor.files if file.relative_to(self.vendor.real_path).is_relative_to("etc/init/hw")]
 
 		# Generate proprietary files list
-		self.proprietary_files_list = ProprietaryFilesList(self.partitions.get_all_partitions(), self.device_info.build_description)
+		self.proprietary_files_list = ProprietaryFilesList(self.partitions.get_all_partitions())
 
 		# Extract boot image
 		self.boot_configuration = BootConfiguration(self.path / "boot.img",
@@ -90,6 +90,7 @@ class DeviceTree:
 			rmtree(folder)
 		folder.mkdir(parents=True)
 
+		# Makefiles/blueprints
 		self._render_template(folder, "Android.bp", comment_prefix="//")
 		self._render_template(folder, "Android.mk")
 		self._render_template(folder, "AndroidProducts.mk")
@@ -97,9 +98,12 @@ class DeviceTree:
 		self._render_template(folder, "device.mk")
 		self._render_template(folder, "extract-files.sh")
 		self._render_template(folder, "lineage_device.mk", out_file=f"lineage_{self.device_info.codename}.mk")
-		(folder / "proprietary-files.txt").write_text(str(self.proprietary_files_list))
 		self._render_template(folder, "README.md")
 		self._render_template(folder, "setup-makefiles.sh")
+
+		# Proprietary files list
+		(folder / "proprietary-files.txt").write_text(
+				self.proprietary_files_list.get_formatted_list(self.device_info.build_description))
 
 		# Dump build props
 		for partition in self.partitions.get_all_partitions():
