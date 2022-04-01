@@ -10,7 +10,9 @@ from textwrap import indent
 from xml.etree.ElementTree import Element
 
 class HidlInterface:
+	"""Class representing a HIDL interface."""
 	def __init__(self, name: str, version: str, instance: str):
+		"""Initialize an object."""
 		self.name = name
 		self.version = version
 		self.instance = instance
@@ -51,7 +53,9 @@ class HidlInterface:
 		return [interface for interfaces in instances for interface in interfaces]
 
 class HidlTransport:
+	"""Class representing a HIDL transport type."""
 	def __init__(self, name: str, passthrough_arch: str = None):
+		"""Initialize an object."""
 		self.name = name
 		self.passthrough_arch = passthrough_arch
 
@@ -81,7 +85,9 @@ class HidlTransport:
 		return cls(name, passthrough_arch)
 
 class HidlHal(Hal):
+	"""Class representing a HIDL HAL."""
 	def __init__(self, name: str, transport: HidlTransport, interfaces: set[HidlInterface]):
+		"""Initialize an object."""
 		super().__init__(name)
 
 		self.transport = transport
@@ -103,7 +109,7 @@ class HidlHal(Hal):
 		string += indent(f'{self.transport}\n', INDENTATION)
 		for interface in sorted(self.interfaces, key=cast_to_str_key):
 			string += indent(f'<fqname>{interface}</fqname>\n', INDENTATION)
-		string += f'</hal>'
+		string += '</hal>'
 
 		return string
 

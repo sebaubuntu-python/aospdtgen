@@ -10,7 +10,9 @@ from textwrap import indent
 from xml.etree.ElementTree import Element
 
 class AidlInterface:
+	"""Class representing a AIDL HAL."""
 	def __init__(self, name: str, instance: str):
+		"""Initialize an object."""
 		self.name = name
 		self.instance = instance
 
@@ -39,7 +41,9 @@ class AidlInterface:
 		return cls(name, instance)
 
 class AidlHal(Hal):
+	"""Class representing a AIDL HAL."""
 	def __init__(self, name: str, interfaces: set[AidlInterface]):
+		"""Initialize an object."""
 		super().__init__(name)
 
 		self.interfaces = interfaces
@@ -49,7 +53,7 @@ class AidlHal(Hal):
 		string += indent(f'<name>{self.name}</name>\n', INDENTATION)
 		for interface in sorted(self.interfaces, key=cast_to_str_key):
 			string += indent(f'<fqname>{interface}</fqname>\n', INDENTATION)
-		string += f'</hal>'
+		string += '</hal>'
 
 		return string
 
