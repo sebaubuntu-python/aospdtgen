@@ -108,7 +108,7 @@ TARGET_KERNEL_SOURCE := kernel/{{ device_info.manufacturer }}/{{ device_info.cod
 TARGET_KERNEL_CLANG_COMPILE := true
 
 # Kernel - prebuilt
-#TARGET_FORCE_PREBUILT_KERNEL := true
+TARGET_FORCE_PREBUILT_KERNEL := true
 ifeq ($(TARGET_FORCE_PREBUILT_KERNEL),true)
 TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilts/kernel
 {% if boot_configuration.dt %}
