@@ -89,6 +89,9 @@ PRODUCT_PACKAGES += \
 {%- for file in rootdir_etc_files %}
     {{ file.name }} \
 {% endfor %}
+{%- for file in rootdir_recovery_etc_files %}
+    {{ file.name }} \
+{% endfor %}
 
 {% if device_info.device_uses_dynamic_partitions %}
 PRODUCT_COPY_FILES += \

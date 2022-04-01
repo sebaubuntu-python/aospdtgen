@@ -71,18 +71,28 @@ class DeviceTree:
 
 				self.ab_partitions.append(partition_model)
 
-		# Get list of rootdir files
-		self.rootdir_bin_files = [file for file in self.vendor.files if file.relative_to(self.vendor.real_path).is_relative_to("bin") and file.suffix == ".sh"]
-		self.rootdir_etc_files = [file for file in self.vendor.files if file.relative_to(self.vendor.real_path).is_relative_to("etc/init/hw")]
-
-		# Generate proprietary files list
-		self.proprietary_files_list = ProprietaryFilesList(self.partitions.get_all_partitions())
-
 		# Extract boot image
 		self.boot_configuration = BootConfiguration(self.path / "boot.img",
 		                                            self.path / "dtbo.img",
 		                                            self.path / "recovery.img",
 		                                            self.path / "vendor_boot.img")
+
+		# Get list of rootdir files
+		self.rootdir_bin_files = [file for file in self.vendor.files
+		                          if file.relative_to(self.vendor.real_path).is_relative_to("bin")
+		                          and file.suffix == ".sh"]
+		self.rootdir_etc_files = [file for file in self.vendor.files
+		                          if file.relative_to(self.vendor.real_path).is_relative_to("etc/init/hw")]
+		
+		recovery_resources_location = (self.boot_configuration.recovery_aik_manager.ramdisk_path
+		                               if self.boot_configuration.recovery_aik_manager
+		                               else self.boot_configuration.boot_aik_manager.ramdisk_path)
+		self.rootdir_recovery_etc_files = [file for file in recovery_resources_location.iterdir()
+		                                   if file.relative_to(recovery_resources_location).is_relative_to(".")
+		                                   and file.suffix == ".rc"]
+
+		# Generate proprietary files list
+		self.proprietary_files_list = ProprietaryFilesList(self.partitions.get_all_partitions())
 
 	def dump_to_folder(self, folder: Path):
 		"""Dump all makefiles, blueprint and prebuilts to a folder."""
@@ -123,6 +133,7 @@ class DeviceTree:
 		rootdir_path.mkdir()
 
 		self._render_template(rootdir_path, "rootdir_Android.bp", "Android.bp", comment_prefix="//")
+		self._render_template(rootdir_path, "rootdir_Android.mk", "Android.mk")
 
 		# rootdir/bin
 		rootdir_bin_path = rootdir_path / "bin"
@@ -135,7 +146,7 @@ class DeviceTree:
 		rootdir_etc_path = rootdir_path / "etc"
 		rootdir_etc_path.mkdir()
 
-		for file in self.rootdir_etc_files:
+		for file in self.rootdir_etc_files + self.rootdir_recovery_etc_files:
 			(rootdir_etc_path / file.name).write_bytes(file.read_bytes())
 
 		(rootdir_etc_path / self.fstab.fstab.name).write_bytes(self.fstab.fstab.read_bytes())
@@ -161,5 +172,6 @@ class DeviceTree:
 		                       fstab=self.fstab,
 		                       rootdir_bin_files=self.rootdir_bin_files,
 		                       rootdir_etc_files=self.rootdir_etc_files,
+		                       rootdir_recovery_etc_files=self.rootdir_recovery_etc_files,
 		                       partitions=self.partitions,
 		                       **kwargs)
