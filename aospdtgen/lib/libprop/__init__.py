@@ -90,7 +90,7 @@ class BuildProp(dict):
 		value = self.get_prop(key)
 
 		try:
-			return strtobool(value)
+			return bool(strtobool(value))
 		except ValueError:
 			return default
 
