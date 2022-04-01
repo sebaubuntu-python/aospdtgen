@@ -32,6 +32,7 @@ class AIKImageInfo:
 	             ramdisk: Path,
 	             ramdisk_compression: str,
 	             ramdisk_offset: str,
+	             sigtype: str,
 	             tags_offset: str,
 	            ):
 		self.kernel = kernel
@@ -51,6 +52,7 @@ class AIKImageInfo:
 		self.pagesize = pagesize
 		self.ramdisk_compression = ramdisk_compression
 		self.ramdisk_offset = ramdisk_offset
+		self.sigtype = sigtype
 		self.tags_offset = tags_offset
 
 	def __str__(self):
@@ -67,6 +69,7 @@ class AIKImageInfo:
 			f"page size: {self.pagesize}\n"
 			f"ramdisk compression: {self.ramdisk_compression}\n"
 			f"ramdisk offset: {self.ramdisk_offset}\n"
+			f"sigtype: {self.sigtype}\n"
 			f"tags offset: {self.tags_offset}\n"
 		)
 
@@ -167,6 +170,7 @@ class AIKManager:
 			ramdisk=ramdisk,
 			ramdisk_compression=ramdisk_compression,
 			ramdisk_offset=self._read_recovery_file(prefix, "ramdisk_offset"),
+			sigtype=self._read_recovery_file(prefix, "sigtype"),
 			tags_offset=self._read_recovery_file(prefix, "tags_offset"),
 		)
 
