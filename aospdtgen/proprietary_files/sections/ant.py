@@ -4,6 +4,7 @@ class AntSection(Section):
 	name = "ANT"
 	interfaces = [
 		"com.dsi.ant",
+		"vendor.xiaomi.hardware.antdtx",
 	]
 
 register_section(AntSection)
