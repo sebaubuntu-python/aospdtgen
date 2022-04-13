@@ -4,6 +4,7 @@ class SoundtriggerSection(Section):
 	name = "Soundtrigger"
 	interfaces = [
 		"android.hardware.soundtrigger",
+		"vendor.qti.voiceprint",
 	]
 	hardware_modules = [
 		"sound_trigger",

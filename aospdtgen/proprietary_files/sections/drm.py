@@ -15,4 +15,24 @@ class DrmSection(Section):
 		"lib64/mediadrm",
 	]
 
+class DrmQseeSection(Section):
+	name = "DRM (Qualcomm Secure Execution Environment)"
+	interfaces = [
+		"vendor.qti.hardware.qseecom",
+	]
+	binaries = [
+		"qseecomd",
+	]
+	libraries = [
+		"libQSEEComAPI",
+	]
+
+class DrmQteeSection(Section):
+	name = "DRM (Qualcomm Trusted Execution Environment)"
+	interfaces = [
+		"vendor.qti.hardware.qteeconnector",
+	]
+
 register_section(DrmSection)
+register_section(DrmQseeSection)
+register_section(DrmQteeSection)

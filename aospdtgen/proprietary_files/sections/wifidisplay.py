@@ -4,6 +4,7 @@ class WifiDisplaySection(Section):
 	name = "Wi-Fi Display"
 	interfaces = [
 		"com.qualcomm.qti.wifidisplayhal",
+		"vendor.qti.hardware.sigma_miracast",
 		"vendor.qti.hardware.wifidisplaysession",
 	]
 	apps = [

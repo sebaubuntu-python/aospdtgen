@@ -10,6 +10,9 @@ class CameraSection(Section):
 		"camera.device",
 		"vendor.qti.hardware.camera.device",
 		"vendor.qti.hardware.camera.postproc",
+		"vendor.qti.hardware.scve.objecttracker",
+		"vendor.qti.hardware.scve.panorama",
+		"vendor.qti.hardware.seccam",
 	]
 	hardware_modules = [
 		"camera",
@@ -21,7 +24,7 @@ class CameraSection(Section):
 	]
 	patterns = [
 		"lib(64)?/com.qti.feature2\..*\.so",
-                "lib(64)?/libchromatix_.*\.so",
+		"lib(64)?/libchromatix_.*\.so",
 	]
 
 class CameraConfigsSection(Section):

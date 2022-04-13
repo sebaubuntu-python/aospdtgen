@@ -15,6 +15,7 @@ class DisplaySection(Section):
 		"vendor.qti.hardware.display.composer",
 		"vendor.qti.hardware.display.mapper",
 		"vendor.qti.hardware.display.mapperextensions",
+		"vendor.qti.hardware.qdutils_disp",
 	]
 	hardware_modules = [
 		"copybit",

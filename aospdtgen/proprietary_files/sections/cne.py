@@ -5,6 +5,7 @@ class CneSection(Section):
 	interfaces = [
 		"vendor.qti.data.factory",
 		"vendor.qti.data.slm",
+		"vendor.qti.hardware.cacert",
 		"vendor.qti.hardware.data.cne.internal.api",
 		"vendor.qti.hardware.data.cne.internal.constants",
 		"vendor.qti.hardware.data.cne.internal.server",

@@ -6,6 +6,7 @@ class WifiSection(Section):
 		"android.hardware.wifi",
 		"vendor.mediatek.hardware.wifi.hostapd",
 		"vendor.mediatek.hardware.wifi.supplicant",
+		"vendor.qti.hardware.fstman",
 		"vendor.qti.hardware.wifi.hostapd",
 		"vendor.qti.hardware.wifi.keystore",
 		"vendor.qti.hardware.wifi.supplicant",
