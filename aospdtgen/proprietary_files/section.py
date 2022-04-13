@@ -168,8 +168,18 @@ known_shared_libs: list[str] = []
 
 def register_section(section: Section):
 	sections.append(section)
-	known_interfaces.extend(section.interfaces)
-	known_shared_libs.extend(section.libraries)
+
+	for interface in section.interfaces:
+		if interface in known_interfaces:
+			raise Exception(f"Duplicate interface: {interface}")
+
+		known_interfaces.append(interface)
+	
+	for library in section.libraries:
+		if library in known_shared_libs:
+			raise Exception(f"Duplicate shared lib: {library}")
+
+		known_shared_libs.append(library)
 
 def register_sections(sections_path: Path):
 	"""Import all the sections and let them execute register_section()."""
