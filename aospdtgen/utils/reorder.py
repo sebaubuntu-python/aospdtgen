@@ -5,9 +5,7 @@
 #
 
 from functools import cmp_to_key
-from locale import LC_ALL, setlocale, strcoll
-
-setlocale(LC_ALL, "C")
+from locale import strcoll
 
 def strcoll_custom(string1: str, string2: str) -> int:
     string1 = str(string1)

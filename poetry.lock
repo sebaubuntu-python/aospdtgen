@@ -51,6 +51,17 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "sebaubuntu-libs"
+version = "1.0.1"
+description = "SebaUbuntu's shared libs"
+category = "main"
+optional = false
+python-versions = ">=3.9,<4.0"
+
+[package.dependencies]
+GitPython = ">=3.1.27,<4.0.0"
+
+[[package]]
 name = "smmap"
 version = "5.0.0"
 description = "A pure Python implementation of a sliding window memory map manager"
@@ -61,7 +72,7 @@ python-versions = ">=3.6"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "72b9237f1e3ed71f40bff597e0fe6c0c16ce0c50608a955c1b48a349eb59c41c"
+content-hash = "0b989c1fb3bb47b85cdbdbaaed39d2fba834d45e55d01f07acbd08cfb476ec26"
 
 [metadata.files]
 gitdb = [
@@ -150,6 +161,10 @@ markupsafe = [
 pyelftools = [
     {file = "pyelftools-0.27-py2.py3-none-any.whl", hash = "sha256:5609aa6da1123fccfae2e8431a67b4146aa7fad5b3889f808df12b110f230937"},
     {file = "pyelftools-0.27.tar.gz", hash = "sha256:cde854e662774c5457d688ca41615f6594187ba7067af101232df889a6b7a66b"},
+]
+sebaubuntu-libs = [
+    {file = "sebaubuntu_libs-1.0.1-py3-none-any.whl", hash = "sha256:30bd6126badd5f9266921dd9727637532a3171db5e62b1ddfacc795a4fbaee74"},
+    {file = "sebaubuntu_libs-1.0.1.tar.gz", hash = "sha256:c715f46ef00282cf9740c83af512d3b69b2cf07ecbd00bc5a1246189c7387534"},
 ]
 smmap = [
     {file = "smmap-5.0.0-py3-none-any.whl", hash = "sha256:2aba19d6a040e78d8b09de5c57e96207b09ed71d8e55ce0959eeee6c8e190d94"},

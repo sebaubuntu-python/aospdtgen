@@ -4,8 +4,8 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-from aospdtgen.lib.libaik import AIKManager
 from pathlib import Path
+from sebaubuntu_libs.libaik import AIKManager
 
 class BootConfiguration:
 	"""Class representing a device's boot configuration."""

@@ -4,8 +4,9 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-from aospdtgen.lib.libprop import BuildProp, get_partition_props
 from distutils.util import strtobool
+from sebaubuntu_libs.libprop import BuildProp
+from sebaubuntu_libs.libprop.utils import get_partition_props
 
 def get_product_props(value: str):
 	return get_partition_props("ro.product.{}" + value, add_empty=True)

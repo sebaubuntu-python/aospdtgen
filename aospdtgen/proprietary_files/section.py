@@ -1,5 +1,3 @@
-from aospdtgen.lib.libexception import format_exception
-from aospdtgen.lib.liblogging import LOGE
 from aospdtgen.proprietary_files.elf import get_needed_shared_libs, get_shared_libs
 from aospdtgen.proprietary_files.ignore import is_blob_allowed
 from aospdtgen.utils.partition import AndroidPartition
@@ -8,6 +6,8 @@ from importlib import import_module
 from pathlib import Path
 from pkgutil import iter_modules
 from re import match
+from sebaubuntu_libs.libexception import format_exception
+from sebaubuntu_libs.liblogging import LOGE
 
 class Section:
 	name: str = "Miscellaneous"

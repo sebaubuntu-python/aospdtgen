@@ -9,6 +9,7 @@ from aospdtgen.utils.logging import setup_logging
 from aospdtgen.devicetree import DeviceTree
 from argparse import ArgumentParser
 from pathlib import Path
+from sebaubuntu_libs.liblocale import setup_locale
 
 def main():
 	setup_logging()
@@ -23,6 +24,8 @@ def main():
 	                    help="custom output folder")
 
 	args = parser.parse_args()
+
+	setup_locale()
 
 	dump = DeviceTree(args.dump_path)
 	dump.dump_to_folder(args.output)
