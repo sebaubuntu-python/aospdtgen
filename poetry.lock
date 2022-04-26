@@ -44,7 +44,7 @@ python-versions = ">=3.6"
 
 [[package]]
 name = "pyelftools"
-version = "0.27"
+version = "0.28"
 description = "Library for analyzing ELF files and DWARF debugging information"
 category = "main"
 optional = false
@@ -72,7 +72,7 @@ python-versions = ">=3.6"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "0b989c1fb3bb47b85cdbdbaaed39d2fba834d45e55d01f07acbd08cfb476ec26"
+content-hash = "fd576e18ecc2e204e68d2a1d9b009d75fa0ab891f35ef6d12ddb04ec421d996c"
 
 [metadata.files]
 gitdb = [
@@ -159,8 +159,8 @@ markupsafe = [
     {file = "MarkupSafe-2.0.1.tar.gz", hash = "sha256:594c67807fb16238b30c44bdf74f36c02cdf22d1c8cda91ef8a0ed8dabf5620a"},
 ]
 pyelftools = [
-    {file = "pyelftools-0.27-py2.py3-none-any.whl", hash = "sha256:5609aa6da1123fccfae2e8431a67b4146aa7fad5b3889f808df12b110f230937"},
-    {file = "pyelftools-0.27.tar.gz", hash = "sha256:cde854e662774c5457d688ca41615f6594187ba7067af101232df889a6b7a66b"},
+    {file = "pyelftools-0.28-py2.py3-none-any.whl", hash = "sha256:1509d30756a14a8c9a6670778144fb9a04b311751ddac019dcc0c2f28da03ccc"},
+    {file = "pyelftools-0.28.tar.gz", hash = "sha256:53e5609cac016471d40bd88dc410cd90755942c25e58a61021cfdf7abdfeacff"},
 ]
 sebaubuntu-libs = [
     {file = "sebaubuntu_libs-1.0.1-py3-none-any.whl", hash = "sha256:30bd6126badd5f9266921dd9727637532a3171db5e62b1ddfacc795a4fbaee74"},
