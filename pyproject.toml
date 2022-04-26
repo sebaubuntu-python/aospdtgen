@@ -8,7 +8,7 @@ license = "Apache-2.0"
 [tool.poetry.dependencies]
 python = "^3.9"
 pyelftools = "^0.28"
-Jinja2 = "^3.0.3"
+Jinja2 = "^3.1.1"
 GitPython = "^3.1.27"
 sebaubuntu-libs = "^1.0.5"
 
