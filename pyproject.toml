@@ -10,7 +10,7 @@ python = "^3.9"
 pyelftools = "^0.28"
 Jinja2 = "^3.0.3"
 GitPython = "^3.1.27"
-sebaubuntu-libs = "^1.0.1"
+sebaubuntu-libs = "^1.0.5"
 
 [tool.poetry.dev-dependencies]
 
