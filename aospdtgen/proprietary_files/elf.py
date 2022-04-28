@@ -16,4 +16,8 @@ def get_needed_shared_libs(file: Path):
 			pass
 
 def get_shared_libs(files: list[Path]):
-	return [lib for lib in files if lib.suffix == ".so"]
+	for lib in files:
+		if not lib.suffix == ".so":
+			continue
+
+		yield lib
