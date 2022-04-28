@@ -572,6 +572,7 @@ IGNORE_FILENAMES = [
 	# Licenses
 	"NOTICE.xml.gz",
 	"NOTICE_GPL.html.gz",
+	"NOTICE_GPL.xml.gz",
 	"passwd",
 
 	# Recovery patch
