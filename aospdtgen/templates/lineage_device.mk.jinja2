@@ -14,8 +14,12 @@ $(call inherit-product, device/{{ device_info.manufacturer }}/{{ device_info.cod
 
 PRODUCT_DEVICE := {{ device_info.codename }}
 PRODUCT_NAME := lineage_{{ device_info.codename }}
+{% if device_info.brand %}
 PRODUCT_BRAND := {{ device_info.brand }}
+{% endif %}
+{% if device_info.model %}
 PRODUCT_MODEL := {{ device_info.model }}
+{% endif %}
 PRODUCT_MANUFACTURER := {{ device_info.manufacturer }}
 
 PRODUCT_GMS_CLIENTID_BASE := {{ device_info.gms_clientid_base }}

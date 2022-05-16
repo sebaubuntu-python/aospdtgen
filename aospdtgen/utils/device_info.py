@@ -108,8 +108,8 @@ class DeviceInfo:
 		# Parse props
 		self.codename = self.get_prop(DEVICE_CODENAME)
 		self.manufacturer = self.get_prop(DEVICE_MANUFACTURER).split()[0].lower()
-		self.brand = self.get_prop(DEVICE_BRAND)
-		self.model = self.get_prop(DEVICE_MODEL)
+		self.brand = self.get_prop(DEVICE_BRAND, raise_exception=False)
+		self.model = self.get_prop(DEVICE_MODEL, raise_exception=False)
 		self.build_fingerprint = self.get_prop(BUILD_FINGERPRINT)
 		self.build_description = self.get_prop(BUILD_DESCRIPTION, default=fingerprint_to_description(self.build_fingerprint))
 
