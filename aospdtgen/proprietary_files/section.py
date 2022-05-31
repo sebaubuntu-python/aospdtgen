@@ -170,15 +170,11 @@ def register_section(section: Section):
 	sections.append(section)
 
 	for interface in section.interfaces:
-		if interface in known_interfaces:
-			raise Exception(f"Duplicate interface: {interface}")
-
+		assert interface not in known_interfaces, f"Duplicate interface: {interface}"
 		known_interfaces.append(interface)
-	
-	for library in section.libraries:
-		if library in known_shared_libs:
-			raise Exception(f"Duplicate shared lib: {library}")
 
+	for library in section.libraries:
+		assert library not in known_shared_libs, f"Duplicate shared library: {library}"
 		known_shared_libs.append(library)
 
 def register_sections(sections_path: Path):
