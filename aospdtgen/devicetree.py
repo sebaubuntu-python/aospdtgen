@@ -120,7 +120,7 @@ class DeviceTree:
 			if not partition.build_prop:
 				continue
 
-			(folder / f"{partition.model.name}.prop").write_text(partition.build_prop.get_readable_list(IGNORED_PROPS))
+			partition.build_prop.write_to_file(folder / f"{partition.model.name}.prop", IGNORED_PROPS)
 
 		# Dump boot image prebuilt files
 		prebuilts_path = folder / "prebuilts"
