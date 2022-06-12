@@ -153,7 +153,7 @@ class DeviceTree:
 		for file in self.rootdir_etc_files + self.rootdir_recovery_etc_files:
 			(rootdir_etc_path / file.name).write_bytes(file.read_bytes())
 
-		(rootdir_etc_path / self.fstab.fstab.name).write_bytes(self.fstab.fstab.read_bytes())
+		(rootdir_etc_path / self.fstab.fstab.name).write_text(self.fstab.format())
 
 		# Manifest
 		(folder / "manifest.xml").write_text(str(self.vendor.manifest))
