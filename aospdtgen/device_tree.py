@@ -9,6 +9,7 @@ from pathlib import Path
 from sebaubuntu_libs.libfstab import Fstab
 from sebaubuntu_libs.liblogging import LOGI
 from sebaubuntu_libs.libprop import BuildProp
+from sebaubuntu_libs.libreorder import strcoll_files_key
 from shutil import rmtree
 
 from aospdtgen.proprietary_files.proprietary_files_list import ProprietaryFilesList
@@ -18,7 +19,6 @@ from aospdtgen.utils.device_info import DeviceInfo
 from aospdtgen.utils.ignored_props import IGNORED_PROPS
 from aospdtgen.utils.partition import PartitionModel
 from aospdtgen.utils.partitions import Partitions
-from aospdtgen.utils.reorder import reorder_key
 
 class DeviceTree:
 	"""Class representing an Android device tree."""
@@ -33,7 +33,7 @@ class DeviceTree:
 		self.all_files = list(dict.fromkeys(self.all_files_txt.open().read().splitlines()))
 		self.all_files = [self.path / file for file in self.all_files]
 		self.all_files = [file for file in self.all_files if file.is_file()]
-		self.all_files.sort(key=reorder_key)
+		self.all_files.sort(key=strcoll_files_key)
 
 		LOGI("Figuring out partitions scheme")
 		self.partitions = Partitions(self.path)

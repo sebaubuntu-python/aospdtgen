@@ -10,11 +10,11 @@ from pkgutil import iter_modules
 from re import match
 from sebaubuntu_libs.libexception import format_exception
 from sebaubuntu_libs.liblogging import LOGE
+from sebaubuntu_libs.libreorder import strcoll_files_key
 
 from aospdtgen.proprietary_files.elf import get_needed_shared_libs, get_shared_libs
 from aospdtgen.proprietary_files.ignore import is_blob_allowed
 from aospdtgen.utils.partition import AndroidPartition
-from aospdtgen.utils.reorder import reorder_key
 
 class Section:
 	name: str = "Miscellaneous"
@@ -90,12 +90,12 @@ class Section:
 					matched.append(file)
 
 		self.files.extend([partition.model.proprietary_files_prefix / file.relative_to(partition.real_path) for file in matched])
-		self.files.sort(key=reorder_key)
+		self.files.sort(key=strcoll_files_key)
 
 		partition.files.clear()
 		partition.files.extend(not_matched)
 		partition.files.extend(ignored)
-		partition.files.sort(key=reorder_key)
+		partition.files.sort(key=strcoll_files_key)
 
 		return not_matched
 
