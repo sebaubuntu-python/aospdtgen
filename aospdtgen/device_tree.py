@@ -6,6 +6,7 @@
 
 from datetime import datetime
 from pathlib import Path
+from sebaubuntu_libs.liblogging import LOGI
 from sebaubuntu_libs.libprop import BuildProp
 from shutil import rmtree
 
@@ -27,34 +28,37 @@ class DeviceTree:
 
 		self.current_year = str(datetime.now().year)
 
-		# All files
+		LOGI("Parsing all_files.txt")
 		self.all_files_txt = self.path / "all_files.txt"
 		self.all_files = list(dict.fromkeys(self.all_files_txt.open().read().splitlines()))
 		self.all_files = [self.path / file for file in self.all_files]
 		self.all_files = [file for file in self.all_files if file.is_file()]
 		self.all_files.sort(key=reorder_key)
 
+		LOGI("Figuring out partitions scheme")
 		self.partitions = Partitions(self.path)
 
 		self.system = self.partitions.get_partition(PartitionModel.SYSTEM)
 		self.vendor = self.partitions.get_partition(PartitionModel.VENDOR)
 
-		# Associate files with partitions
+		LOGI("Associating files with partitions")
 		for partition in self.partitions.get_all_partitions():
 			partition.fill_files(self.all_files)
 
-		# Parse build prop and device info
+		LOGI("Parsing build props and device info")
 		self.build_prop = BuildProp()
 		for partition in self.partitions.get_all_partitions():
 			self.build_prop.import_props(partition.build_prop)
 		self.device_info = DeviceInfo(self.build_prop)
 
-		# Parse fstab
-		fstab = None
-		for file in [file for file in self.vendor.files if file.relative_to(self.vendor.real_path).is_relative_to("etc") and file.name.startswith("fstab.")]:
-			if file.is_file():
-				fstab = file
-				break
+		LOGI("Parsing fstab")
+		fstabs = [
+			file for file in self.vendor.files
+			if (file.relative_to(self.vendor.real_path).is_relative_to("etc")
+		        and file.name.startswith("fstab."))
+		]
+		assert fstabs, "No fstab found"
+		fstab = fstabs[0]
 		self.fstab = Fstab(fstab)
 
 		# Let the partitions know their fstab entries if any
@@ -71,19 +75,19 @@ class DeviceTree:
 
 				self.ab_partitions.append(partition_model)
 
-		# Extract boot image
+		LOGI("Extracting boot image")
 		self.boot_configuration = BootConfiguration(self.path / "boot.img",
 		                                            self.path / "dtbo.img",
 		                                            self.path / "recovery.img",
 		                                            self.path / "vendor_boot.img")
 
-		# Get list of rootdir files
+		LOGI("Getting list of rootdir files")
 		self.rootdir_bin_files = [file for file in self.vendor.files
 		                          if file.relative_to(self.vendor.real_path).is_relative_to("bin")
 		                          and file.suffix == ".sh"]
 		self.rootdir_etc_files = [file for file in self.vendor.files
 		                          if file.relative_to(self.vendor.real_path).is_relative_to("etc/init/hw")]
-		
+
 		recovery_resources_location = (self.boot_configuration.recovery_aik_manager.ramdisk_path
 		                               if self.boot_configuration.recovery_aik_manager
 		                               else self.boot_configuration.boot_aik_manager.ramdisk_path)
@@ -91,7 +95,7 @@ class DeviceTree:
 		                                   if file.relative_to(recovery_resources_location).is_relative_to(".")
 		                                   and file.suffix == ".rc"]
 
-		# Generate proprietary files list
+		LOGI("Generating proprietary files list")
 		self.proprietary_files_list = ProprietaryFilesList(self.partitions.get_all_partitions())
 
 	def dump_to_folder(self, folder: Path):
