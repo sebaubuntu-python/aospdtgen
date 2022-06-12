@@ -7,10 +7,10 @@
 from argparse import ArgumentParser
 from pathlib import Path
 from sebaubuntu_libs.liblocale import setup_locale
+from sebaubuntu_libs.liblogging import setup_logging
 
 from aospdtgen import __version__ as version, current_path
 from aospdtgen.device_tree import DeviceTree
-from aospdtgen.utils.logging import setup_logging
 
 def main():
 	setup_logging()
