@@ -6,10 +6,9 @@
 
 from __future__ import annotations
 from pathlib import Path
+from sebaubuntu_libs.libfstab import Fstab, FstabEntry
 from sebaubuntu_libs.libprop import BuildProp
 from sebaubuntu_libs.libvintf.manifest import Manifest
-
-from aospdtgen.utils.fstab import Fstab, FstabEntry
 
 (
 	BOOTLOADER,
