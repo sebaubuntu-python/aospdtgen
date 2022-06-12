@@ -29,11 +29,10 @@ class DeviceTree:
 
 		# All files
 		self.all_files_txt = self.path / "all_files.txt"
-		self.all_files = [file for file in self.all_files_txt.open().read().splitlines()
-		                  if (self.path / file).is_file()]
-		self.all_files = list(dict.fromkeys(self.all_files))
-		self.all_files.sort(key=reorder_key)
+		self.all_files = list(dict.fromkeys(self.all_files_txt.open().read().splitlines()))
 		self.all_files = [self.path / file for file in self.all_files]
+		self.all_files = [file for file in self.all_files if file.is_file()]
+		self.all_files.sort(key=reorder_key)
 
 		self.partitions = Partitions(self.path)
 
