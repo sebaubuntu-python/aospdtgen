@@ -5,10 +5,11 @@
 #
 
 from __future__ import annotations
-from aospdtgen.utils.fstab import Fstab, FstabEntry
 from pathlib import Path
 from sebaubuntu_libs.libprop import BuildProp
 from sebaubuntu_libs.libvintf.manifest import Manifest
+
+from aospdtgen.utils.fstab import Fstab, FstabEntry
 
 (
 	BOOTLOADER,

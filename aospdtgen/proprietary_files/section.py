@@ -1,13 +1,20 @@
-from aospdtgen.proprietary_files.elf import get_needed_shared_libs, get_shared_libs
-from aospdtgen.proprietary_files.ignore import is_blob_allowed
-from aospdtgen.utils.partition import AndroidPartition
-from aospdtgen.utils.reorder import reorder_key
+#
+# Copyright (C) 2022 The LineageOS Project
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
 from importlib import import_module
 from pathlib import Path
 from pkgutil import iter_modules
 from re import match
 from sebaubuntu_libs.libexception import format_exception
 from sebaubuntu_libs.liblogging import LOGE
+
+from aospdtgen.proprietary_files.elf import get_needed_shared_libs, get_shared_libs
+from aospdtgen.proprietary_files.ignore import is_blob_allowed
+from aospdtgen.utils.partition import AndroidPartition
+from aospdtgen.utils.reorder import reorder_key
 
 class Section:
 	name: str = "Miscellaneous"

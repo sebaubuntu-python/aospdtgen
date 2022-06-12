@@ -1,7 +1,14 @@
-from aospdtgen import module_path
+#
+# Copyright (C) 2022 The LineageOS Project
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
 from jinja2 import Environment, FileSystemLoader
 from pathlib import Path
 from typing import Optional
+
+from aospdtgen import module_path
 
 jinja_env = Environment(loader=FileSystemLoader(module_path / 'templates'),
                         autoescape=True, trim_blocks=True, lstrip_blocks=True)

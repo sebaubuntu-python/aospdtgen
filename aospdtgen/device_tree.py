@@ -4,6 +4,11 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+from datetime import datetime
+from pathlib import Path
+from sebaubuntu_libs.libprop import BuildProp
+from shutil import rmtree
+
 from aospdtgen.proprietary_files.proprietary_files_list import ProprietaryFilesList
 from aospdtgen.templates import render_template
 from aospdtgen.utils.boot_configuration import BootConfiguration
@@ -13,10 +18,6 @@ from aospdtgen.utils.ignored_props import IGNORED_PROPS
 from aospdtgen.utils.partition import PartitionModel
 from aospdtgen.utils.partitions import Partitions
 from aospdtgen.utils.reorder import reorder_key
-from datetime import datetime
-from pathlib import Path
-from sebaubuntu_libs.libprop import BuildProp
-from shutil import rmtree
 
 class DeviceTree:
 	"""Class representing an Android device tree."""

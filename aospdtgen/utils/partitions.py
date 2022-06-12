@@ -4,8 +4,9 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-from aospdtgen.utils.partition import SSI, TREBLE, AndroidPartition, PartitionModel, BUILD_PROP_LOCATION
 from pathlib import Path
+
+from aospdtgen.utils.partition import SSI, TREBLE, AndroidPartition, PartitionModel, BUILD_PROP_LOCATION
 
 class Partitions:
 	def __init__(self, dump_path: Path):

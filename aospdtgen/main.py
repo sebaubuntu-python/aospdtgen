@@ -4,12 +4,13 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-from aospdtgen import __version__ as version, current_path
-from aospdtgen.utils.logging import setup_logging
-from aospdtgen.device_tree import DeviceTree
 from argparse import ArgumentParser
 from pathlib import Path
 from sebaubuntu_libs.liblocale import setup_locale
+
+from aospdtgen import __version__ as version, current_path
+from aospdtgen.device_tree import DeviceTree
+from aospdtgen.utils.logging import setup_logging
 
 def main():
 	setup_logging()

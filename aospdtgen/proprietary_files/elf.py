@@ -1,3 +1,9 @@
+#
+# Copyright (C) 2022 The LineageOS Project
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
 from elftools.common.exceptions import ELFError
 from elftools.elf.elffile import ELFFile
 from pathlib import Path

@@ -4,8 +4,9 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-from aospdtgen.proprietary_files.section import register_sections
 from pathlib import Path
+
+from aospdtgen.proprietary_files.section import register_sections
 
 __version__ = "0.1.0"
 
