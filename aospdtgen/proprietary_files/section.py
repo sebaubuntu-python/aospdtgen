@@ -13,7 +13,6 @@ from sebaubuntu_libs.liblogging import LOGE
 from sebaubuntu_libs.libreorder import strcoll_files_key
 
 from aospdtgen.proprietary_files.elf import get_needed_shared_libs, get_shared_libs
-from aospdtgen.proprietary_files.ignore import is_blob_allowed
 from aospdtgen.utils.partition import AndroidPartition
 
 class Section:
@@ -42,16 +41,10 @@ class Section:
 	def add_files(self, partition: AndroidPartition):
 		matched: list[Path] = []
 		not_matched: list[Path] = []
-		ignored: list[Path] = []
 
 		for file in partition.files:
 			file_relative = file.relative_to(partition.real_path)
-			if not is_blob_allowed(file_relative):
-				ignored.append(file)
-			elif self.file_match(file_relative):
-				matched.append(file)
-			else:
-				not_matched.append(file)
+			matched.append(file) if self.file_match(file_relative) else not_matched.append(file)
 
 		# Handle shared libs
 		for file in matched:
@@ -89,15 +82,19 @@ class Section:
 					not_matched.remove(file)
 					matched.append(file)
 
-		self.files.extend([partition.model.proprietary_files_prefix / file.relative_to(partition.real_path) for file in matched])
-		self.files.sort(key=strcoll_files_key)
+		self.files.extend(
+			partition.model.proprietary_files_prefix / file.relative_to(partition.real_path)
+			for file in matched
+		)
 
-		partition.files.clear()
-		partition.files.extend(not_matched)
-		partition.files.extend(ignored)
-		partition.files.sort(key=strcoll_files_key)
+		partition.files = not_matched
 
 		return not_matched
+
+	def get_files(self):
+		"""Returns the ordered list of files."""
+		self.files.sort(key=strcoll_files_key)
+		return self.files
 
 	def file_match(self, file: Path):
 		if self.name == "Miscellaneous":
