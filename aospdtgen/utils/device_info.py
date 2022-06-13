@@ -99,11 +99,11 @@ class DeviceInfo:
 	by using BuildProp class.
 	"""
 
-	def __init__(self, buildprop: BuildProp):
+	def __init__(self, build_prop: BuildProp):
 		"""
 		Parse common build props.
 		"""
-		self.buildprop = buildprop
+		self.build_prop = build_prop
 
 		# Parse props
 		self.codename = self.get_prop(DEVICE_CODENAME)
@@ -142,7 +142,7 @@ class DeviceInfo:
 	def get_prop(self, props: list, default: str = None, raise_exception: bool = True,
 	             treat_empty_string_as_none: bool = False):
 		for prop in props:
-			prop_value = self.buildprop.get_prop(prop)
+			prop_value = self.build_prop.get_prop(prop)
 			if prop_value is not None and not (treat_empty_string_as_none and not prop_value):
 				return prop_value
 
