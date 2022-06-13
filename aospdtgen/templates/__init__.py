@@ -3,6 +3,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 #
+"""aospdtgen templates utils."""
 
 from jinja2 import Environment, FileSystemLoader
 from pathlib import Path

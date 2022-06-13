@@ -16,6 +16,7 @@ from aospdtgen.proprietary_files.elf import get_needed_shared_libs, get_shared_l
 from aospdtgen.utils.partition import AndroidPartition
 
 class Section:
+	"""Class representing a proprietary files list section."""
 	name: str = "Miscellaneous"
 	"""Name of the section"""
 	interfaces: list[str] = []
@@ -36,6 +37,7 @@ class Section:
 	"""List of basic patterns (use regex)"""
 
 	def __init__(self):
+		"""Initialize the section."""
 		self.files: list[Path] = []
 
 	def add_files(self, partition: AndroidPartition):
@@ -44,7 +46,7 @@ class Section:
 
 		for file in partition.files:
 			file_relative = file.relative_to(partition.real_path)
-			matched.append(file) if self.file_match(file_relative) else not_matched.append(file)
+			(matched if self.file_match(file_relative) else not_matched).append(file)
 
 		# Handle shared libs
 		for file in matched:

@@ -3,6 +3,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 #
+"""aospdtgen module."""
 
 from pathlib import Path
 

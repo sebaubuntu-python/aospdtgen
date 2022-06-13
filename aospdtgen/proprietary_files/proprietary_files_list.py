@@ -9,7 +9,9 @@ from aospdtgen.proprietary_files.section import Section, sections
 from aospdtgen.utils.partition import TREBLE, AndroidPartition
 
 class ProprietaryFilesList:
+	"""Class representing a proprietary files list."""
 	def __init__(self, partitions: list[AndroidPartition]):
+		"""Initialize a new ProprietaryFilesList object."""
 		self.partitions = partitions
 
 		# Filer out ignored files before starting
