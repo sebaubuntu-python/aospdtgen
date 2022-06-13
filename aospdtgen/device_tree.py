@@ -4,6 +4,9 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+import os
+import stat
+
 from datetime import datetime
 from pathlib import Path
 from sebaubuntu_libs.libfstab import Fstab
@@ -114,6 +117,10 @@ class DeviceTree:
 		self._render_template(folder, "lineage_device.mk", out_file=f"lineage_{self.device_info.codename}.mk")
 		self._render_template(folder, "README.md")
 		self._render_template(folder, "setup-makefiles.sh")
+
+		# Set permissions
+		os.chmod(folder / "extract-files.sh", stat.S_IRWXU | stat.S_IRGRP | stat.S_IROTH)
+		os.chmod(folder / "setup-makefiles.sh", stat.S_IRWXU | stat.S_IRGRP | stat.S_IROTH)
 
 		# Proprietary files list
 		(folder / "proprietary-files.txt").write_text(
