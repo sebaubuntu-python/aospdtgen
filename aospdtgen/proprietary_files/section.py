@@ -66,7 +66,7 @@ class Section:
 						skip = True
 						break
 
-				if lib.removesuffix(".so") in known_shared_libs:
+				if lib.removesuffix(".so") in known_libraries:
 					skip = True
 
 				if skip:
@@ -168,7 +168,7 @@ class Section:
 
 sections: list[Section] = []
 known_interfaces: list[str] = []
-known_shared_libs: list[str] = []
+known_libraries: list[str] = []
 
 def register_section(section: Section):
 	sections.append(section)
@@ -178,8 +178,8 @@ def register_section(section: Section):
 		known_interfaces.append(interface)
 
 	for library in section.libraries:
-		assert library not in known_shared_libs, f"Duplicate shared library: {library}"
-		known_shared_libs.append(library)
+		assert library not in known_libraries, f"Duplicate shared library: {library}"
+		known_libraries.append(library)
 
 def register_sections(sections_path: Path):
 	"""Import all the sections and let them execute register_section()."""
