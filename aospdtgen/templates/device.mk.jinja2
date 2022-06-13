@@ -1,21 +1,5 @@
 {% include 'LICENSE.jinja2' %}
 
-{% if device_info.first_api_level %}
-PRODUCT_SHIPPING_API_LEVEL := {{ device_info.first_api_level }}
-
-{% endif %}
-{% if device_info.product_characteristics %}
-PRODUCT_CHARACTERISTICS := {{ device_info.product_characteristics }}
-
-{% endif %}
-{% if device_info.device_uses_dynamic_partitions %}
-PRODUCT_BUILD_SUPER_PARTITION := false
-PRODUCT_USE_DYNAMIC_PARTITIONS := true
-
-{% endif %}
-# Overlays
-PRODUCT_ENFORCE_RRO_TARGETS := *
-
 {% if device_info.device_uses_updatable_apex %}
 # Enable updating of APEXes
 $(call inherit-product, $(SRC_TARGET_DIR)/product/updatable_apex.mk)
@@ -78,6 +62,20 @@ PRODUCT_PACKAGES += \
 {% endif %}
     android.hardware.health@2.1-service
 
+# Overlays
+PRODUCT_ENFORCE_RRO_TARGETS := *
+
+{% if device_info.device_uses_dynamic_partitions %}
+# Partitions
+PRODUCT_BUILD_SUPER_PARTITION := false
+PRODUCT_USE_DYNAMIC_PARTITIONS := true
+
+{% endif %}
+{% if device_info.product_characteristics %}
+# Product characteristics
+PRODUCT_CHARACTERISTICS := {{ device_info.product_characteristics }}
+
+{% endif %}
 # Rootdir
 PRODUCT_PACKAGES += \{{ '\n' }}
 {%- for file in rootdir_bin_files %}
@@ -100,6 +98,11 @@ PRODUCT_COPY_FILES += \
 {% else %}
     $(LOCAL_PATH)/rootdir/etc/{{ fstab.fstab.name }}:$(TARGET_COPY_OUT_RAMDISK)/{{ fstab.fstab.name }}
 {% endif %}
+
+{% endif %}
+{% if device_info.first_api_level %}
+# Shipping API level
+PRODUCT_SHIPPING_API_LEVEL := {{ device_info.first_api_level }}
 
 {% endif %}
 # Soong namespaces

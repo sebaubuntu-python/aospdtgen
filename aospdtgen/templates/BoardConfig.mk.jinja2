@@ -59,11 +59,6 @@ TARGET_USES_VULKAN := true
 {% endif %}
 
 {% endif %}
-{% if device_info.device_has_64bit_arch %}
-# DRM
-TARGET_ENABLE_MEDIADRM_64 := true
-
-{% endif %}
 # Kernel
 {% if boot_configuration.boot_image_info.header_version != "0" %}
 BOARD_BOOTIMG_HEADER_VERSION := {{ boot_configuration.boot_image_info.header_version }}
@@ -102,10 +97,8 @@ BOARD_INCLUDE_DTB_IN_BOOTIMG := true
 {% if boot_configuration.dtbo %}
 BOARD_KERNEL_SEPARATED_DTBO := true
 {% endif %}
-TARGET_KERNEL_ARCH := {{ device_info.arch.arch }}
 TARGET_KERNEL_CONFIG := {{ device_info.codename }}_defconfig
 TARGET_KERNEL_SOURCE := kernel/{{ device_info.manufacturer }}/{{ device_info.codename }}
-TARGET_KERNEL_CLANG_COMPILE := true
 
 # Kernel - prebuilt
 TARGET_FORCE_PREBUILT_KERNEL := true
