@@ -4,16 +4,15 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-import os
-import stat
-
 from datetime import datetime
+from os import chmod
 from pathlib import Path
 from sebaubuntu_libs.libfstab import Fstab
 from sebaubuntu_libs.liblogging import LOGI
 from sebaubuntu_libs.libprop import BuildProp
 from sebaubuntu_libs.libreorder import strcoll_files_key
 from shutil import rmtree
+from stat import S_IRWXU, S_IRGRP, S_IROTH
 
 from aospdtgen.proprietary_files.proprietary_files_list import ProprietaryFilesList
 from aospdtgen.templates import render_template
@@ -119,8 +118,8 @@ class DeviceTree:
 		self._render_template(folder, "setup-makefiles.sh")
 
 		# Set permissions
-		os.chmod(folder / "extract-files.sh", stat.S_IRWXU | stat.S_IRGRP | stat.S_IROTH)
-		os.chmod(folder / "setup-makefiles.sh", stat.S_IRWXU | stat.S_IRGRP | stat.S_IROTH)
+		chmod(folder / "extract-files.sh", S_IRWXU | S_IRGRP | S_IROTH)
+		chmod(folder / "setup-makefiles.sh", S_IRWXU | S_IRGRP | S_IROTH)
 
 		# Proprietary files list
 		(folder / "proprietary-files.txt").write_text(
