@@ -78,10 +78,7 @@ class DeviceTree:
 				self.ab_partitions.append(partition_model)
 
 		LOGI("Extracting boot image")
-		self.boot_configuration = BootConfiguration(self.path / "boot.img",
-		                                            self.path / "dtbo.img",
-		                                            self.path / "recovery.img",
-		                                            self.path / "vendor_boot.img")
+		self.boot_configuration = BootConfiguration(self.path)
 
 		LOGI("Getting list of rootdir files")
 		self.rootdir_bin_files = [file for file in self.vendor.files

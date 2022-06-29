@@ -6,35 +6,33 @@
 
 from pathlib import Path
 from sebaubuntu_libs.libaik import AIKManager
+from typing import Union
 
 class BootConfiguration:
 	"""Class representing a device's boot configuration."""
-	def __init__(self,
-	             boot: Path,
-	             dtbo: Path = None,
-	             recovery: Path = None,
-	             vendor_boot: Path = None,
-	            ):
+	def __init__(self, dump_path: Path):
 		"""
-		Given paths to bootloader partition images, parse all the images
+		Given the path to a dump, parse all the images
 		and generate a boot configuration.
 		"""
-		self.boot = boot
-		self.dtbo = dtbo
-		self.recovery = recovery
-		self.vendor_boot = vendor_boot
+		self.dump_path = dump_path
+
+		self.boot = self._get_image_path("boot")
+		self.dtbo = self._get_image_path("dtbo")
+		self.recovery = self._get_image_path("recovery")
+		self.vendor_boot = self._get_image_path("vendor_boot")
 
 		self.boot_aik_manager = AIKManager()
 		self.boot_image_info = self.boot_aik_manager.unpackimg(self.boot)
 
-		if self.recovery and self.recovery.is_file():
+		if self.recovery:
 			self.recovery_aik_manager = AIKManager()
 			self.recovery_image_info = self.recovery_aik_manager.unpackimg(self.recovery)
 		else:
 			self.recovery_aik_manager = None
 			self.recovery_image_info = None
 
-		if self.vendor_boot and self.vendor_boot.is_file():
+		if self.vendor_boot:
 			self.vendor_boot_aik_manager = AIKManager()
 			self.vendor_boot_image_info = self.vendor_boot_aik_manager.unpackimg(self.vendor_boot)
 		else:
@@ -64,6 +62,10 @@ class BootConfiguration:
 
 		self.cmdline = self.cmdline if self.cmdline else self.boot_image_info.cmdline
 		self.pagesize = self.pagesize if self.pagesize else self.boot_image_info.pagesize
+
+	def _get_image_path(self, partition: str) -> Union[Path, None]:
+		path = self.dump_path / f"{partition}.img"
+		return path if path.is_file() else None
 
 	def copy_files_to_folder(self, folder: Path) -> None:
 		"""Copy all prebuilts to a folder."""
