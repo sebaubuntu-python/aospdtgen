@@ -6,8 +6,8 @@
 
 from aospdtgen.proprietary_files.section import Section, register_section
 
-class ConsumerIrSection(Section):
-	name = "ConsumerIr"
+class IrSection(Section):
+	name = "IR"
 	interfaces = [
 		"android.hardware.ir",
 	]
@@ -15,4 +15,4 @@ class ConsumerIrSection(Section):
 		"consumerir",
 	]
 
-register_section(ConsumerIrSection)
+register_section(IrSection)
