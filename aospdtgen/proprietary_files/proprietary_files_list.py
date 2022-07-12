@@ -4,13 +4,15 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+from typing import List
+
 from aospdtgen.proprietary_files.ignore import is_blob_allowed
 from aospdtgen.proprietary_files.section import Section, sections
 from aospdtgen.utils.partition import TREBLE, AndroidPartition
 
 class ProprietaryFilesList:
 	"""Class representing a proprietary files list."""
-	def __init__(self, partitions: list[AndroidPartition]):
+	def __init__(self, partitions: List[AndroidPartition]):
 		"""Initialize a new ProprietaryFilesList object."""
 		self.partitions = partitions
 
@@ -24,7 +26,7 @@ class ProprietaryFilesList:
 
 			partition.files = allowed
 
-		self.sections: list[Section] = [section() for section in sections]
+		self.sections: List[Section] = [section() for section in sections]
 		for section in self.sections:
 			for partition in self.partitions:
 				section.add_files(partition)

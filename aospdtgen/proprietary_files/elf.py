@@ -7,6 +7,7 @@
 from elftools.common.exceptions import ELFError
 from elftools.elf.elffile import ELFFile
 from pathlib import Path
+from typing import List
 
 def get_needed_shared_libs(file: Path):
 	with open(file, "rb") as f:
@@ -21,7 +22,7 @@ def get_needed_shared_libs(file: Path):
 		except ELFError:
 			pass
 
-def get_shared_libs(files: list[Path]):
+def get_shared_libs(files: List[Path]):
 	for lib in files:
 		if not lib.suffix == ".so":
 			continue

@@ -5,6 +5,7 @@
 #
 
 from pathlib import Path
+from typing import Dict
 
 from aospdtgen.utils.partition import SSI, TREBLE, AndroidPartition, PartitionModel, BUILD_PROP_LOCATION
 
@@ -12,7 +13,7 @@ class Partitions:
 	def __init__(self, dump_path: Path):
 		self.dump_path = dump_path
 
-		self.partitions: dict[PartitionModel, AndroidPartition] = {}
+		self.partitions: Dict[PartitionModel, AndroidPartition] = {}
 
 		# Search for system
 		for system in [self.dump_path / "system", self.dump_path / "system/system"]:

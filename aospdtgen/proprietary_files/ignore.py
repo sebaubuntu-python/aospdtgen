@@ -6,6 +6,7 @@
 
 from pathlib import Path
 import re
+from sebaubuntu_libs.libstring import removeprefix
 
 IGNORE_BINARIES = [
 	"acpi",
@@ -658,7 +659,7 @@ def is_blob_allowed(file: Path) -> bool:
 	if file.name in IGNORE_FILENAMES:
 		return False
 
-	if file.suffix.removeprefix('.') in IGNORE_EXTENSIONS:
+	if removeprefix(file.suffix, '.') in IGNORE_EXTENSIONS:
 		return False
 
 	for folder in [str(folder) for folder in file.parents]:

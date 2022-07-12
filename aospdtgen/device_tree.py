@@ -7,10 +7,12 @@
 from datetime import datetime
 from os import chmod
 from pathlib import Path
+from typing import List
 from sebaubuntu_libs.libandroid.device_info import DeviceInfo
 from sebaubuntu_libs.libandroid.props import BuildProp
 from sebaubuntu_libs.libfstab import Fstab
 from sebaubuntu_libs.liblogging import LOGI
+from sebaubuntu_libs.libpath import is_relative_to
 from sebaubuntu_libs.libreorder import strcoll_files_key
 from shutil import rmtree
 from stat import S_IRWXU, S_IRGRP, S_IROTH
@@ -56,7 +58,7 @@ class DeviceTree:
 		LOGI("Parsing fstab")
 		fstabs = [
 			file for file in self.vendor.files
-			if (file.relative_to(self.vendor.real_path).is_relative_to("etc")
+			if (is_relative_to(file.relative_to(self.vendor.real_path), "etc")
 		        and file.name.startswith("fstab."))
 		]
 		assert fstabs, "No fstab found"
@@ -68,7 +70,7 @@ class DeviceTree:
 			partition.fill_fstab_entry(self.fstab)
 
 		# Get a list of A/B partitions
-		self.ab_partitions: list[PartitionModel] = []
+		self.ab_partitions: List[PartitionModel] = []
 		if self.device_info.device_is_ab:
 			for fstab_entry in self.fstab.get_slotselect_partitions():
 				partition_model = PartitionModel.from_mount_point(fstab_entry.mount_point)
@@ -82,16 +84,16 @@ class DeviceTree:
 
 		LOGI("Getting list of rootdir files")
 		self.rootdir_bin_files = [file for file in self.vendor.files
-		                          if file.relative_to(self.vendor.real_path).is_relative_to("bin")
+		                          if is_relative_to(file.relative_to(self.vendor.real_path), "bin")
 		                          and file.suffix == ".sh"]
 		self.rootdir_etc_files = [file for file in self.vendor.files
-		                          if file.relative_to(self.vendor.real_path).is_relative_to("etc/init/hw")]
+		                          if is_relative_to(file.relative_to(self.vendor.real_path), "etc/init/hw")]
 
 		recovery_resources_location = (self.boot_configuration.recovery_aik_manager.ramdisk_path
 		                               if self.boot_configuration.recovery_aik_manager
 		                               else self.boot_configuration.boot_aik_manager.ramdisk_path)
 		self.rootdir_recovery_etc_files = [file for file in recovery_resources_location.iterdir()
-		                                   if file.relative_to(recovery_resources_location).is_relative_to(".")
+		                                   if is_relative_to(file.relative_to(recovery_resources_location), ".")
 		                                   and file.suffix == ".rc"]
 
 		LOGI("Generating proprietary files list")

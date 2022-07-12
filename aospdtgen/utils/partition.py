@@ -8,8 +8,10 @@ from __future__ import annotations
 from pathlib import Path
 from sebaubuntu_libs.libandroid.props import BuildProp
 from sebaubuntu_libs.libfstab import Fstab, FstabEntry
+from sebaubuntu_libs.libpath import is_relative_to
 from sebaubuntu_libs.libreorder import strcoll_files_key
 from sebaubuntu_libs.libvintf.manifest import Manifest
+from typing import List
 
 (
 	BOOTLOADER,
@@ -19,12 +21,12 @@ from sebaubuntu_libs.libvintf.manifest import Manifest
 ) = range(4)
 
 class _PartitionModel:
-	ALL: list[_PartitionModel] = []
+	ALL: List[_PartitionModel] = []
 
 	def __init__(self,
 	             name: str,
 	             group: int,
-				 mount_points: list[str] = None,
+				 mount_points: List[str] = None,
 				 proprietary_files_prefix: Path = None,
 	            ):
 		self.name = name
@@ -97,7 +99,7 @@ class AndroidPartition:
 		self.real_path = real_path
 		self.dump_path = dump_path
 
-		self.files: list[Path] = []
+		self.files: List[Path] = []
 		self.fstab_entry: FstabEntry = None
 
 		self.build_prop = BuildProp()
@@ -119,9 +121,9 @@ class AndroidPartition:
 	def get_relative_path(self):
 		return self.real_path.relative_to(self.dump_path)
 
-	def fill_files(self, files: list[Path]):
+	def fill_files(self, files: List[Path]):
 		for file in files:
-			if not file.is_relative_to(self.real_path):
+			if not is_relative_to(file, self.real_path):
 				continue
 
 			self.files.append(file)
