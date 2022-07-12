@@ -6,8 +6,8 @@
 
 from __future__ import annotations
 from pathlib import Path
+from sebaubuntu_libs.libandroid.props import BuildProp
 from sebaubuntu_libs.libfstab import Fstab, FstabEntry
-from sebaubuntu_libs.libprop import BuildProp
 from sebaubuntu_libs.libreorder import strcoll_files_key
 from sebaubuntu_libs.libvintf.manifest import Manifest
 

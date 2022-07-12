@@ -7,9 +7,10 @@
 from datetime import datetime
 from os import chmod
 from pathlib import Path
+from sebaubuntu_libs.libandroid.device_info import DeviceInfo
+from sebaubuntu_libs.libandroid.props import BuildProp
 from sebaubuntu_libs.libfstab import Fstab
 from sebaubuntu_libs.liblogging import LOGI
-from sebaubuntu_libs.libprop import BuildProp
 from sebaubuntu_libs.libreorder import strcoll_files_key
 from shutil import rmtree
 from stat import S_IRWXU, S_IRGRP, S_IROTH
@@ -17,7 +18,6 @@ from stat import S_IRWXU, S_IRGRP, S_IROTH
 from aospdtgen.proprietary_files.proprietary_files_list import ProprietaryFilesList
 from aospdtgen.templates import render_template
 from aospdtgen.utils.boot_configuration import BootConfiguration
-from aospdtgen.utils.device_info import DeviceInfo
 from aospdtgen.utils.ignored_props import IGNORED_PROPS
 from aospdtgen.utils.partition import PartitionModel
 from aospdtgen.utils.partitions import Partitions
