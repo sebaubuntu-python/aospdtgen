@@ -17,6 +17,7 @@ class WifiSection(Section):
 		"vendor.qti.hardware.wifi.keystore",
 		"vendor.qti.hardware.wifi.supplicant",
 		"vendor.qti.hardware.wifi.wifilearner",
+		"vendor.qti.hardware.wigig.netperftuner",
 	]
 	binaries = [
 		"hostapd",
