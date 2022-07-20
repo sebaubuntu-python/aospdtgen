@@ -11,6 +11,7 @@ class FingerprintSection(Section):
 	interfaces = [
 		"android.hardware.biometrics.fingerprint",
 		"vendor.goodix.hardware.biometrics.fingerprint",
+		"vendor.qti.hardware.fingerprint",
 		"vendor.xiaomi.hardware.fingerprintextension",
 	]
 	hardware_modules = [
