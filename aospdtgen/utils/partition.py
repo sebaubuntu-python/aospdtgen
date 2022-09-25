@@ -6,11 +6,11 @@
 
 from __future__ import annotations
 from pathlib import Path
+from sebaubuntu_libs.libandroid.fstab import Fstab, FstabEntry
 from sebaubuntu_libs.libandroid.props import BuildProp
-from sebaubuntu_libs.libfstab import Fstab, FstabEntry
 from sebaubuntu_libs.libpath import is_relative_to
 from sebaubuntu_libs.libreorder import strcoll_files_key
-from sebaubuntu_libs.libvintf.manifest import Manifest
+from sebaubuntu_libs.libandroid.vintf.manifest import Manifest
 from typing import List
 
 (

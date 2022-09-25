@@ -32,7 +32,7 @@ TARGET_2ND_CPU_VARIANT := generic
 TARGET_2ND_CPU_VARIANT_RUNTIME := {{ device_info.second_cpu_variant }}
 
 {% endif %}
-{% if not device_info.device_has_64bit_arch and device_info.device_has_64bit_binder %}
+{% if device_info.arch.bitness != 64 %}
 TARGET_USES_64_BIT_BINDER := true
 
 {% endif %}
@@ -87,7 +87,7 @@ BOARD_MKBOOTIMG_ARGS += --ramdisk_offset $(BOARD_RAMDISK_OFFSET)
 {% if boot_configuration.boot_image_info.tags_offset %}
 BOARD_MKBOOTIMG_ARGS += --tags_offset $(BOARD_KERNEL_TAGS_OFFSET)
 {% endif %}
-BOARD_KERNEL_IMAGE_NAME := {{ device_info.arch.kernel_name }}
+BOARD_KERNEL_IMAGE_NAME := Image
 {% if boot_configuration.dt %}
 BOARD_KERNEL_SEPARATED_DT := true
 {% endif %}

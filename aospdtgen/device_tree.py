@@ -9,8 +9,8 @@ from os import chmod
 from pathlib import Path
 from typing import List
 from sebaubuntu_libs.libandroid.device_info import DeviceInfo
+from sebaubuntu_libs.libandroid.fstab import Fstab
 from sebaubuntu_libs.libandroid.props import BuildProp
-from sebaubuntu_libs.libfstab import Fstab
 from sebaubuntu_libs.liblogging import LOGI
 from sebaubuntu_libs.libpath import is_relative_to
 from sebaubuntu_libs.libreorder import strcoll_files_key
