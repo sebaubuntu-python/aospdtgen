@@ -4,11 +4,12 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+from sebaubuntu_libs.libandroid.partitions.partition import AndroidPartition
+from sebaubuntu_libs.libandroid.partitions.partition_model import TREBLE
 from typing import List
 
 from aospdtgen.proprietary_files.ignore import is_blob_allowed
 from aospdtgen.proprietary_files.section import Section, sections
-from aospdtgen.utils.partition import TREBLE, AndroidPartition
 
 class ProprietaryFilesList:
 	"""Class representing a proprietary files list."""

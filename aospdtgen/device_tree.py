@@ -10,6 +10,8 @@ from pathlib import Path
 from typing import List
 from sebaubuntu_libs.libandroid.device_info import DeviceInfo
 from sebaubuntu_libs.libandroid.fstab import Fstab
+from sebaubuntu_libs.libandroid.partitions.partition_model import PartitionModel
+from sebaubuntu_libs.libandroid.partitions.partitions import Partitions
 from sebaubuntu_libs.libandroid.props import BuildProp
 from sebaubuntu_libs.liblogging import LOGI
 from sebaubuntu_libs.libpath import is_relative_to
@@ -21,8 +23,6 @@ from aospdtgen.proprietary_files.proprietary_files_list import ProprietaryFilesL
 from aospdtgen.templates import render_template
 from aospdtgen.utils.boot_configuration import BootConfiguration
 from aospdtgen.utils.ignored_props import IGNORED_PROPS
-from aospdtgen.utils.partition import PartitionModel
-from aospdtgen.utils.partitions import Partitions
 
 class DeviceTree:
 	"""Class representing an Android device tree."""

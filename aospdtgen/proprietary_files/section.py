@@ -8,6 +8,7 @@ from importlib import import_module
 from pathlib import Path
 from pkgutil import iter_modules
 from re import match
+from sebaubuntu_libs.libandroid.partitions.partition import AndroidPartition
 from sebaubuntu_libs.libexception import format_exception
 from sebaubuntu_libs.liblogging import LOGE
 from sebaubuntu_libs.libpath import is_relative_to
@@ -16,7 +17,6 @@ from sebaubuntu_libs.libstring import removesuffix
 from typing import List
 
 from aospdtgen.proprietary_files.elf import get_needed_shared_libs, get_shared_libs
-from aospdtgen.utils.partition import AndroidPartition
 
 class Section:
 	"""Class representing a proprietary files list section."""
