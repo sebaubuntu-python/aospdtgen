@@ -14,7 +14,6 @@ BOARD_USES_RECOVERY_AS_BOOT := true
 
 {% endif %}
 # Architecture
-{% if device_info.arch %}
 TARGET_ARCH := {{ device_info.arch.arch }}
 TARGET_ARCH_VARIANT := {{ device_info.arch.arch_variant }}
 TARGET_CPU_ABI := {{ device_info.arch.cpu_abi }}
@@ -22,7 +21,6 @@ TARGET_CPU_ABI2 := {{ device_info.arch.cpu_abi2 }}
 TARGET_CPU_VARIANT := generic
 TARGET_CPU_VARIANT_RUNTIME := {{ device_info.cpu_variant }}
 
-{% endif %}
 {% if device_info.second_arch %}
 TARGET_2ND_ARCH := {{ device_info.second_arch.arch }}
 TARGET_2ND_ARCH_VARIANT := {{ device_info.second_arch.arch_variant }}
