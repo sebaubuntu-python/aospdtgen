@@ -97,7 +97,7 @@ use_chardet_on_py3 = ["chardet (>=3.0.2,<6)"]
 
 [[package]]
 name = "sebaubuntu-libs"
-version = "1.2.0"
+version = "1.3.0"
 description = "SebaUbuntu's shared libs"
 category = "main"
 optional = false
@@ -131,7 +131,7 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "9f3594295c9d9a2d510f3c06111042ccc5c986e63d9e718bc11101fcf5bfc792"
+content-hash = "1ac17a0c9e7d66d3350523c216407f813248e4e4b29a35a2c37f448c24582820"
 
 [metadata.files]
 certifi = [
@@ -209,8 +209,8 @@ requests = [
     {file = "requests-2.28.1.tar.gz", hash = "sha256:7c5599b102feddaa661c826c56ab4fee28bfd17f5abca1ebbe3e7f19d7c97983"},
 ]
 sebaubuntu-libs = [
-    {file = "sebaubuntu_libs-1.2.0-py3-none-any.whl", hash = "sha256:8653194fcb45cb8a45611e840e72b640c5345fb7852d2442a9f3c02ba7510643"},
-    {file = "sebaubuntu_libs-1.2.0.tar.gz", hash = "sha256:78034957fd916d660b771240e87955b79686a621403a3b3680a48c960e700f83"},
+    {file = "sebaubuntu_libs-1.3.0-py3-none-any.whl", hash = "sha256:931f2d325585f667ae5b7509b62d8186ed2a99b051956dd5a1ef74d4e7e11181"},
+    {file = "sebaubuntu_libs-1.3.0.tar.gz", hash = "sha256:04911028692fc05066db93a545686d8f4442f4a39d7027c7afc7ae14d14708a5"},
 ]
 smmap = [
     {file = "smmap-5.0.0-py3-none-any.whl", hash = "sha256:2aba19d6a040e78d8b09de5c57e96207b09ed71d8e55ce0959eeee6c8e190d94"},
