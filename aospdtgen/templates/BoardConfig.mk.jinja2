@@ -6,7 +6,7 @@ DEVICE_PATH := device/{{ device_info.manufacturer }}/{{ device_info.codename }}
 # A/B
 AB_OTA_UPDATER := true
 AB_OTA_PARTITIONS +=
-{%- for partition in ab_partitions %} \
+{%- for partition in fstab.get_ab_partitions_models() %} \
     {{ partition.name }}
 {%- endfor %}
 

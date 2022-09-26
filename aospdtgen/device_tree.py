@@ -69,16 +69,6 @@ class DeviceTree:
 		for partition in self.partitions.get_all_partitions():
 			partition.fill_fstab_entry(self.fstab)
 
-		# Get a list of A/B partitions
-		self.ab_partitions: List[PartitionModel] = []
-		if self.device_info.device_is_ab:
-			for fstab_entry in self.fstab.get_slotselect_partitions():
-				partition_model = PartitionModel.from_mount_point(fstab_entry.mount_point)
-				if partition_model is None:
-					continue
-
-				self.ab_partitions.append(partition_model)
-
 		LOGI("Extracting boot image")
 		self.boot_configuration = BootConfiguration(self.path)
 
@@ -173,7 +163,6 @@ class DeviceTree:
 
 	def _render_template(self, *args, comment_prefix: str = "#", **kwargs):
 		return render_template(*args,
-		                       ab_partitions=self.ab_partitions,
 		                       boot_configuration=self.boot_configuration,
 		                       comment_prefix=comment_prefix,
 		                       current_year=self.current_year,
