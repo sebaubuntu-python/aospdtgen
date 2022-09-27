@@ -17,28 +17,25 @@ class ProprietaryFilesList:
 		"""Initialize a new ProprietaryFilesList object."""
 		self.partitions = partitions
 
-		# Filer out ignored files before starting
-		for partition in self.partitions:
-			allowed, not_allowed = [], []
-
-			for file in partition.files:
-				file_relative = file.relative_to(partition.path)
-				(allowed if is_blob_allowed(file_relative) else not_allowed).append(file)
-
-			partition.files = allowed
-
 		self.sections: List[Section] = [section() for section in sections]
-		for section in self.sections:
-			for partition in self.partitions:
-				section.add_files(partition)
-
 		misc_section = Section()
 
 		for partition in self.partitions:
+			files = []
+
+			for file in partition.files:
+				file_relative = file.relative_to(partition.path)
+				# Filter out ignored files
+				if is_blob_allowed(file_relative):
+					files.append(file)
+
+			for section in self.sections:
+				files = section.add_files(files, partition)
+
 			if partition.model.group != TREBLE:
 				continue
 
-			misc_section.add_files(partition)
+			misc_section.add_files(files, partition)
 
 		self.sections.append(misc_section)
 

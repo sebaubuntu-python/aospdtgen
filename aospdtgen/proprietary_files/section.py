@@ -44,11 +44,11 @@ class Section:
 		"""Initialize the section."""
 		self.files: List[Path] = []
 
-	def add_files(self, partition: AndroidPartition):
+	def add_files(self, files: List[Path], partition: AndroidPartition):
 		matched: List[Path] = []
 		not_matched: List[Path] = []
 
-		for file in partition.files:
+		for file in files:
 			file_relative = file.relative_to(partition.path)
 			(matched if self.file_match(file_relative) else not_matched).append(file)
 
@@ -92,8 +92,6 @@ class Section:
 			partition.model.proprietary_files_prefix / file.relative_to(partition.path)
 			for file in matched
 		)
-
-		partition.files = not_matched
 
 		return not_matched
 
