@@ -30,6 +30,7 @@ class CameraSection(Section):
 	]
 	patterns = [
 		"lib(64)?/com.qti.feature2\..*\.so",
+		"lib(64)?/libcamx.*\.so",
 		"lib(64)?/libchromatix_.*\.so",
 		"lib(64)?/libmmcamera_.*\.so",
 	]
