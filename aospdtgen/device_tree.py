@@ -32,22 +32,11 @@ class DeviceTree:
 
 		self.current_year = str(datetime.now().year)
 
-		LOGI("Parsing all_files.txt")
-		self.all_files_txt = self.path / "all_files.txt"
-		self.all_files = list(dict.fromkeys(self.all_files_txt.open().read().splitlines()))
-		self.all_files = [self.path / file for file in self.all_files]
-		self.all_files = [file for file in self.all_files if file.is_file()]
-		self.all_files.sort(key=strcoll_files_key)
-
 		LOGI("Figuring out partitions scheme")
 		self.partitions = Partitions(self.path)
 
 		self.system = self.partitions.get_partition(PartitionModel.SYSTEM)
 		self.vendor = self.partitions.get_partition(PartitionModel.VENDOR)
-
-		LOGI("Associating files with partitions")
-		for partition in self.partitions.get_all_partitions():
-			partition.fill_files(self.all_files)
 
 		LOGI("Parsing build props and device info")
 		self.build_prop = BuildProp()
@@ -58,7 +47,7 @@ class DeviceTree:
 		LOGI("Parsing fstab")
 		fstabs = [
 			file for file in self.vendor.files
-			if (is_relative_to(file.relative_to(self.vendor.real_path), "etc")
+			if (is_relative_to(file.relative_to(self.vendor.path), "etc")
 		        and file.name.startswith("fstab."))
 		]
 		assert fstabs, "No fstab found"
@@ -74,10 +63,10 @@ class DeviceTree:
 
 		LOGI("Getting list of rootdir files")
 		self.rootdir_bin_files = [file for file in self.vendor.files
-		                          if is_relative_to(file.relative_to(self.vendor.real_path), "bin")
+		                          if is_relative_to(file.relative_to(self.vendor.path), "bin")
 		                          and file.suffix == ".sh"]
 		self.rootdir_etc_files = [file for file in self.vendor.files
-		                          if is_relative_to(file.relative_to(self.vendor.real_path), "etc/init/hw")]
+		                          if is_relative_to(file.relative_to(self.vendor.path), "etc/init/hw")]
 
 		recovery_resources_location = (self.boot_configuration.recovery_aik_manager.ramdisk_path
 		                               if self.boot_configuration.recovery_aik_manager

@@ -22,7 +22,7 @@ class ProprietaryFilesList:
 			allowed, not_allowed = [], []
 
 			for file in partition.files:
-				file_relative = file.relative_to(partition.real_path)
+				file_relative = file.relative_to(partition.path)
 				(allowed if is_blob_allowed(file_relative) else not_allowed).append(file)
 
 			partition.files = allowed

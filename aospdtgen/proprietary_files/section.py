@@ -48,12 +48,12 @@ class Section:
 		not_matched: List[Path] = []
 
 		for file in partition.files:
-			file_relative = file.relative_to(partition.real_path)
+			file_relative = file.relative_to(partition.path)
 			(matched if self.file_match(file_relative) else not_matched).append(file)
 
 		# Handle shared libs
 		for file in matched:
-			file_relative = file.relative_to(partition.real_path)
+			file_relative = file.relative_to(partition.path)
 			# Check only ELFs
 			if (not is_relative_to(file_relative, "bin")
 					and not is_relative_to(file_relative, "lib")
@@ -88,7 +88,7 @@ class Section:
 					matched.append(file)
 
 		self.files.extend(
-			partition.model.proprietary_files_prefix / file.relative_to(partition.real_path)
+			partition.model.proprietary_files_prefix / file.relative_to(partition.path)
 			for file in matched
 		)
 
