@@ -9,7 +9,11 @@ from aospdtgen.proprietary_files.section import Section, register_section
 class CneSection(Section):
 	name = "CNE"
 	interfaces = [
+		"com.quicinc.cne.api",
+		"com.quicinc.cne.constants",
+		"com.quicinc.cne.server",
 		"vendor.qti.data.factory",
+		"vendor.qti.data.mwqem",
 		"vendor.qti.data.slm",
 		"vendor.qti.hardware.cacert",
 		"vendor.qti.hardware.data.cne.internal.api",
@@ -19,6 +23,7 @@ class CneSection(Section):
 		"vendor.qti.hardware.data.dynamicdds",
 		"vendor.qti.hardware.data.iwlan",
 		"vendor.qti.hardware.data.latency",
+		"vendor.qti.hardware.data.lce",
 		"vendor.qti.hardware.data.qmi",
 		"vendor.qti.hardware.factory",
 		"vendor.qti.hardware.slmadapter",
