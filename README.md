@@ -1,6 +1,6 @@
 # aospdtgen
 
-[![PyPi version](https://img.shields.io/pypi/v/aospdtgen)](https://pypi.org/project/aospdtgen/)
+[![PyPI version](https://img.shields.io/pypi/v/aospdtgen)](https://pypi.org/project/aospdtgen/)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/8dc4d00653654b1aa19eeff284d4aa15)](https://www.codacy.com/gh/SebaUbuntu/aospdtgen/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=SebaUbuntu/aospdtgen&amp;utm_campaign=Badge_Grade)
 
 Create a [LineageOS](https://github.com/LineageOS)-compatible device tree from an Android stock ROM dump (made with [dumpyara](https://github.com/SebaUbuntu/dumpyara)).
@@ -12,7 +12,7 @@ Requires Python 3.8 or greater
 ## Installation
 
 ```sh
-pip3 install .
+pip3 install aospdtgen
 ```
 
 ## Instructions
