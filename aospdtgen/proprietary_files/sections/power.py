@@ -10,6 +10,7 @@ class PowerSection(Section):
 	name = "Power"
 	interfaces = [
 		"android.hardware.power",
+		"vendor.mediatek.hardware.mtkpower",
 	]
 	hardware_modules = [
 		"power",

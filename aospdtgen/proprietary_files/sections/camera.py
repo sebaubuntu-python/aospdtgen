@@ -14,6 +14,14 @@ class CameraSection(Section):
 		"android.hardware.camera.metadata",
 		"android.hardware.camera.provider",
 		"camera.device",
+		"motorola.hardware.camera.imgtuner",
+		"vendor.mediatek.hardware.camera.atms",
+		"vendor.mediatek.hardware.camera.bgservice",
+		"vendor.mediatek.hardware.camera.frhandler",
+		"vendor.mediatek.hardware.camera.isphal",
+		"vendor.mediatek.hardware.camera.lomoeffect",
+		"vendor.mediatek.hardware.camera.postproc",
+		"vendor.mediatek.hardware.camera.security",
 		"vendor.qti.hardware.camera.device",
 		"vendor.qti.hardware.camera.postproc",
 		"vendor.qti.hardware.scve.objecttracker",
@@ -30,6 +38,7 @@ class CameraSection(Section):
 	]
 	patterns = [
 		"lib(64)?/com.qti.feature2\..*\.so",
+		"lib(64)?/libCamera_.*\.so",
 		"lib(64)?/libcamx.*\.so",
 		"lib(64)?/libchromatix_.*\.so",
 		"lib(64)?/libmmcamera_.*\.so",

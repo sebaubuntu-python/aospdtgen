@@ -64,6 +64,8 @@ class RadioImsSection(Section):
 	interfaces = [
 		"com.qualcomm.qti.imscmservice",
 		"com.qualcomm.qti.uceservice",
+		"vendor.mediatek.hardware.rcs",
+		"vendor.mediatek.hardware.videotelephony",
 		"vendor.qti.hardware.radio.ims",
 		"vendor.qti.ims.callcapability",
 		"vendor.qti.ims.callinfo",

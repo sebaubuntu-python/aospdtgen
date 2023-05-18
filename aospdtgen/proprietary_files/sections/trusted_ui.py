@@ -11,6 +11,7 @@ class TrustedUiSection(Section):
 	interfaces = [
 		"vendor.qti.hardware.trustedui",
 		"vendor.qti.hardware.tui_comm",
+		"vendor.trustonic.tee.tui",
 	]
 	binaries = [
 		"TrustedUISampleTest",

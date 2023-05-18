@@ -12,6 +12,9 @@ class GnssSection(Section):
 		"android.hardware.gnss",
 		"vendor.qti.gnss",
 	]
+	hardware_modules = [
+		"gps",
+	]
 	binaries = [
 		"loc_launcher",
 		"lowi-server",
@@ -19,6 +22,12 @@ class GnssSection(Section):
 		"xtra-daemon",
 		"xtwifi-client",
 		"xtwifi-inet-agent",
+	]
+
+class GnssConfigSection(Section):
+	name = "GNSS configs"
+	folders = [
+		"etc/gnss",
 	]
 
 register_section(GnssSection)

@@ -10,25 +10,21 @@ class VibratorSection(Section):
 	name = "Vibrator"
 	interfaces = [
 		"android.hardware.vibrator",
+		"motorola.hardware.vibrator",
 		"vendor.qti.hardware.vibrator",
+		"vendor.xiaomi.hardware.vibratorfeature",
 	]
 	hardware_modules = [
 		"vibrator",
-	]
-
-class VibratorXiaomiSection(Section):
-	name = "Vibrator (Xiaomi)"
-	interfaces = [
-		"vendor.xiaomi.hardware.vibratorfeature",
 	]
 
 class VibratorFirmwareSection(Section):
 	name = "Vibrator firmware"
 	patterns = [
 		"firmware/.*(rtp|RTP)\.bin",
+		"firmware/aw8622x.*\.bin",
 		"firmware/aw8697.*\.bin",
 	]
 
 register_section(VibratorSection)
-register_section(VibratorXiaomiSection)
 register_section(VibratorFirmwareSection)

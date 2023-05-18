@@ -28,8 +28,23 @@ class MediaOmxSection(Section):
 		"mediacodec.policy",
 	]
 	patterns = [
+		"lib(64)?/libMtkOmx.*\.so",
 		"lib(64)?/libOmx.*\.so",
 		"lib(64)?/libstagefright.*\.so",
+	]
+
+class MediaDolbySection(Section):
+	name = "Media (Dolby)"
+	interfaces = [
+		"vendor.dolby.hardware.dms",
+		"vendor.dolby.media.c2",
+	]
+	libraries = [
+		"libdapparamstorage",
+		"libdeccfg",
+	]
+	folders = [
+		"etc/dolby",
 	]
 
 class MediaConfigsSection(Section):
@@ -41,4 +56,5 @@ class MediaConfigsSection(Section):
 
 register_section(MediaCodec2Section)
 register_section(MediaOmxSection)
+register_section(MediaDolbySection)
 register_section(MediaConfigsSection)

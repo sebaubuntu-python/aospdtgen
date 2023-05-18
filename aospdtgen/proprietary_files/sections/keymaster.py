@@ -10,9 +10,11 @@ class KeymasterSection(Section):
 	name = "Keymaster"
 	interfaces = [
 		"android.hardware.keymaster",
+		"vendor.mediatek.hardware.keymaster_attestation",
 	]
 	hardware_modules = [
 		"keystore",
+		"kmsetkey",
 	]
 
 register_section(KeymasterSection)

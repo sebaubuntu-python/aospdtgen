@@ -35,6 +35,8 @@ class AudioConfigsSection(Section):
 	]
 	folders = [
 		"etc/audio",
+		"etc/audio_param",
+		"etc/smartpa_param",
 	]
 	patterns = [
 		"etc/audio_configs.*\.xml",

@@ -14,6 +14,9 @@ class BluetoothSection(Section):
 	hardware_modules = [
 		"bluetooth",
 	]
+	libraries = [
+		"libbt-vendor",
+	]
 
 class BluetoothA2dpSection(Section):
 	name = "Bluetooth (A2DP)"
@@ -21,6 +24,7 @@ class BluetoothA2dpSection(Section):
 		"android.hardware.bluetooth.a2dp",
 		"android.hardware.bluetooth.audio",
 		"com.qualcomm.qti.bluetooth_audio",
+		"vendor.mediatek.hardware.bluetooth.audio",
 		"vendor.qti.hardware.bluetooth_audio",
 		"vendor.qti.hardware.bluetooth_sar",
 		"vendor.qti.hardware.btconfigstore",

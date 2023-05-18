@@ -14,17 +14,25 @@ class DisplaySection(Section):
 		"android.hardware.graphics.composer",
 		"android.hardware.graphics.mapper",
 		"android.hardware.memtrack",
+		"com.motorola.hardware.display.panel",
+		"com.motorola.hardware.display.touch",
 		"vendor.display.color",
 		"vendor.display.config",
 		"vendor.display.postproc",
+		"vendor.mediatek.hardware.composer_ext",
+		"vendor.mediatek.hardware.mms",
+		"vendor.mediatek.hardware.pq",
 		"vendor.qti.hardware.display.allocator",
 		"vendor.qti.hardware.display.composer",
 		"vendor.qti.hardware.display.mapper",
 		"vendor.qti.hardware.display.mapperextensions",
 		"vendor.qti.hardware.qdutils_disp",
+		"vendor.xiaomi.hardware.displayfeature",
 	]
 	hardware_modules = [
 		"copybit",
+		"displayfeature",
+		"displaypanel",
 		"gralloc",
 		"hwcomposer",
 		"memtrack",
@@ -49,16 +57,6 @@ class DisplayFirmwareSection(Section):
 		"firmware/a[0-9]+_.*\..*",
 	]
 
-class DisplayXiaomiSection(Section):
-	name = "Display (Xiaomi)"
-	interfaces = [
-		"vendor.xiaomi.hardware.displayfeature",
-	]
-	hardware_modules = [
-		"displayfeature",
-	]
-
 register_section(DisplaySection)
 register_section(DisplayConfigsSection)
 register_section(DisplayFirmwareSection)
-register_section(DisplayXiaomiSection)
