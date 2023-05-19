@@ -10,6 +10,9 @@ class WifiSection(Section):
 	name = "Wi-Fi"
 	interfaces = [
 		"android.hardware.wifi",
+		"vendor.asus.wifi.netutil",
+		"vendor.asus.wifi.rttutil",
+		"vendor.ims.wifiantennamode",
 		"vendor.mediatek.hardware.wifi.hostapd",
 		"vendor.mediatek.hardware.wifi.supplicant",
 		"vendor.qti.hardware.fstman",

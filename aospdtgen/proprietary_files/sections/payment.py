@@ -6,6 +6,18 @@
 
 from aospdtgen.proprietary_files.section import Section, register_section
 
+class PaymentEIDSection(Section):
+	name = "Payment (eID)"
+	interfaces = [
+		"vendor.qti.hardware.eid",
+	]
+
+class PaymentIFAASection(Section):
+	name = "Payment (IFAA)"
+	apps = [
+		"IFAAService",
+	]
+
 class PaymentXiaomiSection(Section):
 	name = "Payment (Xiaomi)"
 	interfaces = [
@@ -21,4 +33,6 @@ class PaymentXiaomiSection(Section):
 		"bin/tidad(@[0-9]+\.[0-9]+)?$",
 	]
 
+register_section(PaymentEIDSection)
+register_section(PaymentIFAASection)
 register_section(PaymentXiaomiSection)

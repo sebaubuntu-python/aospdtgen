@@ -22,6 +22,8 @@ class DisplaySection(Section):
 		"vendor.mediatek.hardware.composer_ext",
 		"vendor.mediatek.hardware.mms",
 		"vendor.mediatek.hardware.pq",
+		"vendor.pixelworks.hardware.display.iris",
+		"vendor.pixelworks.hardware.feature.irisfeature",
 		"vendor.qti.hardware.display.allocator",
 		"vendor.qti.hardware.display.composer",
 		"vendor.qti.hardware.display.mapper",

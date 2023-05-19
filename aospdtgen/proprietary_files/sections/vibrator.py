@@ -11,6 +11,7 @@ class VibratorSection(Section):
 	interfaces = [
 		"android.hardware.vibrator",
 		"motorola.hardware.vibrator",
+		"vendor.asus.vibrator.vibratorgovern",
 		"vendor.qti.hardware.vibrator",
 		"vendor.xiaomi.hardware.vibratorfeature",
 	]

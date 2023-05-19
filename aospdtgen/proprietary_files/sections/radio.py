@@ -14,6 +14,7 @@ class RadioSection(Section):
 		"qcrild",
 		"vendor.mediatek.hardware.mtkradioex",
 		"vendor.mediatek.hardware.radio",
+		"vendor.qti.hardware.embmssl",
 		"vendor.qti.hardware.radio.am",
 		"vendor.qti.hardware.radio.atcmdfwd",
 		"vendor.qti.hardware.radio.internal.deviceinfo",
@@ -21,6 +22,7 @@ class RadioSection(Section):
 		"vendor.qti.hardware.radio.qcrilhook",
 		"vendor.qti.hardware.radio.qtiradio",
 		"vendor.qti.hardware.radio.uim",
+		"vendor.qti.hardware.radio.uim_remote_client",
 		"vendor.qti.rmt_storage",
 		"vendor.qti.tftp",
 	]
@@ -52,6 +54,7 @@ class RadioSection(Section):
 		"init-qcril-data.rc",
 	]
 	folders = [
+		"etc/qcril_database",
 		"radio/qcril_database",
 	]
 	patterns = [

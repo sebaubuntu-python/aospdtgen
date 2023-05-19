@@ -10,6 +10,8 @@ class GatekeeperSection(Section):
 	name = "Gatekeeper"
 	interfaces = [
 		"android.hardware.gatekeeper",
+		"vendor.qti.hardware.secureprocessor",
+		"vendor.qti.spu",
 		"vendor.trustonic.tee",
 	]
 	hardware_modules = [

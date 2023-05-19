@@ -6,28 +6,25 @@
 
 from aospdtgen.proprietary_files.section import Section, register_section
 
-class MediaCodec2Section(Section):
-	name = "Media (Codec2)"
+class MediaSection(Section):
+	name = "Media"
 	interfaces = [
 		"android.hardware.media.c2",
+		"android.hardware.media.omx",
+		"vendor.qti.hardware.qconfig",
+		"vendor.qti.hardware.vpp",
 		"vendor.qti.media.c2",
+	]
+	binaries = [
+		"qconfigservice",
+		"vppservice",
 	]
 	filenames = [
 		"c2_manifest_vendor.xml",
-	]
-	patterns = [
-		"etc/seccomp_policy/codec2.vendor.*.-arm\.policy",
-	]
-
-class MediaOmxSection(Section):
-	name = "Media (OMX)"
-	interfaces = [
-		"android.hardware.media.omx",
-	]
-	filenames = [
 		"mediacodec.policy",
 	]
 	patterns = [
+		"etc/seccomp_policy/codec2.vendor.*.-arm\.policy",
 		"lib(64)?/libMtkOmx.*\.so",
 		"lib(64)?/libOmx.*\.so",
 		"lib(64)?/libstagefright.*\.so",
@@ -47,6 +44,12 @@ class MediaDolbySection(Section):
 		"etc/dolby",
 	]
 
+class MediaOZOAudioSection(Section):
+	name = "Media (OZO Audio)"
+	interfaces = [
+		"vendor.ozoaudio.media.c2",
+	]
+
 class MediaConfigsSection(Section):
 	name = "Media configs"
 	patterns = [
@@ -54,7 +57,7 @@ class MediaConfigsSection(Section):
 		"etc/media_profiles.*\.xml",
 	]
 
-register_section(MediaCodec2Section)
-register_section(MediaOmxSection)
+register_section(MediaSection)
 register_section(MediaDolbySection)
+register_section(MediaOZOAudioSection)
 register_section(MediaConfigsSection)
