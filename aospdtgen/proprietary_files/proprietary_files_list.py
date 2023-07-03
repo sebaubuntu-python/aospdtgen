@@ -6,7 +6,7 @@
 
 from sebaubuntu_libs.libandroid.partitions.partition import AndroidPartition
 from sebaubuntu_libs.libandroid.partitions.partition_model import TREBLE
-from typing import List
+from typing import List, Optional
 
 from aospdtgen.proprietary_files.ignore import is_blob_allowed
 from aospdtgen.proprietary_files.section import Section, sections
@@ -42,7 +42,7 @@ class ProprietaryFilesList:
 	def __str__(self) -> str:
 		return self.get_formatted_list()
 
-	def get_formatted_list(self, build_description: str = None) -> str:
+	def get_formatted_list(self, build_description: Optional[str] = None) -> str:
 		result = ""
 		if build_description:
 			result += f"# Unpinned blobs from {build_description}\n"
