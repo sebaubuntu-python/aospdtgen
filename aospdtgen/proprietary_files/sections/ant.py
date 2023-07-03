@@ -10,6 +10,7 @@ class AntSection(Section):
 	name = "ANT"
 	interfaces = [
 		"com.dsi.ant",
+		"com.qualcomm.qti.ant",
 		"vendor.xiaomi.hardware.antdtx",
 	]
 

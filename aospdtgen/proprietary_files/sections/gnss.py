@@ -26,8 +26,18 @@ class GnssSection(Section):
 
 class GnssConfigSection(Section):
 	name = "GNSS configs"
+	filenames = [
+		"apdr.conf",
+		"flp.conf",
+		"gps.conf",
+		"izat.conf",
+		"lowi.conf",
+		"sap.conf",
+		"xtwifi.conf",
+	]
 	folders = [
 		"etc/gnss",
 	]
 
 register_section(GnssSection)
+register_section(GnssConfigSection)

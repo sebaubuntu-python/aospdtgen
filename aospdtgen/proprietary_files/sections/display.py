@@ -40,6 +40,12 @@ class DisplaySection(Section):
 		"memtrack",
 		"vulkan",
 	]
+	libraries = [
+		"libsdedrm",
+		"libsdm-color",
+		"libsdm-diag",
+		"libsdmextension",
+	]
 	folders = [
 		"lib/egl",
 		"lib64/egl",

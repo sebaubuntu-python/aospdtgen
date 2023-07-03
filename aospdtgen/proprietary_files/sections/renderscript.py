@@ -11,5 +11,10 @@ class RenderscriptSection(Section):
 	interfaces = [
 		"android.hardware.renderscript",
 	]
+	libraries = [
+		"libRSDriver_adreno",
+		"librs_adreno",
+		"librs_adreno_sha1",
+	]
 
 register_section(RenderscriptSection)

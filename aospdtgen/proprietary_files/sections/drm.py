@@ -38,7 +38,22 @@ class DrmQteeSection(Section):
 	interfaces = [
 		"vendor.qti.hardware.qteeconnector",
 	]
+	libraries = [
+		"libGPQTEEC_vendor",
+		"libGPTEE_vendor",
+		"libQTEEConnector_vendor",
+	]
+
+class DrmFirmwareSection(Section):
+	name = "DRM Firmware"
+	folders = [
+		"etc/firmware/drm",
+	]
+	patterns = [
+		"firmware/widevine\..*",
+	]
 
 register_section(DrmSection)
 register_section(DrmQseeSection)
 register_section(DrmQteeSection)
+register_section(DrmFirmwareSection)

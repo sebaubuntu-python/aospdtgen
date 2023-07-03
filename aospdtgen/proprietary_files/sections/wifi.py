@@ -21,10 +21,16 @@ class WifiSection(Section):
 		"vendor.qti.hardware.wifi.supplicant",
 		"vendor.qti.hardware.wifi.wifilearner",
 		"vendor.qti.hardware.wigig.netperftuner",
+		"vendor.qti.hardware.wigig.supptunnel",
 	]
 	binaries = [
+		"cnss-daemon",
 		"hostapd",
+		"wcnss_service",
 		"wpa_supplicant",
+	]
+	libraries = [
+		"libwifi-hal-qcom",
 	]
 
 class WifiConfigsSection(Section):

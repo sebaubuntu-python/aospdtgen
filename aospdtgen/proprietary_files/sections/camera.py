@@ -32,6 +32,21 @@ class CameraSection(Section):
 		"camera",
 		"com.qti.chi",
 	]
+	binaries = [
+		"mm-qcamera-daemon",
+	]
+	libraries = [
+		"libscveBlobDescriptor_stub",
+		"libscveCommon",
+		"libscveCommon_stub",
+		"libscveObjectSegmentation",
+		"libscveObjectSegmentation_stub",
+		"libscveObjectTracker",
+		"libscveObjectTracker_stub",
+		"libscvePanorama",
+		"libscvePanorama_lite",
+		"libscvePanorama_stub",
+	]
 	folders = [
 		"lib/camera",
 		"lib64/camera",
@@ -39,9 +54,12 @@ class CameraSection(Section):
 	patterns = [
 		"lib(64)?/com.qti.feature2\..*\.so",
 		"lib(64)?/libCamera_.*\.so",
+		"lib(64)?/libactuator_.*\.so",
 		"lib(64)?/libcamx.*\.so",
 		"lib(64)?/libchromatix_.*\.so",
 		"lib(64)?/libmmcamera_.*\.so",
+		"lib(64)?/libmmcamera2_.*\.so",
+		"lib(64)?/libois_.*\.so",
 	]
 
 class CameraConfigsSection(Section):

@@ -12,6 +12,7 @@ class RadioSection(Section):
 		"android.hardware.radio",
 		"mtkfusionrild",
 		"qcrild",
+		"rild",
 		"vendor.mediatek.hardware.mtkradioex",
 		"vendor.mediatek.hardware.radio",
 		"vendor.qti.hardware.embmssl",

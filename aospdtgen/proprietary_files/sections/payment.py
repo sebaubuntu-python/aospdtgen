@@ -14,6 +14,9 @@ class PaymentEIDSection(Section):
 
 class PaymentIFAASection(Section):
 	name = "Payment (IFAA)"
+	interfaces = [
+		"vendor.qti.hardware.ifaa",
+	]
 	apps = [
 		"IFAAService",
 	]
@@ -21,6 +24,7 @@ class PaymentIFAASection(Section):
 class PaymentXiaomiSection(Section):
 	name = "Payment (Xiaomi)"
 	interfaces = [
+		"vendor.fido.fidoca",
 		"vendor.xiaomi.hardware.mfidoca",
 		"vendor.xiaomi.hardware.mlipay",
 		"vendor.xiaomi.hardware.mtdservice",
