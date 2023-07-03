@@ -65,8 +65,11 @@ class DeviceTree:
 		self.rootdir_bin_files = [file for file in self.vendor.files
 		                          if is_relative_to(file.relative_to(self.vendor.path), "bin")
 		                          and file.suffix == ".sh"]
+		self.rootdir_bin_files.sort(key=strcoll_files_key)
+
 		self.rootdir_etc_files = [file for file in self.vendor.files
 		                          if is_relative_to(file.relative_to(self.vendor.path), "etc/init/hw")]
+		self.rootdir_etc_files.sort(key=strcoll_files_key)
 
 		recovery_resources_location = (self.boot_configuration.recovery_aik_manager.ramdisk_path
 		                               if self.boot_configuration.recovery_aik_manager
@@ -74,6 +77,7 @@ class DeviceTree:
 		self.rootdir_recovery_etc_files = [file for file in recovery_resources_location.iterdir()
 		                                   if is_relative_to(file.relative_to(recovery_resources_location), ".")
 		                                   and file.suffix == ".rc"]
+		self.rootdir_recovery_etc_files.sort(key=strcoll_files_key)
 
 		LOGI("Generating proprietary files list")
 		self.proprietary_files_list = ProprietaryFilesList(self.partitions.get_all_partitions())
