@@ -22,6 +22,8 @@ class BootConfiguration:
 		self.recovery = self._get_image_path("recovery")
 		self.vendor_boot = self._get_image_path("vendor_boot")
 
+		assert self.boot, "No boot image found"
+
 		self.boot_aik_manager = AIKManager()
 		self.boot_image_info = self.boot_aik_manager.unpackimg(self.boot)
 
