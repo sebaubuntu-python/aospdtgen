@@ -53,6 +53,7 @@ IGNORED_PROPS.append("ro.sf.lcd_density")
 # Treble/VNDK
 IGNORED_PROPS.extend(get_partition_props("ro.{}vndk.version", add_empty=True))
 IGNORED_PROPS.append("ro.treble.enabled")
+IGNORED_PROPS.append("ro.vndk.lite")
 
 # Bionic
 IGNORED_PROPS.append("ro.bionic.arch")
@@ -102,3 +103,9 @@ IGNORED_PROPS.append("ro.apex.updatable")
 
 # Vulkan
 IGNORED_PROPS.append("ro.hwui.use_vulkan")
+
+# ADB
+IGNORED_PROPS.append("persist.sys.usb.config")
+IGNORED_PROPS.append("ro.secure")
+IGNORED_PROPS.append("ro.adb.secure")
+IGNORED_PROPS.append("ro.debuggable")
