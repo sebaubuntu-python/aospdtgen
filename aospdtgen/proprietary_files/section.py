@@ -134,15 +134,12 @@ class Section:
 
 		# Apps
 		if is_relative_to(file, "app") or is_relative_to(file, "priv-app"):
-			app_name = file.relative_to("app" if is_relative_to(file, "app") else "priv-app")
-			app_name = list(app_name.parts)[0]
-			if app_name in self.apps:
+			if file.suffix == ".apk" and file.stem in self.apps:
 				return True
 
 		# Binaries
-		if is_relative_to(file, "bin"):
-			if file.name in self.binaries:
-				return True
+		if is_relative_to(file, "bin") and file.name in self.binaries:
+			return True
 
 		# Init scripts
 		if is_relative_to(file, "etc/init"):
