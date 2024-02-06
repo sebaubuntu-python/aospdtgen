@@ -27,6 +27,8 @@ class Section:
 	"""List of interfaces"""
 	hardware_modules: List[str] = []
 	"""List of hardware modules IDs"""
+	apexes: List[str] = []
+	"""List of APEXes"""
 	apps: List[str] = []
 	"""List of app names"""
 	binaries: List[str] = []
@@ -131,6 +133,10 @@ class Section:
 			for hardware_module in self.hardware_modules:
 				if file.name.startswith(f"{hardware_module}.") and file.suffix == ".so":
 					return True
+
+		# APEXes
+		if is_relative_to(file, "apex") and file.suffix == ".apex" and file.stem in self.apexes:
+			return True
 
 		# Apps
 		if is_relative_to(file, "app") or is_relative_to(file, "priv-app"):
