@@ -33,15 +33,24 @@ class MediaSection(Section):
 class MediaDolbySection(Section):
 	name = "Media (Dolby)"
 	interfaces = [
+		"vendor.dolby.dms",
 		"vendor.dolby.hardware.dms",
 		"vendor.dolby.media.c2",
+		"vendor.dolby_sp.hardware.dmssp",
+		"vendor.dolby_sp.media.c2",
 	]
 	libraries = [
 		"libdapparamstorage",
 		"libdeccfg",
 	]
+	filenames = [
+		"dolby_vision.cfg",
+	]
 	folders = [
 		"etc/dolby",
+	]
+	patterns = [
+		"lib(64)?/libdolby.*\.so",
 	]
 
 class MediaOZOAudioSection(Section):

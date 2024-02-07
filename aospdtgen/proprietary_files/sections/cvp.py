@@ -12,4 +12,12 @@ class CvpSection(Section):
 		"vendor.qti.hardware.cvp",
 	]
 
+class CvpFirmwareSection(Section):
+	name = "CVP firmware"
+	patterns = [
+		"(.*/)?firmware/evass\..*",
+		"(.*/)?firmware/evass-lt\..*",
+	]
+
 register_section(CvpSection)
+register_section(CvpFirmwareSection)

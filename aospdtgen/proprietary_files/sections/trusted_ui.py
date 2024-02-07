@@ -17,7 +17,10 @@ class TrustedUiSection(Section):
 		"TrustedUISampleTest",
 	]
 	libraries = [
+		"libTrustedUI",
+		"libTrustedUIAIDL",
 		"libTrustedUITZ",
+		"libTrustedUIVM",
 	]
 
 register_section(TrustedUiSection)

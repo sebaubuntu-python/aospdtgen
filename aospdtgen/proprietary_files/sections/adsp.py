@@ -22,7 +22,9 @@ class AdspSection(Section):
 class AdspModulesSection(Section):
 	name = "ADSP modules"
 	folders = [
+		"lib/rfs/dsp",
 		"lib/rfsa/adsp",
+		"lib64/rfs/dsp",
 		"lib64/rfsa/adsp",
 	]
 

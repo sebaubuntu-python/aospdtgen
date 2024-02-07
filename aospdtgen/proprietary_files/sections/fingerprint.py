@@ -11,12 +11,16 @@ class FingerprintSection(Section):
 	interfaces = [
 		"android.hardware.biometrics.fingerprint",
 		"vendor.goodix.hardware.biometrics.fingerprint",
+		"vendor.oplus.hardware.biometrics.fingerprint",
 		"vendor.qti.hardware.fingerprint",
 		"vendor.xiaomi.hardware.fingerprintextension",
 	]
 	hardware_modules = [
 		"fingerprint",
 		"gf_fingerprint",
+	]
+	binaries = [
+		"qfp-daemon",
 	]
 
 register_section(FingerprintSection)

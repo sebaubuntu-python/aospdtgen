@@ -11,12 +11,16 @@ class AudioSection(Section):
 	interfaces = [
 		"android.hardware.audio",
 		"android.hardware.audio.effect",
+		"vendor.oplus.hardware.binaural_record",
+		"vendor.oplus.hardware.virtual_device.audio",
 		"vendor.qti.hardware.audiohalext",
 	]
 	hardware_modules = [
+		"audio.binaural_record",
 		"audio.primary",
 		"audio.r_submix",
 		"audio.usb",
+		"audio.virtual",
 	]
 
 class AudioFxModulesSection(Section):
@@ -35,8 +39,6 @@ class AudioConfigsSection(Section):
 	]
 	folders = [
 		"etc/audio",
-		"etc/audio_param",
-		"etc/smartpa_param",
 	]
 	patterns = [
 		"etc/audio_configs.*\.xml",
@@ -47,6 +49,19 @@ class AudioConfigsSection(Section):
 		"etc/sound_trigger_.*\.xml",
 	]
 
+class AudioCalibrationSection(Section):
+	name = "Audio calibration"
+	folders = [
+		"etc/audio_param",
+		"etc/lvacfs_params",
+		"etc/smartpa_param",
+		"etc/spatializer",
+	]
+	patterns = [
+		"(.*/)?firmware/tfa98xx\..*",
+	]
+
 register_section(AudioSection)
 register_section(AudioFxModulesSection)
 register_section(AudioConfigsSection)
+register_section(AudioCalibrationSection)

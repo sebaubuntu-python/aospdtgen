@@ -11,12 +11,8 @@ class SoterSection(Section):
 	interfaces = [
 		"vendor.qti.hardware.soter",
 	]
-
-class SoterTencentSection(Section):
-	name = "Soter (Tencent)"
 	apps = [
 		"SoterService",
 	]
 
 register_section(SoterSection)
-register_section(SoterTencentSection)

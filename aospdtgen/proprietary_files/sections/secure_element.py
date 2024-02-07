@@ -13,11 +13,11 @@ class SecureElementSection(Section):
 		"vendor.qti.secure_element",
 	]
 
-class SecureElementESESection(Section):
-	name = "Secure element (ESE)"
+class SecureElementPowerManagerSection(Section):
+	name = "Secure element (power manager)"
 	interfaces = [
 		"vendor.qti.esepowermanager",
 	]
 
 register_section(SecureElementSection)
-register_section(SecureElementESESection)
+register_section(SecureElementPowerManagerSection)

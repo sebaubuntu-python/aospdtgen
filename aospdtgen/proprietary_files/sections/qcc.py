@@ -11,6 +11,10 @@ class QccSection(Section):
 	interfaces = [
 		"vendor.qti.hardware.qccsyshal",
 		"vendor.qti.hardware.qccvndhal",
+		"vendor.qti.qccvndhal_aidl",
+	]
+	binaries = [
+		"qcc-vendor",
 	]
 
 register_section(QccSection)

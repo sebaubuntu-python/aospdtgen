@@ -14,4 +14,11 @@ class AntSection(Section):
 		"vendor.xiaomi.hardware.antdtx",
 	]
 
+class AntFirmwareSection(Section):
+	name = "ANT firmware"
+	patterns = [
+		"(.*/)?firmware/antdtx\..*",
+	]
+
 register_section(AntSection)
+register_section(AntFirmwareSection)

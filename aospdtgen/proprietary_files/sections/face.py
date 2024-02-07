@@ -10,6 +10,7 @@ class FaceSection(Section):
 	name = "Face"
 	interfaces = [
 		"android.hardware.biometrics.face",
+		"vendor.oplus.hardware.biometrics.face",
 	]
 
 register_section(FaceSection)

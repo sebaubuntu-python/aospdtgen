@@ -11,6 +11,7 @@ class SensorsSection(Section):
 	interfaces = [
 		"android.hardware.sensors",
 		"motorola.hardware.sensorscalibrate",
+		"vendor-oplus-hardware-oplusSensor",
 		"vendor.qti.hardware.sensorscalibrate",
 	]
 	hardware_modules = [
@@ -29,6 +30,7 @@ class SensorsConfigsSection(Section):
 	name = "Sensors configs"
 	folders = [
 		"etc/motorola/sensors",
+		"etc/sensor",
 		"etc/sensors",
 	]
 

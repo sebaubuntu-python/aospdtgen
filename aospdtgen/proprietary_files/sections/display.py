@@ -22,12 +22,15 @@ class DisplaySection(Section):
 		"vendor.mediatek.hardware.composer_ext",
 		"vendor.mediatek.hardware.mms",
 		"vendor.mediatek.hardware.pq",
-		"vendor.pixelworks.hardware.display.iris",
-		"vendor.pixelworks.hardware.feature.irisfeature",
+		"vendor.oplus.hardware.displaycolorfeature",
+		"vendor.oplus.hardware.displaypanelfeature",
 		"vendor.qti.hardware.display.allocator",
+		"vendor.qti.hardware.display.color",
 		"vendor.qti.hardware.display.composer",
+		"vendor.qti.hardware.display.config",
 		"vendor.qti.hardware.display.mapper",
 		"vendor.qti.hardware.display.mapperextensions",
+		"vendor.qti.hardware.display.postproc",
 		"vendor.qti.hardware.qdutils_disp",
 		"vendor.xiaomi.hardware.displayfeature",
 	]
@@ -51,8 +54,24 @@ class DisplaySection(Section):
 		"lib64/egl",
 	]
 
+class DisplayPixelworksSection(Section):
+	name = "Display (Pixelworks)"
+	interfaces = [
+		"vendor.pixelworks.hardware.display",
+		"vendor.pixelworks.hardware.display.iris",
+		"vendor.pixelworks.hardware.feature",
+		"vendor.pixelworks.hardware.feature.irisfeature",
+	]
+	patterns = [
+		"(.*/)?firmware/pxlw_.*\..*",
+	]
+
 class DisplayConfigsSection(Section):
 	name = "Display configs"
+	folders = [
+		"etc/display",
+		"etc/inparm",
+	]
 	patterns = [
 		"etc/ltm_*",
 		"etc/mdss_*",
@@ -60,11 +79,16 @@ class DisplayConfigsSection(Section):
 	]
 
 class DisplayFirmwareSection(Section):
-	name = "Display (firmware)"
+	name = "Display firmware"
+	folders = [
+		"gpu/kbc",
+	]
 	patterns = [
-		"firmware/a[0-9]+_.*\..*",
+		"(.*/)?firmware/a[0-9]+_.*\..*",
+		"(.*/)?firmware/iris.*\..*",
 	]
 
 register_section(DisplaySection)
+register_section(DisplayPixelworksSection)
 register_section(DisplayConfigsSection)
 register_section(DisplayFirmwareSection)

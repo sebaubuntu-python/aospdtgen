@@ -25,6 +25,7 @@ class BluetoothA2dpSection(Section):
 		"android.hardware.bluetooth.audio",
 		"com.qualcomm.qti.bluetooth_audio",
 		"vendor.mediatek.hardware.bluetooth.audio",
+		"vendor.qti.hardware.bluetooth.audio",
 		"vendor.qti.hardware.bluetooth_audio",
 		"vendor.qti.hardware.bluetooth_sar",
 		"vendor.qti.hardware.btconfigstore",

@@ -11,6 +11,8 @@ class DpmSection(Section):
 	interfaces = [
 		"com.qualcomm.qti.dpm.api",
 		"vendor.qti.diaghal",
+		"vendor.qti.hardware.dpmaidlservice",
+		"vendor.qti.hardware.dpmservice",
 	]
 	binaries = [
 		"dpmQmiMgr",

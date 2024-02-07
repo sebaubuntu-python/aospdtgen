@@ -22,7 +22,15 @@ class CameraSection(Section):
 		"vendor.mediatek.hardware.camera.lomoeffect",
 		"vendor.mediatek.hardware.camera.postproc",
 		"vendor.mediatek.hardware.camera.security",
+		"vendor.oplus.hardware.camera_rfi",
+		"vendor.oplus.hardware.cammidasservice",
+		"vendor.oplus.hardware.extcamera",
+		"vendor.oplus.hardware.virtual_device.camera.hal",
+		"vendor.oplus.hardware.virtual_device.camera.manager",
+		"vendor.oplus.hardware.virtual_device.camera.provider",
+		"vendor.qti.camera.provider",	
 		"vendor.qti.hardware.camera.device",
+		"vendor.qti.hardware.camera.offlinecamera",
 		"vendor.qti.hardware.camera.postproc",
 		"vendor.qti.hardware.scve.objecttracker",
 		"vendor.qti.hardware.scve.panorama",
@@ -34,6 +42,7 @@ class CameraSection(Section):
 	]
 	binaries = [
 		"mm-qcamera-daemon",
+		"virtualcameraprovider",
 	]
 	libraries = [
 		"libscveBlobDescriptor_stub",
@@ -55,6 +64,7 @@ class CameraSection(Section):
 		"lib(64)?/com.qti.feature2\..*\.so",
 		"lib(64)?/libCamera_.*\.so",
 		"lib(64)?/libactuator_.*\.so",
+		"lib(64)?/libarcsoft_.*\.so",
 		"lib(64)?/libcamx.*\.so",
 		"lib(64)?/libchromatix_.*\.so",
 		"lib(64)?/libmmcamera_.*\.so",
@@ -69,8 +79,14 @@ class CameraConfigsSection(Section):
 		"etc/camera",
 	]
 
+class CameraFirmwareSection(Section):
+	name = "Camera firmware"
+	patterns = [
+		"(.*/)?firmware/CAMERA_ICP.*",
+	]
+
 class CameraMotorSection(Section):
-	name = "Camera (motor)"
+	name = "Camera motor"
 	interfaces = [
 		"vendor.xiaomi.hardware.motor",
 	]
@@ -86,4 +102,5 @@ class CameraMotorSection(Section):
 
 register_section(CameraSection)
 register_section(CameraConfigsSection)
+register_section(CameraFirmwareSection)
 register_section(CameraMotorSection)

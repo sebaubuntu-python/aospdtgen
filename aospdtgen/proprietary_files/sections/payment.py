@@ -21,6 +21,14 @@ class PaymentIFAASection(Section):
 		"IFAAService",
 	]
 
+class PaymentOplusSection(Section):
+	name = "Payment (oplus)"
+	interfaces = [
+		"vendor.oplus.hardware.biometrics.fingerprintpay",
+		"vendor.oplus.hardware.fido.fido2ca",
+		"vendor.oplus.hardware.fido.fidoca",
+	]
+
 class PaymentXiaomiSection(Section):
 	name = "Payment (Xiaomi)"
 	interfaces = [
@@ -37,6 +45,17 @@ class PaymentXiaomiSection(Section):
 		"bin/tidad(@[0-9]+\.[0-9]+)?$",
 	]
 
+
+class PaymentFirmwareSection(Section):
+	name = "Payment firmware"
+	patterns = [
+		"(.*/)?firmware/alipay\..*",
+		"(.*/)?firmware/fidoctap\..*",
+		"(.*/)?firmware/fidotap\..*",
+	]
+
 register_section(PaymentEIDSection)
 register_section(PaymentIFAASection)
+register_section(PaymentOplusSection)
 register_section(PaymentXiaomiSection)
+register_section(PaymentFirmwareSection)

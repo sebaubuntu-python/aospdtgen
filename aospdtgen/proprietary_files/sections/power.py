@@ -10,10 +10,19 @@ class PowerSection(Section):
 	name = "Power"
 	interfaces = [
 		"android.hardware.power",
+		"vendor-oplus-hardware-power-powermonitor",
+		"vendor.qti.hardware.power.powermodule",
 		"vendor.mediatek.hardware.mtkpower",
 	]
 	hardware_modules = [
 		"power",
 	]
 
+class PowerConfigsSection(Section):
+	name = "Power configs"
+	folders = [
+		"etc/pwr",
+	]
+
 register_section(PowerSection)
+register_section(PowerConfigsSection)

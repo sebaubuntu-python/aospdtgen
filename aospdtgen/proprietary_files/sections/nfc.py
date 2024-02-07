@@ -11,6 +11,8 @@ class NfcSection(Section):
 	interfaces = [
 		"android.hardware.nfc",
 		"vendor.nxp.hardware.nfc",
+		"vendor.oplus.hardware.nfcExtns",
+		"vendor.oplus.hardware.nfc_aidl",
 	]
 	hardware_modules = [
 		"nfc",
@@ -18,6 +20,9 @@ class NfcSection(Section):
 
 class NfcConfigsSection(Section):
 	name = "NFC configs"
+	folders = [
+		"etc/nfc",
+	]
 	patterns = [
 		"etc/libnfc-.*\.conf",
 		"etc/sn100u_.*\.pnscr",

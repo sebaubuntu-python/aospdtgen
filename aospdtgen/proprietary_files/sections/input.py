@@ -10,7 +10,13 @@ class InputSection(Section):
 	name = "Input"
 	interfaces = [
 		"android.hardware.input",
+	]
+
+class InputMotorolaSection(Section):
+	name = "Input (Motorola)"
+	interfaces = [
 		"motorola.hardware.input",
 	]
 
 register_section(InputSection)
+register_section(InputMotorolaSection)

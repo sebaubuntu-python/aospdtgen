@@ -15,6 +15,8 @@ class WifiSection(Section):
 		"vendor.ims.wifiantennamode",
 		"vendor.mediatek.hardware.wifi.hostapd",
 		"vendor.mediatek.hardware.wifi.supplicant",
+		"vendor.oplus.hardware.wifi",
+		"vendor.oplus.hardware.wifi-aidl",
 		"vendor.qti.hardware.fstman",
 		"vendor.qti.hardware.wifi.hostapd",
 		"vendor.qti.hardware.wifi.keystore",
@@ -26,7 +28,9 @@ class WifiSection(Section):
 	binaries = [
 		"cnss-daemon",
 		"hostapd",
+		"hostapd_cli",
 		"wcnss_service",
+		"wpa_cli",
 		"wpa_supplicant",
 	]
 	libraries = [

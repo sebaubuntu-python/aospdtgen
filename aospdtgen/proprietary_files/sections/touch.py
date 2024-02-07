@@ -6,7 +6,7 @@
 
 from aospdtgen.proprietary_files.section import Section, register_section
 
-class TouchHBTPSection(Section):
+class TouchHbtpSection(Section):
 	name = "Touch (HBTP)"
 	interfaces = [
 		"vendor.qti.hardware.improvetouch.touchcompanion",
@@ -18,11 +18,25 @@ class TouchHBTPSection(Section):
 		"etc/hbtp",
 	]
 
-class TouchTouchfeatureSection(Section):
-	name = "Touch (Touchfeature)"
+class TouchOplusSection(Section):
+	name = "Touch (oplus)"
+	interfaces = [
+		"vendor-oplus-hardware-touch",
+	]
+
+class TouchXiaomiSection(Section):
+	name = "Touch (Xiaomi)"
 	interfaces = [
 		"vendor.xiaomi.hardware.touchfeature",
 	]
 
-register_section(TouchHBTPSection)
-register_section(TouchTouchfeatureSection)
+class TouchFirmwareSection(Section):
+	name = "Touch firmware"
+	folders = [
+		"firmware/tp",
+	]
+
+register_section(TouchHbtpSection)
+register_section(TouchOplusSection)
+register_section(TouchXiaomiSection)
+register_section(TouchFirmwareSection)

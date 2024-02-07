@@ -24,7 +24,7 @@ class GnssSection(Section):
 		"xtwifi-inet-agent",
 	]
 
-class GnssConfigSection(Section):
+class GnssConfigsSection(Section):
 	name = "GNSS configs"
 	filenames = [
 		"apdr.conf",
@@ -40,4 +40,4 @@ class GnssConfigSection(Section):
 	]
 
 register_section(GnssSection)
-register_section(GnssConfigSection)
+register_section(GnssConfigsSection)

@@ -14,6 +14,12 @@ class ThermalSection(Section):
 	hardware_modules = [
 		"thermal",
 	]
+
+class ThermalQcomSection(Section):
+	name = "Thermal (Qualcomm)"
+	interfaces = [
+		"vendor.qti.hardware.limits",
+	]
 	binaries = [
 		"thermal-engine",
 	]
@@ -29,10 +35,14 @@ class ThermalXiaomiSection(Section):
 
 class ThermalConfigsSection(Section):
 	name = "Thermal configs"
+	folders = [
+		"etc/temperature_profile"
+	]
 	patterns = [
 		"etc/thermal.*.\.conf",
 	]
 
 register_section(ThermalSection)
+register_section(ThermalQcomSection)
 register_section(ThermalXiaomiSection)
 register_section(ThermalConfigsSection)

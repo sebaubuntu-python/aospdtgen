@@ -11,6 +11,9 @@ class DrmSection(Section):
 	interfaces = [
 		"android.hardware.drm",
 	]
+	apexes = [
+		"com.google.android.widevine.nonupdatable",
+	]
 	libraries = [
 		"liboemcrypto",
 	]
@@ -45,12 +48,12 @@ class DrmQteeSection(Section):
 	]
 
 class DrmFirmwareSection(Section):
-	name = "DRM Firmware"
+	name = "DRM firmware"
 	folders = [
 		"etc/firmware/drm",
 	]
 	patterns = [
-		"firmware/widevine\..*",
+		"(.*/)?firmware/widevine\..*",
 	]
 
 register_section(DrmSection)

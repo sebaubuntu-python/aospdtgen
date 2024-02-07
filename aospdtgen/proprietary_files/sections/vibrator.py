@@ -12,6 +12,7 @@ class VibratorSection(Section):
 		"android.hardware.vibrator",
 		"motorola.hardware.vibrator",
 		"vendor.asus.vibrator.vibratorgovern",
+		"vendor.oplus.hardware.vibrator",
 		"vendor.qti.hardware.vibrator",
 		"vendor.xiaomi.hardware.vibratorfeature",
 	]
@@ -21,10 +22,13 @@ class VibratorSection(Section):
 
 class VibratorFirmwareSection(Section):
 	name = "Vibrator firmware"
+	folders = [
+		"etc/vibrator",
+	]
 	patterns = [
-		"firmware/.*(rtp|RTP)\.bin",
-		"firmware/aw8622x.*\.bin",
-		"firmware/aw8697.*\.bin",
+		"(.*/)?firmware/.*(rtp|RTP)\.bin",
+		"(.*/)?firmware/aw8622x.*\.bin",
+		"(.*/)?firmware/aw8697.*\.bin",
 	]
 
 register_section(VibratorSection)

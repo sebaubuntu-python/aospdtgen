@@ -22,7 +22,11 @@ class WifiDisplaySection(Section):
 		"wfdvndservice",
 		"wifidisplayhalservice",
 	]
+	libraries = [
+		"libmiracast",
+	]
 	filenames = [
+		"wfdconfig.xml",
 		"wifidisplayhalservice.policy",
 	]
 	patterns = [
