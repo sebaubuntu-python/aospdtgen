@@ -2,7 +2,7 @@
 name = "aospdtgen"
 version = "1.0.1"
 description = "Create an Android device tree from a device dump"
-authors = ["Sebastiano Barezzi <barezzisebastiano@gmail.com>"]
+authors = ["Sebastiano Barezzi <seba@sebaubuntu.dev>"]
 license = "Apache-2.0"
 readme = "README.md"
 repository = "https://github.com/sebaubuntu-python/aospdtgen"
