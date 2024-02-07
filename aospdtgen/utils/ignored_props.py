@@ -36,10 +36,13 @@ IGNORED_PROPS.extend(get_partition_props("ro.{}build.version.security_patch", ad
 
 # Product info
 IGNORED_PROPS.extend(get_partition_props("ro.product.{}brand", add_empty=True))
+IGNORED_PROPS.extend(get_partition_props("ro.product.{}brand_for_attestation", add_empty=True))
 IGNORED_PROPS.extend(get_partition_props("ro.product.{}device", add_empty=True))
 IGNORED_PROPS.extend(get_partition_props("ro.product.{}manufacturer", add_empty=True))
 IGNORED_PROPS.extend(get_partition_props("ro.product.{}model", add_empty=True))
+IGNORED_PROPS.extend(get_partition_props("ro.product.{}model_for_attestation", add_empty=True))
 IGNORED_PROPS.extend(get_partition_props("ro.product.{}name", add_empty=True))
+IGNORED_PROPS.extend(get_partition_props("ro.product.{}name_for_attestation", add_empty=True))
 
 # ABI list
 IGNORED_PROPS.extend(get_partition_props("ro.{}product.cpu.abi", add_empty=True))
