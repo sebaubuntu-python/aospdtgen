@@ -5,11 +5,6 @@
 $(call inherit-product, $(SRC_TARGET_DIR)/product/updatable_apex.mk)
 
 {% endif %}
-{% if device_info.device_uses_dynamic_partitions %}
-# Include GSI keys
-$(call inherit-product, $(SRC_TARGET_DIR)/product/gsi_keys.mk)
-
-{% endif %}
 {% if device_info.device_is_ab %}
 # A/B
 {% if device_info.device_uses_virtual_ab %}
@@ -82,7 +77,6 @@ PRODUCT_ENFORCE_RRO_TARGETS := *
 
 {% if device_info.device_uses_dynamic_partitions %}
 # Partitions
-PRODUCT_BUILD_SUPER_PARTITION := false
 PRODUCT_USE_DYNAMIC_PARTITIONS := true
 
 {% endif %}
