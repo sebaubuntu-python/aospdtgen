@@ -11,7 +11,9 @@ class DisplaySection(Section):
 	interfaces = [
 		"android.hardware.graphics.allocator",
 		"android.hardware.graphics.bufferqueue",
+		"android.hardware.graphics.common",
 		"android.hardware.graphics.composer",
+		"android.hardware.graphics.composer3",
 		"android.hardware.graphics.mapper",
 		"android.hardware.memtrack",
 		"com.motorola.hardware.display.panel",

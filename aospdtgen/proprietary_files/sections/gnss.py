@@ -10,6 +10,8 @@ class GnssSection(Section):
 	name = "GNSS"
 	interfaces = [
 		"android.hardware.gnss",
+		"android.hardware.gnss.measurement_corrections",
+		"android.hardware.gnss.visibility_control",
 		"vendor.qti.gnss",
 	]
 	hardware_modules = [

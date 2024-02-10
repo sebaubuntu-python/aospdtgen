@@ -14,7 +14,7 @@ class AutomotiveSection(Section):
 		"android.hardware.automotive.evs",
 		"android.hardware.automotive.occupant_awareness",
 		"android.hardware.automotive.sv",
-		"android.hardware.automotive.veichle",
+		"android.hardware.automotive.vehicle",
 		"vendor.qti.hardware.automotive.vehicle",
 	]
 

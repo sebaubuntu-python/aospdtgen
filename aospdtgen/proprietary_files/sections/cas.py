@@ -10,6 +10,7 @@ class CasSection(Section):
 	name = "CAS"
 	interfaces = [
 		"android.hardware.cas",
+		"android.hardware.cas.native",
 	]
 
 register_section(CasSection)

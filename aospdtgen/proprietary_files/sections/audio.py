@@ -10,6 +10,7 @@ class AudioSection(Section):
 	name = "Audio"
 	interfaces = [
 		"android.hardware.audio",
+		"android.hardware.audio.common",
 		"android.hardware.audio.effect",
 		"vendor.oplus.hardware.binaural_record",
 		"vendor.oplus.hardware.virtual_device.audio",

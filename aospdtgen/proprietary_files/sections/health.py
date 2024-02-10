@@ -10,6 +10,7 @@ class HealthSection(Section):
 	name = "Health"
 	interfaces = [
 		"android.hardware.health",
+		"android.hardware.health.storage",
 		"motorola.hardware.health",
 		"motorola.hardware.health.storage",
 		"motorola.hardware.wireless.wlc",
