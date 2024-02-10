@@ -81,7 +81,9 @@ IGNORED_PROPS.append("ro.virtual_ab.enabled")
 # Pixel format
 IGNORED_PROPS.append("ro.minui.pixel_format")
 
-# First API level
+# API levels
+IGNORED_PROPS.append("ro.board.api_level")
+IGNORED_PROPS.append("ro.board.first_api_level")
 IGNORED_PROPS.append("ro.product.first_api_level")
 
 # Zygote

@@ -47,6 +47,21 @@ PRODUCT_PACKAGES += \
     otapreopt_script
 
 {% endif %}
+{% if device_info.board_api_level
+      or device_info.board_shipping_api_level
+      or device_info.first_api_level %}
+# API levels
+{% if device_info.board_shipping_api_level %}
+BOARD_SHIPPING_API_LEVEL := {{ device_info.board_shipping_api_level }}
+{% endif %}
+{% if device_info.board_api_level %}
+BOARD_API_LEVEL := {{ device_info.board_api_level }}
+{% endif %}
+{% if device_info.first_api_level %}
+PRODUCT_SHIPPING_API_LEVEL := {{ device_info.first_api_level }}
+{% endif %}
+
+{% endif %}
 {% if device_info.device_uses_dynamic_partitions %}
 # fastbootd
 PRODUCT_PACKAGES += \
@@ -98,11 +113,6 @@ PRODUCT_COPY_FILES += \
 {% else %}
     $(LOCAL_PATH)/rootdir/etc/{{ fstab.fstab.name }}:$(TARGET_COPY_OUT_RAMDISK)/{{ fstab.fstab.name }}
 {% endif %}
-
-{% endif %}
-{% if device_info.first_api_level %}
-# Shipping API level
-PRODUCT_SHIPPING_API_LEVEL := {{ device_info.first_api_level }}
 
 {% endif %}
 # Soong namespaces
