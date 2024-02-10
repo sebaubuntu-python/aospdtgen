@@ -164,7 +164,7 @@ TARGET_USERIMAGES_USE_F2FS := true
 
 {% if device_info.vendor_build_security_patch %}
 # Security patch level
-VENDOR_SECURITY_PATCH := 2021-08-01
+VENDOR_SECURITY_PATCH := {{ device_info.vendor_build_security_patch }}
 
 {% endif %}
 {% if boot_configuration.boot_image_info.sigtype == "AVBv2" %}
