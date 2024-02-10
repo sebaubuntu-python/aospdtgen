@@ -136,7 +136,10 @@ BOARD_VENDOR_BOOTIMAGE_PARTITION_SIZE := {{ boot_configuration.vendor_boot_image
 {% if device_info.device_uses_dynamic_partitions %}
 BOARD_SUPER_PARTITION_SIZE := 9126805504 # TODO: Fix hardcoded value
 BOARD_SUPER_PARTITION_GROUPS := {{ device_info.manufacturer }}_dynamic_partitions
-BOARD_{{ device_info.manufacturer|upper }}_DYNAMIC_PARTITIONS_PARTITION_LIST := {%- for partition in fstab.get_logical_partitions() %} {{ partition.src }}{% endfor %}
+BOARD_{{ device_info.manufacturer|upper }}_DYNAMIC_PARTITIONS_PARTITION_LIST :=
+{%- for partition in fstab.get_logical_partitions_models() %} \
+    {{ partition.name }}
+{%- endfor %}
 
 BOARD_{{ device_info.manufacturer|upper }}_DYNAMIC_PARTITIONS_SIZE := 9122611200 # TODO: Fix hardcoded value
 {% endif %}
