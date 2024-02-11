@@ -59,8 +59,8 @@ TARGET_USES_VULKAN := true
 {% if boot_configuration.boot_image_info.header_version != "0" %}
 BOARD_BOOTIMG_HEADER_VERSION := {{ boot_configuration.boot_image_info.header_version }}
 {% endif %}
-{% if boot_configuration.boot_image_info.base_address %}
-BOARD_KERNEL_BASE := {{ boot_configuration.boot_image_info.base_address }}
+{% if boot_configuration.base_address %}
+BOARD_KERNEL_BASE := {{ boot_configuration.base_address }}
 {% endif %}
 {% if boot_configuration.cmdline %}
 BOARD_KERNEL_CMDLINE := {{ boot_configuration.cmdline }}
@@ -68,20 +68,8 @@ BOARD_KERNEL_CMDLINE := {{ boot_configuration.cmdline }}
 {% if boot_configuration.pagesize %}
 BOARD_KERNEL_PAGESIZE := {{ boot_configuration.pagesize }}
 {% endif %}
-{% if boot_configuration.boot_image_info.ramdisk_offset %}
-BOARD_RAMDISK_OFFSET := {{ boot_configuration.boot_image_info.ramdisk_offset }}
-{% endif %}
-{% if boot_configuration.boot_image_info.tags_offset %}
-BOARD_KERNEL_TAGS_OFFSET := {{ boot_configuration.boot_image_info.tags_offset }}
-{% endif %}
 {% if boot_configuration.boot_image_info.header_version != "0" %}
 BOARD_MKBOOTIMG_ARGS += --header_version $(BOARD_BOOTIMG_HEADER_VERSION)
-{% endif %}
-{% if boot_configuration.boot_image_info.ramdisk_offset %}
-BOARD_MKBOOTIMG_ARGS += --ramdisk_offset $(BOARD_RAMDISK_OFFSET)
-{% endif %}
-{% if boot_configuration.boot_image_info.tags_offset %}
-BOARD_MKBOOTIMG_ARGS += --tags_offset $(BOARD_KERNEL_TAGS_OFFSET)
 {% endif %}
 BOARD_KERNEL_IMAGE_NAME := Image
 {% if boot_configuration.dt %}
@@ -130,8 +118,14 @@ BOARD_DTBOIMG_PARTITION_SIZE := {{ boot_configuration.dtbo.stat().st_size }}
 {% if boot_configuration.recovery_image_info %}
 BOARD_RECOVERYIMAGE_PARTITION_SIZE := {{ boot_configuration.recovery_image_info.origsize }}
 {% endif %}
+{% if boot_configuration.init_boot_image_info %}
+BOARD_INIT_BOOT_IMAGE_PARTITION_SIZE := {{ boot_configuration.init_boot_image_info.origsize }}
+{% endif %}
 {% if boot_configuration.vendor_boot_image_info %}
 BOARD_VENDOR_BOOTIMAGE_PARTITION_SIZE := {{ boot_configuration.vendor_boot_image_info.origsize }}
+{% endif %}
+{% if boot_configuration.vendor_kernel_boot_image_info %}
+BOARD_VENDOR_KERNEL_BOOTIMAGE_PARTITION_SIZE := {{ boot_configuration.vendor_kernel_boot_image_info.origsize }}
 {% endif %}
 {% if device_info.device_uses_dynamic_partitions %}
 BOARD_SUPER_PARTITION_SIZE := 9126805504 # TODO: Fix hardcoded value
@@ -174,11 +168,26 @@ VENDOR_SECURITY_PATCH := {{ device_info.vendor_build_security_patch }}
 # Verified Boot
 BOARD_AVB_ENABLE := true
 BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flags 3
-{% if boot_configuration.recovery_image_info and boot_configuration.recovery_image_info.sigtype == "AVBv2" %}
+{% if boot_configuration.recovery_image_info
+      and boot_configuration.recovery_image_info.sigtype == "AVBv2" %}
 BOARD_AVB_RECOVERY_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
 BOARD_AVB_RECOVERY_ALGORITHM := SHA256_RSA4096
 BOARD_AVB_RECOVERY_ROLLBACK_INDEX := 1
 BOARD_AVB_RECOVERY_ROLLBACK_INDEX_LOCATION := 1
+{% endif %}
+{% if boot_configuration.vendor_boot_image_info
+      and boot_configuration.vendor_boot_image_info.sigtype == "AVBv2" %}
+BOARD_AVB_VENDOR_BOOT_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
+BOARD_AVB_VENDOR_BOOT_ALGORITHM := SHA256_RSA4096
+BOARD_AVB_VENDOR_BOOT_ROLLBACK_INDEX := 1
+BOARD_AVB_VENDOR_BOOT_ROLLBACK_INDEX_LOCATION := 1
+{% endif %}
+{% if boot_configuration.vendor_kernel_boot_image_info
+      and boot_configuration.vendor_kernel_boot_image_info.sigtype == "AVBv2" %}
+BOARD_AVB_VENDOR_KERNEL_BOOT_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
+BOARD_AVB_VENDOR_KERNEL_BOOT_ALGORITHM := SHA256_RSA4096
+BOARD_AVB_VENDOR_KERNEL_BOOT_ROLLBACK_INDEX := 1
+BOARD_AVB_VENDOR_KERNEL_BOOT_ROLLBACK_INDEX_LOCATION := 1
 {% endif %}
 
 {% endif %}
