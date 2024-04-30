@@ -15,7 +15,7 @@ from sebaubuntu_libs.liblogging import LOGE
 from sebaubuntu_libs.libpath import is_relative_to
 from sebaubuntu_libs.libreorder import strcoll_files_key
 from sebaubuntu_libs.libstring import removesuffix
-from typing import List
+from typing import List, Type
 
 from aospdtgen.proprietary_files.elf import get_shared_libs
 
@@ -70,7 +70,7 @@ class Section:
 				skip = False
 
 				for interface in known_interfaces:
-					if match(f"{interface}(@[0-9]+\.[0-9]+|-).*\.so", lib):
+					if match(f"{interface}(@[0-9]+\\.[0-9]+|-).*\\.so", lib):
 						skip = True
 						break
 
@@ -121,11 +121,11 @@ class Section:
 				return True
 
 			# Passthrough impl (only HIDL)
-			if (is_relative_to(file, "lib/hw") or is_relative_to(file, "lib64/hw")) and match(f"{interface}@[0-9]+\.[0-9]+-impl\.so", file.name):
+			if (is_relative_to(file, "lib/hw") or is_relative_to(file, "lib64/hw")) and match(f"{interface}@[0-9]+\\.[0-9]+-impl\\.so", file.name):
 				return True
 
 			# Interface libs (AIDL and HIDL)
-			if (is_relative_to(file, "lib") or is_relative_to(file, "lib64")) and match(f"{interface}(@[0-9]+\.[0-9]+|-).*\.so", file.name):
+			if (is_relative_to(file, "lib") or is_relative_to(file, "lib64")) and match(f"{interface}(@[0-9]+\\.[0-9]+|-).*\\.so", file.name):
 				return True
 
 		# Hardware modules
@@ -150,7 +150,7 @@ class Section:
 		# Init scripts
 		if is_relative_to(file, "etc/init"):
 			for binary in self.binaries:
-				if match(f"(init)?(.)?{binary}\.rc", file.name):
+				if match(f"(init)?(.)?{binary}\\.rc", file.name):
 					return True
 
 		# Libraries
@@ -173,11 +173,11 @@ class Section:
 
 		return False
 
-sections: List[Section] = []
+sections: List[Type[Section]] = []
 known_interfaces: List[str] = []
 known_libraries: List[str] = []
 
-def register_section(section: Section):
+def register_section(section: Type[Section]):
 	sections.append(section)
 
 	for interface in section.interfaces:

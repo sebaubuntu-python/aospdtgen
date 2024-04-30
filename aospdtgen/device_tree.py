@@ -7,10 +7,8 @@
 from datetime import datetime
 from os import chmod
 from pathlib import Path
-from typing import List
 from sebaubuntu_libs.libandroid.device_info import DeviceInfo
 from sebaubuntu_libs.libandroid.fstab import Fstab
-from sebaubuntu_libs.libandroid.partitions.partition_model import PartitionModel
 from sebaubuntu_libs.libandroid.partitions.partitions import Partitions
 from sebaubuntu_libs.libandroid.props import BuildProp
 from sebaubuntu_libs.liblogging import LOGI
@@ -35,8 +33,8 @@ class DeviceTree:
 		LOGI("Figuring out partitions scheme")
 		self.partitions = Partitions(self.path)
 
-		self.system = self.partitions.get_partition(PartitionModel.SYSTEM)
-		self.vendor = self.partitions.get_partition(PartitionModel.VENDOR)
+		self.system = self.partitions.system
+		self.vendor = self.partitions.vendor
 
 		LOGI("Parsing build props and device info")
 		self.build_prop = BuildProp()
@@ -80,7 +78,9 @@ class DeviceTree:
 		self.rootdir_recovery_etc_files.sort(key=strcoll_files_key)
 
 		LOGI("Generating proprietary files list")
-		self.proprietary_files_list = ProprietaryFilesList(self.partitions.get_all_partitions())
+		self.proprietary_files_list = ProprietaryFilesList(
+			[value for value in self.partitions.get_all_partitions()]
+		)
 
 	def dump_to_folder(self, folder: Path):
 		"""Dump all makefiles, blueprint and prebuilts to a folder."""
@@ -155,14 +155,16 @@ class DeviceTree:
 		self.boot_configuration.cleanup()
 
 	def _render_template(self, *args, comment_prefix: str = "#", **kwargs):
-		return render_template(*args,
-		                       boot_configuration=self.boot_configuration,
-		                       comment_prefix=comment_prefix,
-		                       current_year=self.current_year,
-		                       device_info=self.device_info,
-		                       fstab=self.fstab,
-		                       rootdir_bin_files=self.rootdir_bin_files,
-		                       rootdir_etc_files=self.rootdir_etc_files,
-		                       rootdir_recovery_etc_files=self.rootdir_recovery_etc_files,
-		                       partitions=self.partitions,
-		                       **kwargs)
+		return render_template(
+			*args,
+			boot_configuration=self.boot_configuration,
+			comment_prefix=comment_prefix,
+			current_year=self.current_year,
+			device_info=self.device_info,
+			fstab=self.fstab,
+			rootdir_bin_files=self.rootdir_bin_files,
+			rootdir_etc_files=self.rootdir_etc_files,
+			rootdir_recovery_etc_files=self.rootdir_recovery_etc_files,
+			partitions=self.partitions,
+			**kwargs,
+		)

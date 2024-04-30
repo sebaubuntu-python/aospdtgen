@@ -963,11 +963,11 @@ IGNORE_PATHS = [
 
 IGNORE_PATTERNS = [re.compile(pattern) for pattern in [
 	# Shell scripts
-	"bin/.*\.sh",
+	"bin/.*\\.sh",
 
 	# TODO: Find a cleaner way to exclude AOSP interfaces libs,
 	# We're currently excluding all AOSP interfaces libs except impl
-	"^(?!lib(64)?/(hw/)?android\..*\..*-impl.so)lib(64)?/(hw/)?android\..*\..*.so",
+	"^(?!lib(64)?/(hw/)?android\\..*\\..*-impl.so)lib(64)?/(hw/)?android\\..*\\..*.so",
 
 	# Versioned libprotobuf library
 	"lib(64)?/libprotobuf-cpp-(full|lite)-.*.so",
