@@ -28,6 +28,9 @@ class HealthSection(Section):
 	filenames = [
 		"charger_fstab.qti",
 	]
+	properties_prefixes = {
+		"ro.charger.": False,
+	}
 
 class HealthFirmwareSection(Section):
 	name = "Health firmware"

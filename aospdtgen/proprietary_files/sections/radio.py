@@ -70,6 +70,17 @@ class RadioSection(Section):
 		"etc/init/data.*.\.rc",
 		"etc/seccomp_policy/atfwd(@[0-9]+\.[0-9]+)?.policy",
 	]
+	properties_prefixes = {
+		"persist.radio.": False,
+		"persist.rild.": False,
+		"persist.vendor.mdm_helper.": False,
+		"persist.vendor.radio.": False,
+		"ril.": False,
+		"rild.": False,
+		"ro.radio.": False,
+		"ro.telephony.": False,
+		"telephony.": False,
+	}
 
 class RadioImsSection(Section):
 	name = "Radio (IMS)"
@@ -106,6 +117,9 @@ class RadioImsSection(Section):
 	patterns = [
 		"lib(64)?/lib-ims.*.\.so",
 	]
+	properties_prefixes = {
+		"persist.vendor.ims.": False,
+	}
 
 register_section(RadioSection)
 register_section(RadioImsSection)

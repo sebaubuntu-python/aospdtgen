@@ -29,6 +29,9 @@ class TouchXiaomiSection(Section):
 	interfaces = [
 		"vendor.xiaomi.hardware.touchfeature",
 	]
+	properties_prefixes = {
+		"ro.vendor.touchfeature.": False,
+	}
 
 class TouchFirmwareSection(Section):
 	name = "Touch firmware"

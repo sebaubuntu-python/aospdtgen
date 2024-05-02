@@ -20,6 +20,7 @@ from stat import S_IRWXU, S_IRGRP, S_IROTH
 from aospdtgen.proprietary_files.proprietary_files_list import ProprietaryFilesList
 from aospdtgen.templates import render_template
 from aospdtgen.utils.boot_configuration import BootConfiguration
+from aospdtgen.utils.format_props import dump_partition_build_prop
 from aospdtgen.utils.ignored_props import IGNORED_PROPS
 
 class DeviceTree:
@@ -109,10 +110,7 @@ class DeviceTree:
 
 		# Dump build props
 		for partition in self.partitions.get_all_partitions():
-			if not partition.build_prop:
-				continue
-
-			partition.build_prop.write_to_file(folder / f"{partition.model.name}.prop", IGNORED_PROPS)
+			dump_partition_build_prop(partition.build_prop, folder / f"{partition.model.name}.prop")
 
 		# Dump boot image prebuilt files
 		prebuilts_path = folder / "prebuilts"

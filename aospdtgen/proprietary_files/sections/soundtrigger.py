@@ -16,5 +16,8 @@ class SoundtriggerSection(Section):
 	hardware_modules = [
 		"sound_trigger",
 	]
+	properties_prefixes = {
+		"ro.vendor.audio.soundtrigger": False,
+	}
 
 register_section(SoundtriggerSection)

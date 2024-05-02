@@ -45,5 +45,8 @@ class CneSection(Section):
 	folders = [
 		"etc/cne",
 	]
+	properties_prefixes = {
+		"persist.vendor.cne.": False,
+	}
 
 register_section(CneSection)

@@ -14,6 +14,9 @@ class ThermalSection(Section):
 	hardware_modules = [
 		"thermal",
 	]
+	properties_prefixes = {
+		"vendor.sys.thermal.": False,
+	}
 
 class ThermalQcomSection(Section):
 	name = "Thermal (Qualcomm)"

@@ -36,6 +36,12 @@ class WifiSection(Section):
 	libraries = [
 		"libwifi-hal-qcom",
 	]
+	properties_prefixes = {
+		"ro.hardware.wlan.": False,
+		"ro.wifi.": False,
+		"ro.wlan.": False,
+		"wifi.": False,
+	}
 
 class WifiConfigsSection(Section):
 	name = "Wi-Fi configs"

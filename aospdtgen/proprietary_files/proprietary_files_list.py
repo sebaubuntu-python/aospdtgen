@@ -17,7 +17,7 @@ class ProprietaryFilesList:
 		"""Initialize a new ProprietaryFilesList object."""
 		self.partitions = partitions
 
-		self.sections: List[Section] = [section() for section in sections]
+		self.sections = sections
 		misc_section = Section()
 
 		for partition in self.partitions:

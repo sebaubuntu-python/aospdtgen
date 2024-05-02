@@ -17,6 +17,19 @@ class BluetoothSection(Section):
 	libraries = [
 		"libbt-vendor",
 	]
+	properties_prefixes = {
+		"bluetooth.": False,
+		"persist.bluetooth.": False,
+		"persist.sys.btsatck.": False, # Xiaomi...
+		"persist.vendor.bt.": False,
+		"persist.vendor.btsatck.": False, # Xiaomi...
+		"persist.vendor.btstack.": False,
+		"persist.vendor.qcom.bluetooth.": False,
+		"ro.bluetooth.": False,
+		"ro.vendor.bluetooth.": False,
+		"vendor.bluetooth.": False,
+		"vendor.qcom.bluetooth.": False,
+	}
 
 class BluetoothA2dpSection(Section):
 	name = "Bluetooth (A2DP)"

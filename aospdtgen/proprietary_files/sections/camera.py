@@ -71,6 +71,11 @@ class CameraSection(Section):
 		"lib(64)?/libmmcamera2_.*\.so",
 		"lib(64)?/libois_.*\.so",
 	]
+	properties_prefixes = {
+		"camera.": False,
+		"persist.vendor.camera.": False,
+		"vendor.camera.": False,
+	}
 
 class CameraConfigsSection(Section):
 	name = "Camera configs"

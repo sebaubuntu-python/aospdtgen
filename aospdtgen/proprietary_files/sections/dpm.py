@@ -21,5 +21,9 @@ class DpmSection(Section):
 	folders = [
 		"etc/dpm",
 	]
+	properties_prefixes = {
+		"persist.vendor.dpm.": False,
+		"persist.vendor.dpmhalservice.": False,
+	}
 
 register_section(DpmSection)

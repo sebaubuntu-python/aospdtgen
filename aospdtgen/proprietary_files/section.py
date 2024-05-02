@@ -15,7 +15,7 @@ from sebaubuntu_libs.liblogging import LOGE
 from sebaubuntu_libs.libpath import is_relative_to
 from sebaubuntu_libs.libreorder import strcoll_files_key
 from sebaubuntu_libs.libstring import removesuffix
-from typing import List, Type
+from typing import Dict, List, Type
 
 from aospdtgen.proprietary_files.elf import get_shared_libs
 
@@ -41,6 +41,8 @@ class Section:
 	"""List of folders"""
 	patterns: List[str] = []
 	"""List of basic patterns (use regex)"""
+	properties_prefixes: Dict[str, bool] = {}
+	"""List of properties prefix to whether it's an exact match"""
 
 	def __init__(self):
 		"""Initialize the section."""
@@ -173,12 +175,20 @@ class Section:
 
 		return False
 
-sections: List[Type[Section]] = []
+	def property_match(self, prop: str):
+		"""Check if the property matches the prefixes."""
+		for prefix, exact_match in self.properties_prefixes.items():
+			if prop == prefix if exact_match else prop.startswith(prefix):
+				return True
+
+		return False
+
+sections: List[Section] = []
 known_interfaces: List[str] = []
 known_libraries: List[str] = []
 
 def register_section(section: Type[Section]):
-	sections.append(section)
+	sections.append(section())
 
 	for interface in section.interfaces:
 		assert interface not in known_interfaces, f"Duplicate interface: {interface}"

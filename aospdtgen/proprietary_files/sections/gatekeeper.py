@@ -17,5 +17,8 @@ class GatekeeperSection(Section):
 	hardware_modules = [
 		"gatekeeper",
 	]
+	properties_prefixes = {
+		"vendor.gatekeeper.": False,
+	}
 
 register_section(GatekeeperSection)

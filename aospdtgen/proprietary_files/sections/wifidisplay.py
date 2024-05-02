@@ -32,5 +32,9 @@ class WifiDisplaySection(Section):
 	patterns = [
 		"etc/seccomp_policy/wfd.*.service\.policy",
 	]
+	properties_prefixes = {
+		"persist.debug.wfd.": False,
+		"persist.sys.wfd.": False,
+	}
 
 register_section(WifiDisplaySection)

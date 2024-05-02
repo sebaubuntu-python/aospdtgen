@@ -11,5 +11,8 @@ class UsbSection(Section):
 	interfaces = [
 		"android.hardware.usb",
 	]
+	properties_prefixes = {
+		"vendor.usb.": False,
+	}
 
 register_section(UsbSection)

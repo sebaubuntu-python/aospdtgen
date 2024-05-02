@@ -17,6 +17,9 @@ class PowerSection(Section):
 	hardware_modules = [
 		"power",
 	]
+	properties_prefixes = {
+		"vendor.power.": False,
+	}
 
 class PowerConfigsSection(Section):
 	name = "Power configs"

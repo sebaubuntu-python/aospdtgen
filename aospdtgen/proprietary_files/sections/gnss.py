@@ -25,6 +25,10 @@ class GnssSection(Section):
 		"xtwifi-client",
 		"xtwifi-inet-agent",
 	]
+	properties_prefixes = {
+		"persist.sys.gps.": False,
+		"persist.vendor.overlay.izat.": False,
+	}
 
 class GnssConfigsSection(Section):
 	name = "GNSS configs"

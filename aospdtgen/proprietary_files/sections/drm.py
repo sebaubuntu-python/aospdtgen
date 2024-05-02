@@ -23,6 +23,10 @@ class DrmSection(Section):
 		"lib64/mediacas",
 		"lib64/mediadrm",
 	]
+	properties_prefixes = {
+		"drm.service.enabled": True,
+		"ro.netflix.bsp_rev": True,
+	}
 
 class DrmQseeSection(Section):
 	name = "DRM (Qualcomm Secure Execution Environment)"

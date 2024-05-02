@@ -17,6 +17,9 @@ class NfcSection(Section):
 	hardware_modules = [
 		"nfc",
 	]
+	properties_prefixes = {
+		"ro.nfc.": False,
+	}
 
 class NfcConfigsSection(Section):
 	name = "NFC configs"

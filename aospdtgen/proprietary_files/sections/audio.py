@@ -23,6 +23,21 @@ class AudioSection(Section):
 		"audio.usb",
 		"audio.virtual",
 	]
+	properties_prefixes = {
+		"aaudio.": False,
+		"af.fast_track_multiplier": True,
+		"audio.": False,
+		"persist.audio.": False,
+		"persist.vendor.audio.": False,
+		"ro.audio.": False,
+		"ro.qc.sdk.audio.": False,
+		"ro.vendor.audio.": False,
+		"tunnel.audio.": False,
+		"use.voice.path.for.pcm.voip": True,
+		"vendor.audio.": False,
+		"vendor.audio_hal.": False,
+		"vendor.voice.path.for.pcm.voip": True,
+	}
 
 class AudioFxModulesSection(Section):
 	name = "Audio (FX modules)"

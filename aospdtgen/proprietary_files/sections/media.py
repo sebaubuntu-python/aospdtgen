@@ -31,6 +31,10 @@ class MediaSection(Section):
 		"lib(64)?/libOmx.*\.so",
 		"lib(64)?/libstagefright.*\.so",
 	]
+	properties_prefixes = {
+		"debug.stagefright.": False,
+		"media.": False,
+	}
 
 class MediaDolbySection(Section):
 	name = "Media (Dolby)"
@@ -54,6 +58,9 @@ class MediaDolbySection(Section):
 	patterns = [
 		"lib(64)?/libdolby.*\.so",
 	]
+	properties_prefixes = {
+		"ro.vendor.dolby.": False,
+	}
 
 class MediaOZOAudioSection(Section):
 	name = "Media (OZO Audio)"

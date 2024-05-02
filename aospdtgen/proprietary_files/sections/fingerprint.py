@@ -22,5 +22,8 @@ class FingerprintSection(Section):
 	binaries = [
 		"qfp-daemon",
 	]
+	properties_prefixes = {
+		"persist.vendor.qfp": True,
+	}
 
 register_section(FingerprintSection)

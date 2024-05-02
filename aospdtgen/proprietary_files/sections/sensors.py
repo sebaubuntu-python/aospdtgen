@@ -25,6 +25,10 @@ class SensorsSection(Section):
 	patterns = [
 		"lib(64)?/sensors\..*\.so",
 	]
+	properties_prefixes = {
+		"persist.vendor.sensor.": False,
+		"persist.vendor.sensors.": False,
+	}
 
 class SensorsConfigsSection(Section):
 	name = "Sensors configs"

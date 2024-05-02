@@ -55,6 +55,31 @@ class DisplaySection(Section):
 		"lib/egl",
 		"lib64/egl",
 	]
+	properties_prefixes = {
+		"debug.egl.": False,
+		"debug.sf.": False,
+		"persist.displayfeature.": False,
+		"persist.sys.sf.": False,
+		"persist.vendor.dc_backlight.": False,
+		"persist.vendor.dfps.": False,
+		"ro.gfx.driver.": False,
+		"ro.hardware.egl": True,
+		"ro.hardware.vulkan": True,
+		"ro.hwui.": False,
+		"ro.opengles.": False,
+		"ro.surface_flinger.": False,
+		"ro.vendor.cabc.": False,
+		"ro.vendor.colorpick_adjust": True,
+		"ro.vendor.dfps.": False,
+		"ro.vendor.display.": False,
+		"ro.vendor.fps.": False,
+		"ro.vendor.hbm_backlight.": False,
+		"ro.vendor.histogram.": False,
+		"ro.vendor.mi_sf.": False,
+		"ro.vendor.whitepoint_calibration_enable": True,
+		"vendor.display.": False,
+		"vendor.gralloc.": False,
+	}
 
 class DisplayPixelworksSection(Section):
 	name = "Display (Pixelworks)"

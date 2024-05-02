@@ -20,6 +20,9 @@ class PerfSection(Section):
 	folders = [
 		"etc/perf",
 	]
+	properties_prefixes = {
+		"ro.vendor.extension_library": True,
+	}
 
 class PerfIopSection(Section):
 	name = "Perf IOP"
