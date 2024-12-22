@@ -21,7 +21,6 @@ from aospdtgen.proprietary_files.proprietary_files_list import ProprietaryFilesL
 from aospdtgen.templates import render_template
 from aospdtgen.utils.boot_configuration import BootConfiguration
 from aospdtgen.utils.format_props import dump_partition_build_prop
-from aospdtgen.utils.ignored_props import IGNORED_PROPS
 
 class DeviceTree:
 	"""Class representing an Android device tree."""
