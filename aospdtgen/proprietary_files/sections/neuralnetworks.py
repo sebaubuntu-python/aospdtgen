@@ -10,6 +10,7 @@ class NeuralNetworksSection(Section):
 	name = "Neural networks"
 	interfaces = [
 		"android.hardware.neuralnetworks",
+		"vendor.mediatek.hardware.mmagent",
 	]
 	binaries = [
 		"nn_device_test",
