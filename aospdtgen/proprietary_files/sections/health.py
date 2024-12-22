@@ -21,12 +21,14 @@ class HealthSection(Section):
 	]
 	binaries = [
 		"batterysecret",
+		"fuelgauged",
 		"hvdcp_opti",
 		"init.qti.chg_policy.sh",
 		"wlschgd",
 	]
 	filenames = [
 		"charger_fstab.qti",
+		"fuelgauged_init.rc",
 	]
 	properties_prefixes = {
 		"ro.charger.": False,

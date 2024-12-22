@@ -20,10 +20,15 @@ class GnssSection(Section):
 	binaries = [
 		"loc_launcher",
 		"lowi-server",
+		"mnld",
+		"mtk_agpsd",
 		"slim_daemon",
 		"xtra-daemon",
 		"xtwifi-client",
 		"xtwifi-inet-agent",
+	]
+	patterns = [
+		"etc/init/mtk_agps.*\.rc",
 	]
 	properties_prefixes = {
 		"persist.sys.gps.": False,

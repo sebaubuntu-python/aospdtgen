@@ -30,8 +30,14 @@ class WifiSection(Section):
 		"hostapd",
 		"hostapd_cli",
 		"wcnss_service",
+		"wlan_assistant",
+		"wmt_launcher",
+		"wmt_loader",
 		"wpa_cli",
 		"wpa_supplicant",
+	]
+	filenames = [
+		"init.wlan_drv.rc",
 	]
 	libraries = [
 		"libwifi-hal-qcom",

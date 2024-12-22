@@ -12,6 +12,9 @@ class KeymasterSection(Section):
 		"android.hardware.keymaster",
 		"vendor.mediatek.hardware.keymaster_attestation",
 	]
+	binaries = [
+		"bp_kmsetkey_ca",
+	]
 	hardware_modules = [
 		"keystore",
 		"kmsetkey",

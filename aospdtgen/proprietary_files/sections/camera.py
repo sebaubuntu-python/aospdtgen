@@ -41,6 +41,7 @@ class CameraSection(Section):
 		"com.qti.chi",
 	]
 	binaries = [
+		"camerahalserver",
 		"mm-qcamera-daemon",
 		"virtualcameraprovider",
 	]
@@ -69,6 +70,7 @@ class CameraSection(Section):
 		"lib(64)?/libchromatix_.*\.so",
 		"lib(64)?/libmmcamera_.*\.so",
 		"lib(64)?/libmmcamera2_.*\.so",
+		"lib(64)?/libmtkcam_.*\.so",
 		"lib(64)?/libois_.*\.so",
 	]
 	properties_prefixes = {
@@ -88,6 +90,10 @@ class CameraFirmwareSection(Section):
 	name = "Camera firmware"
 	patterns = [
 		"(.*/)?firmware/CAMERA_ICP.*",
+		"bin/lib3a.*",
+		"bin/libccu_.*",
+		"firmware/lib3a.*",
+		"firmware/libccu_.*",
 	]
 
 class CameraMotorSection(Section):

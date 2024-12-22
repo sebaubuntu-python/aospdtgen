@@ -13,5 +13,8 @@ class TetherOffloadSection(Section):
 		"android.hardware.tetheroffload.config",
 		"android.hardware.tetheroffload.control",
 	]
+	binaries = [
+		"tetheroffloadservice",
+	]
 
 register_section(TetherOffloadSection)

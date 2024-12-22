@@ -9,6 +9,7 @@ from aospdtgen.proprietary_files.section import Section, register_section
 class SoterSection(Section):
 	name = "Soter"
 	interfaces = [
+		"vendor.microtrust.hardware.soter",
 		"vendor.qti.hardware.soter",
 	]
 	apps = [

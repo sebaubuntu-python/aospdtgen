@@ -15,6 +15,7 @@ class RadioSection(Section):
 		"qcrilNrd",
 		"rild",
 		"vendor.mediatek.hardware.mtkradioex",
+		"vendor.mediatek.hardware.nwk_opt",
 		"vendor.mediatek.hardware.radio",
 		"vendor.oplus.hardware.appradioaidl",
 		"vendor.oplus.hardware.esim",
@@ -46,6 +47,9 @@ class RadioSection(Section):
 	binaries = [
 		"ATFWD-daemon",
 		"adpl",
+		"ccci_mdinit",
+		"ccci_rpcd",
+		"gsm0710muxd",
 		"ks",
 		"mdm_helper",
 		"netmgrd",
@@ -58,15 +62,18 @@ class RadioSection(Section):
 		"rmt_storage",
 		"ssgtzd",
 		"tftp_server",
+		"xcap",
 	]
 	filenames = [
 		"init-qcril-data.rc",
+		"init.md_apps.rc",
 	]
 	folders = [
 		"etc/qcril_database",
 		"radio/qcril_database",
 	]
 	patterns = [
+		"etc/init/init.ccci.*\.rc",
 		"etc/init/data.*.\.rc",
 		"etc/seccomp_policy/atfwd(@[0-9]+\.[0-9]+)?.policy",
 	]
@@ -101,10 +108,25 @@ class RadioImsSection(Section):
 		"ims",
 	]
 	binaries = [
+		"bip",
+		"charon",
+		"epdg_wod",
 		"ims_rtp_daemon",
 		"imsdatadaemon",
 		"imsqmidaemon",
 		"imsrcsd",
+		"ipsec_mon",
+		"rcs_volte_stack",
+		"starter",
+		"stroke",
+		"volte_clientapi_ua",
+		"volte_imcb",
+		"volte_imsm_93",
+		"volte_md_status",
+		"volte_rcs_ua",
+		"volte_stack",
+		"volte_ua",
+		"vtservice_hidl",
 	]
 	libraries = [
 		"lib-rcsconfig",
@@ -113,6 +135,7 @@ class RadioImsSection(Section):
 	]
 	filenames = [
 		"imsrtp.policy",
+		"init.wod.rc",
 	]
 	patterns = [
 		"lib(64)?/lib-ims.*.\.so",

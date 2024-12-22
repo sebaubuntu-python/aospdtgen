@@ -20,6 +20,7 @@ class MediaSection(Section):
 	binaries = [
 		"qconfigservice",
 		"vppservice",
+		"vpud",
 	]
 	filenames = [
 		"c2_manifest_vendor.xml",
