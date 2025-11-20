@@ -11,12 +11,10 @@ repository = "https://github.com/sebaubuntu-python/aospdtgen"
 aospdtgen = 'aospdtgen.main:main'
 
 [tool.poetry.dependencies]
-python = "^3.8"
-Jinja2 = "^3.1.2"
-GitPython = "^3.1.31"
-sebaubuntu-libs = "^1.4.4"
-
-[tool.poetry.dev-dependencies]
+python = "^3.9"
+Jinja2 = "^3.1.6"
+GitPython = "^3.1.45"
+sebaubuntu-libs = "^1.6.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

@@ -7,12 +7,12 @@ Create a [LineageOS](https://github.com/LineageOS)-compatible device tree from a
 This script supports any Android firmware from a Treble-enabled device (Higher than Android 8.0 and with VNDK enabled, you can check it with [Treble Info](https://play.google.com/store/apps/details?id=tk.hack5.treblecheck) or with `adb shell getprop ro.treble.enabled`).
 For pre-Treble devices please use [twrpdtgen](https://github.com/twrpdtgen/twrpdtgen).
 
-Requires Python 3.8 or greater
+Requires Python 3.9 or greater
 
 ## Installation
 
 ```sh
-pip3 install aospdtgen
+pip install aospdtgen
 ```
 
 ## Instructions
