@@ -1,6 +1,5 @@
 #
-# Copyright (C) 2022 The LineageOS Project
-#
+# SPDX-FileCopyrightText: The LineageOS Project
 # SPDX-License-Identifier: Apache-2.0
 #
 
@@ -27,8 +26,6 @@ class DeviceTree:
 	def __init__(self, path: Path):
 		"""Given a path to a dumpyara dump path, generate a device tree by parsing it."""
 		self.path = path
-
-		self.current_year = str(datetime.now().year)
 
 		LOGI("Figuring out partitions scheme")
 		self.partitions = Partitions(self.path)
@@ -156,7 +153,6 @@ class DeviceTree:
 			*args,
 			boot_configuration=self.boot_configuration,
 			comment_prefix=comment_prefix,
-			current_year=self.current_year,
 			device_info=self.device_info,
 			fstab=self.fstab,
 			rootdir_bin_files=self.rootdir_bin_files,
