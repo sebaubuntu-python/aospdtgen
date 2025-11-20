@@ -75,6 +75,7 @@ IGNORED_PROPS.append("ro.board.platform")
 IGNORED_PROPS.append("ro.boot.dynamic_partitions")
 IGNORED_PROPS.append("ro.build.ab_update")
 IGNORED_PROPS.append("ro.build.system_root_image")
+IGNORED_PROPS.append("ro.product.ab_ota_partitions")
 IGNORED_PROPS.append("ro.virtual_ab.enabled")
 
 # Pixel format
@@ -119,3 +120,7 @@ IGNORED_PROPS.append("ro.adb.secure")
 IGNORED_PROPS.append("ro.debuggable")
 IGNORED_PROPS.append("ro.force.debuggable")
 IGNORED_PROPS.append("ro.secure")
+
+# OEM customization
+IGNORED_PROPS.append("ro.com.google.clientidbase")
+IGNORED_PROPS.append("setupwizard.theme")
