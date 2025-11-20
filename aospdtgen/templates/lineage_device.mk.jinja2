@@ -23,13 +23,14 @@ PRODUCT_MODEL := {{ device_info.model }}
 PRODUCT_MANUFACTURER := {{ device_info.manufacturer }}
 
 PRODUCT_GMS_CLIENTID_BASE := {{ device_info.gms_clientid_base }}
-{% if device_info.build_description %}
+{% if device_info.build_description or device_info.build_fingerprint %}
 
-PRODUCT_BUILD_PROP_OVERRIDES += \
-    PRIVATE_BUILD_DESC="{{ device_info.build_description }}"
-{% endif %}
-{% if device_info.build_fingerprint %}
-
-BUILD_FINGERPRINT := {{ device_info.build_fingerprint }}
+PRODUCT_BUILD_PROP_OVERRIDES +=
+{%- if device_info.build_description %} \
+    BuildDesc="{{ device_info.build_description }}"
+{%- endif %}
+{%- if device_info.build_fingerprint %} \
+    BuildFingerprint := {{ device_info.build_fingerprint }}
+{%- endif %}
 {% endif %}
 
