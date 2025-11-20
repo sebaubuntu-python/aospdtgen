@@ -338,14 +338,14 @@ use-chardet-on-py3 = ["chardet (>=3.0.2,<6)"]
 
 [[package]]
 name = "sebaubuntu-libs"
-version = "1.6.0"
+version = "1.6.1"
 description = "SebaUbuntu's shared libs"
 optional = false
 python-versions = "<4.0,>=3.9"
 groups = ["main"]
 files = [
-    {file = "sebaubuntu_libs-1.6.0-py3-none-any.whl", hash = "sha256:13de754d26b42dead13ccc6f6e284d263b893994baafbee42401c5e14b72ea35"},
-    {file = "sebaubuntu_libs-1.6.0.tar.gz", hash = "sha256:2524efe82a8e707cecfb65bc4e2423648eb9dced0f780c10cb1ab3c70daa4f5f"},
+    {file = "sebaubuntu_libs-1.6.1-py3-none-any.whl", hash = "sha256:8045dd75b7fadb735a0e798ececf261d9d07a316f04bc252eabe98b1f754fed1"},
+    {file = "sebaubuntu_libs-1.6.1.tar.gz", hash = "sha256:7612b8c9518080faf3f8042fbb49381f3119259213087efae66896e6aa67ee29"},
 ]
 
 [package.dependencies]
@@ -402,4 +402,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.9"
-content-hash = "4e3bb774275c8a2b4d1d3bc959473e6c865a54d7873f67e3a468c8d962f50b7a"
+content-hash = "d8d1a9c20436b6fbcbde73f73d753d9aa721a6fb6281597eeb3b484b3b7569a4"

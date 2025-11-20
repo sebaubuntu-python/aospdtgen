@@ -14,7 +14,7 @@ aospdtgen = 'aospdtgen.main:main'
 python = "^3.9"
 Jinja2 = "^3.1.6"
 GitPython = "^3.1.45"
-sebaubuntu-libs = "^1.6.0"
+sebaubuntu-libs = "^1.6.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
