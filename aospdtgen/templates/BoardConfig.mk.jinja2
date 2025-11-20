@@ -57,7 +57,7 @@ TARGET_USES_VULKAN := true
 {% endif %}
 # Kernel
 {% if boot_configuration.boot_image_info.header_version != "0" %}
-BOARD_BOOTIMG_HEADER_VERSION := {{ boot_configuration.boot_image_info.header_version }}
+BOARD_BOOT_HEADER_VERSION := {{ boot_configuration.boot_image_info.header_version }}
 {% endif %}
 {% if boot_configuration.base_address %}
 BOARD_KERNEL_BASE := {{ boot_configuration.base_address }}
@@ -69,7 +69,7 @@ BOARD_KERNEL_CMDLINE := {{ boot_configuration.cmdline }}
 BOARD_KERNEL_PAGESIZE := {{ boot_configuration.pagesize }}
 {% endif %}
 {% if boot_configuration.boot_image_info.header_version != "0" %}
-BOARD_MKBOOTIMG_ARGS += --header_version $(BOARD_BOOTIMG_HEADER_VERSION)
+BOARD_MKBOOTIMG_ARGS += --header_version $(BOARD_BOOT_HEADER_VERSION)
 {% endif %}
 BOARD_KERNEL_IMAGE_NAME := Image
 {% if boot_configuration.dt %}
