@@ -98,6 +98,7 @@ IGNORED_PROPS.append("dalvik.vm.isa.x86.features")
 IGNORED_PROPS.append("dalvik.vm.isa.x86.variant")
 IGNORED_PROPS.append("dalvik.vm.isa.x86_64.features")
 IGNORED_PROPS.append("dalvik.vm.isa.x86_64.variant")
+IGNORED_PROPS.append("ro.dalvik.vm.enable_uffd_gc")
 
 # Characteristics
 IGNORED_PROPS.append("ro.build.characteristics")

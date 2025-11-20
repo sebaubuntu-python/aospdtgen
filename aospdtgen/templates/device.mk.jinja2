@@ -72,6 +72,11 @@ PRODUCT_PACKAGES += \
 {% endif %}
     android.hardware.health@2.1-service
 
+{% if device_info.enable_uffd_gc is not none %}
+# Kernel
+PRODUCT_ENABLE_UFFD_GC := {{ device_info.enable_uffd_gc|string|lower }}
+
+{% endif %}
 # Overlays
 PRODUCT_ENFORCE_RRO_TARGETS := *
 
