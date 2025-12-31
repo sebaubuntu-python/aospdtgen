@@ -46,7 +46,7 @@ def dump_partition_build_prop(build_prop: BuildProp, destination_file_path: Path
         section_to_props["Miscellaneous"] = filtered_build_props
 
     # Write the properties to the file
-    with destination_file_path.open("w") as f:
+    with destination_file_path.open("w", encoding="utf-8") as f:
         for section, props in section_to_props.items():
             f.write(f"# {section}\n")
             for prop in sorted(props.keys()):
