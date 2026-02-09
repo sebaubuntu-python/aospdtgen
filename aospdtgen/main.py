@@ -22,13 +22,16 @@ def main():
 	                    help="path to an Android dump made with dumpyara")
 	parser.add_argument("-o", "--output", type=Path, default=current_path / "output",
 	                    help="custom output folder")
+	parser.add_argument("-c", "--codename", type=str, default=None,
+	                    help="override the device codename (e.g., re5c33)")
 
 	args = parser.parse_args()
 
 	setup_locale()
 
-	dump = DeviceTree(args.dump_path)
+	dump = DeviceTree(args.dump_path, codename_override=args.codename)
 	dump.dump_to_folder(args.output)
 	dump.cleanup()
 
 	print(f"\nDone! You can find the device tree in {str(args.output)}")
+

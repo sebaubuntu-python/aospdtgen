@@ -23,7 +23,7 @@ from aospdtgen.utils.format_props import dump_partition_build_prop
 
 class DeviceTree:
 	"""Class representing an Android device tree."""
-	def __init__(self, path: Path):
+	def __init__(self, path: Path, codename_override: str = None):
 		"""Given a path to a dumpyara dump path, generate a device tree by parsing it."""
 		self.path = path
 
@@ -38,6 +38,11 @@ class DeviceTree:
 		for partition in self.partitions.get_all_partitions():
 			self.build_prop.import_props(partition.build_prop)
 		self.device_info = DeviceInfo(self.build_prop)
+
+		# Override codename if specified
+		if codename_override:
+			LOGI(f"Overriding codename: {self.device_info.codename} -> {codename_override}")
+			self.device_info.codename = codename_override
 
 		LOGI("Parsing fstab")
 		fstabs = [
