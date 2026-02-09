@@ -1,0 +1,15 @@
+#
+# SPDX-FileCopyrightText: The LineageOS Project
+# SPDX-License-Identifier: Apache-2.0
+#
+
+from aospdtgen.proprietary_files.section import Section, register_section
+
+class CasSection(Section):
+	name = "CAS"
+	interfaces = [
+		"android.hardware.cas",
+		"android.hardware.cas.native",
+	]
+
+register_section(CasSection)

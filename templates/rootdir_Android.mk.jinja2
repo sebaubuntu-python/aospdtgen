@@ -1,0 +1,16 @@
+{% include 'LICENSE.jinja2' %}
+
+LOCAL_PATH := $(call my-dir)
+
+# Recovery init configuration files{{ '\n' }}
+{%- for file in rootdir_recovery_etc_files %}
+include $(CLEAR_VARS)
+LOCAL_MODULE       := {{ file.name }}
+LOCAL_MODULE_TAGS  := optional
+LOCAL_MODULE_CLASS := ETC
+LOCAL_SRC_FILES    := etc/{{ file.name }}
+LOCAL_MODULE_PATH  := $(TARGET_ROOT_OUT)
+include $(BUILD_PREBUILT)
+
+{% endfor %}
+

@@ -1,0 +1,36 @@
+{% include 'LICENSE.jinja2' %}
+
+# Inherit from those products. Most specific first.
+{% if device_info.arch.bitness == 64 %}
+$(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
+{% endif %}
+$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
+
+# Inherit from {{ device_info.codename }} device
+$(call inherit-product, device/{{ device_info.manufacturer }}/{{ device_info.codename }}/device.mk)
+
+# Inherit some common Lineage stuff.
+$(call inherit-product, vendor/lineage/config/common_full_phone.mk)
+
+PRODUCT_DEVICE := {{ device_info.codename }}
+PRODUCT_NAME := lineage_{{ device_info.codename }}
+{% if device_info.brand %}
+PRODUCT_BRAND := {{ device_info.brand }}
+{% endif %}
+{% if device_info.model %}
+PRODUCT_MODEL := {{ device_info.model }}
+{% endif %}
+PRODUCT_MANUFACTURER := {{ device_info.manufacturer }}
+
+PRODUCT_GMS_CLIENTID_BASE := {{ device_info.gms_clientid_base }}
+{% if device_info.build_description or device_info.build_fingerprint %}
+
+PRODUCT_BUILD_PROP_OVERRIDES +=
+{%- if device_info.build_description %} \
+    BuildDesc="{{ device_info.build_description }}"
+{%- endif %}
+{%- if device_info.build_fingerprint %} \
+    BuildFingerprint := {{ device_info.build_fingerprint }}
+{%- endif %}
+{% endif %}
+

@@ -1,0 +1,199 @@
+{% include 'LICENSE.jinja2' %}
+
+DEVICE_PATH := device/{{ device_info.manufacturer }}/{{ device_info.codename }}
+
+{% if device_info.device_is_ab %}
+# A/B
+AB_OTA_UPDATER := true
+AB_OTA_PARTITIONS +=
+{%- for partition in fstab.get_ab_partitions_models() %} \
+    {{ partition.name }}
+{%- endfor %}
+
+BOARD_USES_RECOVERY_AS_BOOT := true
+
+{% endif %}
+# Architecture
+TARGET_ARCH := {{ device_info.arch.arch }}
+TARGET_ARCH_VARIANT := {{ device_info.arch.arch_variant }}
+TARGET_CPU_ABI := {{ device_info.arch.cpu_abi }}
+TARGET_CPU_ABI2 := {{ device_info.arch.cpu_abi2 }}
+TARGET_CPU_VARIANT := generic
+TARGET_CPU_VARIANT_RUNTIME := {{ device_info.cpu_variant }}
+
+{% if device_info.second_arch %}
+TARGET_2ND_ARCH := {{ device_info.second_arch.arch }}
+TARGET_2ND_ARCH_VARIANT := {{ device_info.second_arch.arch_variant }}
+TARGET_2ND_CPU_ABI := {{ device_info.second_arch.cpu_abi }}
+TARGET_2ND_CPU_ABI2 := {{ device_info.second_arch.cpu_abi2 }}
+TARGET_2ND_CPU_VARIANT := generic
+TARGET_2ND_CPU_VARIANT_RUNTIME := {{ device_info.second_cpu_variant }}
+
+{% endif %}
+{% if device_info.arch.bitness != 64 %}
+TARGET_USES_64_BIT_BINDER := true
+
+{% endif %}
+{% if not device_info.device_uses_updatable_apex %}
+# APEX
+OVERRIDE_TARGET_FLATTEN_APEX := true
+
+{% endif %}
+# Bootloader
+{% if device_info.bootloader_board_name %}
+TARGET_BOOTLOADER_BOARD_NAME := {{ device_info.bootloader_board_name }}
+{% endif %}
+TARGET_NO_BOOTLOADER := true
+
+{% if device_info.screen_density or device_info.use_vulkan %}
+# Display
+{% if device_info.screen_density %}
+TARGET_SCREEN_DENSITY := {{ device_info.screen_density }}
+{% endif %}
+{% if device_info.use_vulkan %}
+TARGET_USES_VULKAN := true
+{% endif %}
+
+{% endif %}
+# Kernel
+{% if boot_configuration.boot_image_info.header_version != "0" %}
+BOARD_BOOT_HEADER_VERSION := {{ boot_configuration.boot_image_info.header_version }}
+{% endif %}
+{% if boot_configuration.base_address %}
+BOARD_KERNEL_BASE := {{ boot_configuration.base_address }}
+{% endif %}
+{% if boot_configuration.cmdline %}
+BOARD_KERNEL_CMDLINE := {{ boot_configuration.cmdline }}
+{% endif %}
+{% if boot_configuration.pagesize %}
+BOARD_KERNEL_PAGESIZE := {{ boot_configuration.pagesize }}
+{% endif %}
+{% if boot_configuration.boot_image_info.header_version != "0" %}
+BOARD_MKBOOTIMG_ARGS += --header_version $(BOARD_BOOT_HEADER_VERSION)
+{% endif %}
+BOARD_KERNEL_IMAGE_NAME := Image
+{% if boot_configuration.dt %}
+BOARD_KERNEL_SEPARATED_DT := true
+{% endif %}
+{% if boot_configuration.dtb %}
+BOARD_INCLUDE_DTB_IN_BOOTIMG := true
+{% endif %}
+{% if boot_configuration.dtbo %}
+BOARD_KERNEL_SEPARATED_DTBO := true
+{% endif %}
+TARGET_KERNEL_CONFIG := {{ device_info.codename }}_defconfig
+TARGET_KERNEL_SOURCE := kernel/{{ device_info.manufacturer }}/{{ device_info.codename }}
+
+# Kernel - prebuilt
+TARGET_FORCE_PREBUILT_KERNEL := true
+ifeq ($(TARGET_FORCE_PREBUILT_KERNEL),true)
+TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilts/kernel
+{% if boot_configuration.dt %}
+TARGET_PREBUILT_DT := $(DEVICE_PATH)/prebuilts/dt.img
+BOARD_MKBOOTIMG_ARGS += --dt $(TARGET_PREBUILT_DT)
+BOARD_KERNEL_SEPARATED_DT := 
+{% endif %}
+{% if boot_configuration.dtb %}
+TARGET_PREBUILT_DTB := $(DEVICE_PATH)/prebuilts/dtb.img
+BOARD_MKBOOTIMG_ARGS += --dtb $(TARGET_PREBUILT_DTB)
+BOARD_INCLUDE_DTB_IN_BOOTIMG := 
+{% endif %}
+{% if boot_configuration.dtbo %}
+BOARD_PREBUILT_DTBOIMAGE := $(DEVICE_PATH)/prebuilts/dtbo.img
+BOARD_KERNEL_SEPARATED_DTBO := 
+{% endif %}
+endif
+
+# Partitions
+{% if device_info.device_uses_system_as_root %}
+BOARD_BUILD_SYSTEM_ROOT_IMAGE := true
+{% endif %}
+{% if boot_configuration.pagesize %}
+BOARD_FLASH_BLOCK_SIZE := {{ boot_configuration.pagesize|int * 64 }} # (BOARD_KERNEL_PAGESIZE * 64)
+{% endif %}
+BOARD_BOOTIMAGE_PARTITION_SIZE := {{ boot_configuration.boot_image_info.origsize }}
+{% if boot_configuration.dtbo %}
+BOARD_DTBOIMG_PARTITION_SIZE := {{ boot_configuration.dtbo.stat().st_size }}
+{% endif %}
+{% if boot_configuration.recovery_image_info %}
+BOARD_RECOVERYIMAGE_PARTITION_SIZE := {{ boot_configuration.recovery_image_info.origsize }}
+{% endif %}
+{% if boot_configuration.init_boot_image_info %}
+BOARD_INIT_BOOT_IMAGE_PARTITION_SIZE := {{ boot_configuration.init_boot_image_info.origsize }}
+{% endif %}
+{% if boot_configuration.vendor_boot_image_info %}
+BOARD_VENDOR_BOOTIMAGE_PARTITION_SIZE := {{ boot_configuration.vendor_boot_image_info.origsize }}
+{% endif %}
+{% if boot_configuration.vendor_kernel_boot_image_info %}
+BOARD_VENDOR_KERNEL_BOOTIMAGE_PARTITION_SIZE := {{ boot_configuration.vendor_kernel_boot_image_info.origsize }}
+{% endif %}
+{% if device_info.device_uses_dynamic_partitions %}
+BOARD_SUPER_PARTITION_SIZE := 9126805504 # TODO: Fix hardcoded value
+BOARD_SUPER_PARTITION_GROUPS := {{ device_info.manufacturer }}_dynamic_partitions
+BOARD_{{ device_info.manufacturer|upper }}_DYNAMIC_PARTITIONS_PARTITION_LIST :=
+{%- for partition in fstab.get_logical_partitions_models() %} \
+    {{ partition.name }}
+{%- endfor %}
+
+BOARD_{{ device_info.manufacturer|upper }}_DYNAMIC_PARTITIONS_SIZE := 9122611200 # TODO: Fix hardcoded value
+{% endif %}
+
+# Platform
+TARGET_BOARD_PLATFORM := {{ device_info.platform }}
+
+# Properties{{ '\n' }}
+{%- for partition in partitions.get_all_partitions() %}
+{% if partition.build_prop %}
+TARGET_{{ partition.model.name|upper }}_PROP += $(DEVICE_PATH)/{{ partition.model.name }}.prop
+{% endif %}
+{% endfor %}
+
+# Recovery
+TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/rootdir/etc/{{ fstab.fstab.name }}
+{% if boot_configuration.dtbo and not device_info.device_is_ab %}
+BOARD_INCLUDE_RECOVERY_DTBO := true
+{% endif %}
+{% if device_info.device_pixel_format %}
+TARGET_RECOVERY_PIXEL_FORMAT := {{ device_info.device_pixel_format }}
+{% endif %}
+TARGET_USERIMAGES_USE_EXT4 := true
+TARGET_USERIMAGES_USE_F2FS := true
+
+{% if device_info.vendor_build_security_patch %}
+# Security patch level
+VENDOR_SECURITY_PATCH := {{ device_info.vendor_build_security_patch }}
+
+{% endif %}
+{% if boot_configuration.boot_image_info.sigtype == "AVBv2" %}
+# Verified Boot
+BOARD_AVB_ENABLE := true
+BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flags 3
+{% if boot_configuration.recovery_image_info
+      and boot_configuration.recovery_image_info.sigtype == "AVBv2" %}
+BOARD_AVB_RECOVERY_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
+BOARD_AVB_RECOVERY_ALGORITHM := SHA256_RSA4096
+BOARD_AVB_RECOVERY_ROLLBACK_INDEX := 1
+BOARD_AVB_RECOVERY_ROLLBACK_INDEX_LOCATION := 1
+{% endif %}
+{% if boot_configuration.vendor_boot_image_info
+      and boot_configuration.vendor_boot_image_info.sigtype == "AVBv2" %}
+BOARD_AVB_VENDOR_BOOT_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
+BOARD_AVB_VENDOR_BOOT_ALGORITHM := SHA256_RSA4096
+BOARD_AVB_VENDOR_BOOT_ROLLBACK_INDEX := 1
+BOARD_AVB_VENDOR_BOOT_ROLLBACK_INDEX_LOCATION := 1
+{% endif %}
+{% if boot_configuration.vendor_kernel_boot_image_info
+      and boot_configuration.vendor_kernel_boot_image_info.sigtype == "AVBv2" %}
+BOARD_AVB_VENDOR_KERNEL_BOOT_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
+BOARD_AVB_VENDOR_KERNEL_BOOT_ALGORITHM := SHA256_RSA4096
+BOARD_AVB_VENDOR_KERNEL_BOOT_ROLLBACK_INDEX := 1
+BOARD_AVB_VENDOR_KERNEL_BOOT_ROLLBACK_INDEX_LOCATION := 1
+{% endif %}
+
+{% endif %}
+# VINTF
+DEVICE_MANIFEST_FILE += $(DEVICE_PATH)/manifest.xml
+
+# Inherit the proprietary files
+include vendor/{{ device_info.manufacturer }}/{{ device_info.codename }}/BoardConfigVendor.mk
+
