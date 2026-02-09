@@ -30,7 +30,7 @@ PRODUCT_BUILD_PROP_OVERRIDES +=
     BuildDesc="{{ device_info.build_description }}"
 {%- endif %}
 {%- if device_info.build_fingerprint %} \
-    BuildFingerprint := {{ device_info.build_fingerprint }}
+    BuildFingerprint={{ device_info.build_fingerprint }}
 {%- endif %}
 {% endif %}
 
