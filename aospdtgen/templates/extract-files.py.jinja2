@@ -13,7 +13,7 @@ ANDROID_ROOT = MY_DIR.parents[2]
 
 sys.path.insert(0, str(ANDROID_ROOT / 'tools' / 'extract-utils'))
 
-from extract_utils.extract import ExtractUtils, ExtractUtilsModule
+from extract_utils.main import ExtractUtils, ExtractUtilsModule
 
 namespace_imports = [
     'hardware/lineage/interfaces',
