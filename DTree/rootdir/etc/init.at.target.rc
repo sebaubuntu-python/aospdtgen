@@ -1,0 +1,211 @@
+
+# Copyright (c) 2019-2021, The Linux Foundation. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are
+# met:
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above
+#       copyright notice, this list of conditions and the following
+#       disclaimer in the documentation and/or other materials provided
+#       with the distribution.
+#     * Neither the name of The Linux Foundation nor the names of its
+#       contributors may be used to endorse or promote products derived
+#       from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED
+# WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT
+# ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
+# BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+# BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+# OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
+# IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+#
+
+import /vendor/etc/init/hw/init.qti.kernel.rc
+
+on early-init
+#ifndef
+#Wei.Hua@MULTIMEDIA.AUDIODRIVER.SMARTPA, 2020/05/25, add for tfa9874 bringup
+    #exec u:r:vendor_modprobe:s0 -- /vendor/bin/modprobe -a -d /vendor/lib/modules q6_pdr_dlkm q6_notifier_dlkm snd_event_dlkm apr_dlkm adsp_loader_dlkm q6_dlkm native_dlkm pinctrl_wcd_dlkm pinctrl_lpi_dlkm swr_dlkm platform_dlkm hdmi_dlkm stub_dlkm wcd_core_dlkm wsa883x_dlkm bolero_cdc_dlkm wsa_macro_dlkm va_macro_dlkm rx_macro_dlkm tx_macro_dlkm bt_fm_slim wcd938x_dlkm wcd938x_slave_dlkm swr_dmic_dlkm swr_haptics_dlkm machine_dlkm radio-i2c-rtc6226-qca mmc_core mmc_block sdhci sdhci-pltfm sdhci-msm cdsprm
+#else
+    exec u:r:vendor_modprobe:s0 -- /vendor/bin/modprobe -a -d /vendor/lib/modules q6_pdr_dlkm q6_notifier_dlkm snd_event_dlkm apr_dlkm adsp_loader_dlkm q6_dlkm native_dlkm pinctrl_wcd_dlkm pinctrl_lpi_dlkm swr_dlkm platform_dlkm hdmi_dlkm stub_dlkm wcd_core_dlkm wsa883x_dlkm bolero_cdc_dlkm wsa_macro_dlkm va_macro_dlkm rx_macro_dlkm tx_macro_dlkm bt_fm_slim wcd938x_dlkm wcd938x_slave_dlkm swr_dmic_dlkm swr_haptics_dlkm machine_dlkm radio-i2c-rtc6226-qca mmc_core mmc_block sdhci sdhci-pltfm sdhci-msm cdsprm tfa98xx-v6_dlkm camera
+#endif
+    exec u:r:vendor_modprobe:s0 -- /vendor/bin/vendor_modprobe.sh
+    write /proc/sys/kernel/printk_devkmsg ratelimited
+    export MEMTAG_OPTIONS off
+
+on init
+    # Scheduler uclamp
+    mkdir /dev/cpuctl/foreground
+    mkdir /dev/cpuctl/background
+    mkdir /dev/cpuctl/top-app
+    mkdir /dev/cpuctl/rt
+    chown system system /dev/cpuctl
+    chown system system /dev/cpuctl/foreground
+    chown system system /dev/cpuctl/background
+    chown system system /dev/cpuctl/top-app
+    chown system system /dev/cpuctl/rt
+    chown system system /dev/cpuctl/tasks
+    chown system system /dev/cpuctl/foreground/tasks
+    chown system system /dev/cpuctl/background/tasks
+    chown system system /dev/cpuctl/top-app/tasks
+    chown system system /dev/cpuctl/rt/tasks
+    chmod 0664 /dev/cpuctl/tasks
+    chmod 0664 /dev/cpuctl/foreground/tasks
+    chmod 0664 /dev/cpuctl/background/tasks
+    chmod 0664 /dev/cpuctl/top-app/tasks
+    chmod 0664 /dev/cpuctl/rt/tasks
+    write /dev/cpuctl/foreground/cpu.rt_runtime_us 950000
+    write /dev/cpuctl/background/cpu.rt_runtime_us 950000
+    write /dev/cpuctl/top-app/cpu.rt_runtime_us 950000
+    write /dev/cpuctl/rt/cpu.rt_runtime_us 950000
+
+    wait /dev/block/platform/soc/${ro.boot.bootdevice}
+    symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
+    chown system system /sys/devices/platform/soc/1d84000.ufshc/auto_hibern8
+    chmod 0660 /sys/devices/platform/soc/1d84000.ufshc/auto_hibern8
+    start logd
+
+on early-fs
+    start vold
+
+on fs
+    start hwservicemanager
+    #mount_all /vendor/etc/fstab.qcom --early
+    mount_all /vendor/etc/fstab.at.qcom --early
+    chown root system /mnt/vendor/persist
+    chmod 0771 /mnt/vendor/persist
+    restorecon_recursive /mnt/vendor/persist
+    mkdir /mnt/vendor/persist/data 0700 system system
+
+on fs && property:ro.boot.product.vendor.sku=taro
+    mkdir /mnt/vendor/spunvm 0660 system system
+    wait /dev/block/bootdevice/by-name/spunvm
+    mount vfat /dev/block/bootdevice/by-name/spunvm /mnt/vendor/spunvm rw noatime shortname=lower,uid=1000,gid=1000,dmask=007,fmask=007,context=u:object_r:vendor_spunvm_file:s0
+
+on post-fs
+    # set RLIMIT_MEMLOCK to 64MB
+    setrlimit 8 67108864 67108864
+#    write /dev/ipa 1
+
+on late-fs
+    wait_for_prop hwservicemanager.ready true
+    #exec_start wait_for_keymaster
+    start console
+    #mount_all /vendor/etc/fstab.qcom --late
+    mount_all /vendor/etc/fstab.at.qcom --late
+
+on post-fs-data
+    mkdir /vendor/data/tombstones 0771 system system
+    # Enable WLAN cold boot calibration
+    write /sys/devices/platform/soc/b0000000.qcom,cnss-qca6490/fs_ready 1
+
+on early-boot
+    start vendor.sensors
+
+on boot
+    write /dev/cpuset/audio-app/cpus 1-2
+    # Add a cpuset for the camera daemon
+    # We want all cores for camera
+    mkdir /dev/cpuset/camera-daemon
+    write /dev/cpuset/camera-daemon/cpus 0-7
+    write /dev/cpuset/camera-daemon/mems 0
+    chown cameraserver cameraserver /dev/cpuset/camera-daemon
+    chown cameraserver cameraserver /dev/cpuset/camera-daemon/tasks
+    chmod 0660 /dev/cpuset/camera-daemon/tasks
+    chown system /sys/devices/platform/soc/990000.i2c/i2c-0/0-0049/trusted_touch_enable
+    chmod 0660 /sys/devices/platform/soc/990000.i2c/i2c-0/0-0049/trusted_touch_enable
+    chown system /sys/devices/system/cpu/hyp_core_ctl/enable
+    chown system /sys/devices/system/cpu/hyp_core_ctl/hcc_min_freq
+    #USB controller configuration
+    setprop vendor.usb.controller a600000.dwc3
+#ifdef OPLUS_FEATURE_FINGERPRINT
+    start fps_hal
+#endif
+
+on property:vendor.display.lcd_density=560
+   setprop dalvik.vm.heapgrowthlimit 256m
+
+#on property:vendor.display.lcd_density=640
+#   setprop dalvik.vm.heapgrowthlimit 512m
+
+on init && property:ro.boot.mode=charger
+    mount_all /vendor/etc/charger_fw_fstab.qti --early
+    wait /sys/kernel/boot_adsp/boot
+    write /sys/kernel/boot_adsp/boot 1
+
+on charger
+#    start vendor.power_off_alarm
+#    setprop sys.usb.controller a600000.dwc3
+#    setprop sys.usb.configfs 1
+
+#service vendor.lowi /vendor/bin/sscrpcd
+#   class core
+#   user system
+#   group system wakelock
+#   capabilities BLOCK_SUSPEND
+
+#pd-mapper
+service vendor.pd_mapper /vendor/bin/pd-mapper
+    class core
+    user system
+    group system
+
+#Peripheral manager
+service vendor.per_mgr /vendor/bin/pm-service
+    class core
+    user system
+    group system
+    ioprio rt 4
+
+service vendor.per_proxy /vendor/bin/pm-proxy
+    class core
+    user system
+    group system
+    disabled
+
+#service vendor.mdm_helper /vendor/bin/mdm_helper
+#    class core
+#    group system wakelock
+#    disabled
+
+service vendor.mdm_launcher /vendor/bin/sh /vendor/bin/init.mdm.sh
+    class core
+    oneshot
+
+#ifdef OPLUS_FEATURE_FINGERPRINT
+#//PengNan@BSP.FTM.Factory, 2019/01/21, add enterning vddmin,
+service fps_hal /odm/bin/hw/vendor.oplus.hardware.biometrics.fingerprint@2.1-service
+    # "class hal" causes a race condition on some devices due to files created
+    # in /data. As a workaround, postpone startup until later in boot once
+    # /data is mounted.
+    class late_start
+    user root
+    group root
+#endif
+
+on property:init.svc.vendor.per_mgr=running
+    start vendor.per_proxy
+
+on property:sys.shutdown.requested=*
+    stop vendor.per_proxy
+
+#on property:vold.decrypt=trigger_restart_framework
+#  start vendor.cnss_diag
+
+#service vendor.cnss_diag /system/vendor/bin/cnss_diag -q -f -t HELIUM
+#   class main
+#   user system
+#   group system wifi inet sdcard_rw media_rw diag
+#   oneshot
+
+on early-boot && property:persist.vendor.pcie.boot_option=*
+    write /sys/bus/platform/devices/1c00000.qcom,pcie/debug/boot_option ${persist.vendor.pcie.boot_option}
+    write /sys/bus/platform/devices/1c08000.qcom,pcie/debug/boot_option ${persist.vendor.pcie.boot_option}

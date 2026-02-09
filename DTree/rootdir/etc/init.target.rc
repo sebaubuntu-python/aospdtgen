@@ -1,0 +1,266 @@
+
+# Copyright (c) 2019-2021, The Linux Foundation. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are
+# met:
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above
+#       copyright notice, this list of conditions and the following
+#       disclaimer in the documentation and/or other materials provided
+#       with the distribution.
+#     * Neither the name of The Linux Foundation nor the names of its
+#       contributors may be used to endorse or promote products derived
+#       from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED
+# WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT
+# ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
+# BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+# BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+# OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
+# IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+#
+# Changes from Qualcomm Innovation Center are provided under the following license:
+# Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted (subject to the limitations in the
+# disclaimer below) provided that the following conditions are met:
+#
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#
+#     * Redistributions in binary form must reproduce the above
+#       copyright notice, this list of conditions and the following
+#       disclaimer in the documentation and/or other materials provided
+#       with the distribution.
+#
+#     * Neither the name of Qualcomm Innovation Center, Inc. nor the names of
+#       its contributors may be used to endorse or promote products derived
+#       from this software without specific prior written permission.
+#
+# NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE
+# GRANTED BY THIS LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT
+# HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED
+# WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+# IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+# ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+# GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+# INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+# IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+# OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
+# IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+import /vendor/etc/init/hw/init.qti.kernel.rc
+
+on early-init
+    write /proc/sys/kernel/printk_devkmsg ratelimited
+    export MEMTAG_OPTIONS off
+
+on property:sys.oplus.bootupgrade=1
+    write /sys/devices/system/cpu/cpu6/cpufreq/scaling_max_freq 1785600
+    write /sys/devices/system/cpu/cpu7/cpufreq/scaling_max_freq 1977600
+    write /dev/kmsg "first boot, sys.oplus.bootupgrade = 1.  limit cpufreq."
+
+on init
+    wait /dev/block/platform/soc/${ro.boot.bootdevice}
+    symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
+    chown system system /sys/devices/platform/soc/1d84000.ufshc/auto_hibern8
+    chmod 0660 /sys/devices/platform/soc/1d84000.ufshc/auto_hibern8
+    start logd
+
+on property:sys.boot_completed=1 && property:sys.oplus.bootupgrade=1
+    write /dev/kmsg "first boot completed, sys.oplus.bootupgrade = 1. free cpufreq limit."
+    write /sys/devices/system/cpu/cpu6/cpufreq/scaling_max_freq 2803200
+    write /sys/devices/system/cpu/cpu7/cpufreq/scaling_max_freq 2956800
+
+on early-fs
+    start vold
+
+on fs
+    #ifdef OPLUS_FEATURE_PHOENIX
+    write /proc/bootprof "INIT:fs"
+    #endif
+    start hwservicemanager
+    #ifdef OPLUS_FEATURE_PHOENIX
+    write /proc/bootprof "INIT:Mount_START"
+    #endif
+    mount_all /vendor/etc/fstab.qcom --early
+    #ifdef OPLUS_FEATURE_PHOENIX
+    write /proc/bootprof "INIT:Mount_END"
+    #endif
+    chown root system /mnt/vendor/persist
+    chmod 0771 /mnt/vendor/persist
+    restorecon_recursive /mnt/vendor/persist
+    mkdir /mnt/vendor/persist/secnvm 0770 system system
+    mkdir /mnt/vendor/persist/data 0700 system system
+
+on property:ro.boot.product.vendor.sku=kalama
+    setprop ro.soc.model kalama
+
+on post-fs
+    # set RLIMIT_MEMLOCK to 64MB
+    setrlimit 8 67108864 67108864
+    #Execute virtualization manager
+
+
+# 8550 disable tui
+#   enable vendor.qvirtmgr
+#   start  vendor.qvirtmgr
+
+on late-fs
+    wait_for_prop hwservicemanager.ready true
+    #exec_start wait_for_keymaster
+   #ifdef OPLUS_FEATURE_PHOENIX
+    write /proc/bootprof "INIT:Mount_START --late"
+    #endif
+    mount_all /vendor/etc/fstab.qcom --late
+    #ifdef OPLUS_FEATURE_PHOENIX
+    write /proc/bootprof "INIT:Mount_END --late"
+    #endif
+
+on post-fs-data
+    mkdir /vendor/data/tombstones 0771 system system
+    # Enable WLAN cold boot calibration
+    write /sys/kernel/cnss/fs_ready 1
+
+on early-boot
+    start vendor.sensors
+
+on boot
+    #ifndef OPLUS_ARCH_EXTENDS
+    # dongchuancheng@MULTIMEDIA.AUDIOSERVER.FRAMEWORK, 2023/05/15, extend audio rt cpuset from cpu 1-2 to cpu0-7
+    #write /dev/cpuset/audio-app/cpus 1-2
+    #else /* OPLUS_ARCH_EXTENDS */
+    write /dev/cpuset/audio-app/cpus 0-7
+    #endif /* OPLUS_ARCH_EXTENDS */
+    # Add a cpuset for the camera daemon
+    # We want all cores for camera
+    mkdir /dev/cpuset/camera-daemon
+    write /dev/cpuset/camera-daemon/cpus 0-7
+    write /dev/cpuset/camera-daemon/mems 0
+    chown cameraserver cameraserver /dev/cpuset/camera-daemon
+    chown cameraserver cameraserver /dev/cpuset/camera-daemon/tasks
+    chmod 0660 /dev/cpuset/camera-daemon/tasks
+    # Add a cpuset for kswapd-like thread
+    # We do not want kswapd-like thread running on super-big-core
+    mkdir /dev/cpuset/kswapd-like
+    write /dev/cpuset/kswapd-like/cpus 0-6
+    write /dev/cpuset/kswapd-like/mems 0
+    chown system system /dev/cpuset/kswapd-like
+    chown system system /dev/cpuset/kswapd-like/tasks
+    chmod 0660 /dev/cpuset/kswapd-like/tasks
+    chown system /sys/devices/platform/soc/990000.i2c/i2c-0/0-0038/trusted_touch_enable
+    chmod 0660 /sys/devices/platform/soc/990000.i2c/i2c-0/0-0038/trusted_touch_enable
+    chown system /sys/devices/platform/soc/990000.spi/spi_master/spi0/spi0.0/trusted_touch_enable
+    chmod 0660 /sys/devices/platform/soc/990000.spi/spi_master/spi0/spi0.0/trusted_touch_enable
+    chown system /sys/devices/system/cpu/hyp_core_ctl/enable
+    chown system /sys/devices/system/cpu/hyp_core_ctl/hcc_min_freq
+
+on property:vendor.display.lcd_density=560
+   setprop dalvik.vm.heapgrowthlimit 256m
+
+on property:vendor.display.lcd_density=640
+   setprop dalvik.vm.heapgrowthlimit 512m
+
+on init && property:ro.boot.mode=charger
+    wait_for_prop vendor.all.modules.ready 1
+    mount_all /vendor/etc/charger_fw_fstab.qti --early
+    wait /sys/kernel/boot_adsp/boot
+    write /sys/kernel/boot_adsp/boot 1
+
+on charger
+    start vendor.power_off_alarm
+    write /sys/kernel/cnss/charger_mode 1
+
+#service vendor.lowi /vendor/bin/sscrpcd
+#   class core
+#   user system
+#   group system wakelock
+#   capabilities BLOCK_SUSPEND
+
+#pd-mapper
+service vendor.pd_mapper /vendor/bin/pd-mapper
+    class core
+    user system
+    group system
+
+#Peripheral manager
+service vendor.per_mgr /vendor/bin/pm-service
+    class core
+    user system
+    group system
+    ioprio rt 4
+
+service vendor.per_proxy /vendor/bin/pm-proxy
+    class core
+    user system
+    group system
+    disabled
+
+service vendor.mdm_helper /vendor/bin/mdm_helper
+    class core
+    group system wakelock
+    disabled
+
+service vendor.mdm_launcher /vendor/bin/sh /vendor/bin/init.mdm.sh
+    class core
+    oneshot
+
+on property:init.svc.vendor.per_mgr=running
+    start vendor.per_proxy
+
+on property:sys.shutdown.requested=*
+    write /sys/kernel/qcom_rproc/shutdown_in_progress 1
+    stop vendor.per_proxy
+
+#ifdef OPLUS_FEATURE_POWER
+#//wukunling@BSP.Thermal 2022/9/23 disable thermalzone of cpu's cooling for hightempaging
+on property:ro.oplus.image.my_engineering.type=hightempaging
+    write /sys/class/thermal/thermal_zone99/mode disabled
+#endif /* OPLUS_FEATURE_POWER */
+
+#ifdef OPLUS_MODEM_SUBSYSTEM_BOOT
+#wuxiaoyu@NETWORK.ARCH, 2021/11/24, Add for modem subsystem does not bootup during shutdown charging
+on property:ro.bootmode=charger
+    stop vendor.per_mgr
+    stop vendor.per_proxy
+
+#endif /* OPLUS_MODEM_SUBSYSTEM_BOOT */
+
+#ifndef OPLUS_BUG_COMPATIBILITY
+#//ZhangPan@CONNECTIVITY.WIFI.LOG.3917089,2022/06/30, Remove for wifi log enhance function
+#on property:vold.decrypt=trigger_restart_framework
+#   start vendor.cnss_diag
+
+#service vendor.cnss_diag /system/vendor/bin/cnss_diag -q -f -t HELIUM
+#   class main
+#   user system
+#   group system wifi inet sdcard_rw media_rw diag
+#   oneshot
+#endif /* OPLUS_BUG_COMPATIBILITY */
+
+on early-boot && property:persist.vendor.pcie.boot_option=*
+    write /sys/bus/platform/devices/1c00000.qcom,pcie/debug/boot_option ${persist.vendor.pcie.boot_option}
+    write /sys/bus/platform/devices/1c08000.qcom,pcie/debug/boot_option ${persist.vendor.pcie.boot_option}
+
+service fan_control_turn_on /vendor/bin/fan_service 1
+    class late_start
+    user root
+    disabled
+    oneshot
+
+service fan_control_turn_off /vendor/bin/fan_service 0
+    class late_start
+    user root
+    disabled
+    oneshot

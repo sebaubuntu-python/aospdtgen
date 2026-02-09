@@ -1,0 +1,114 @@
+on post-fs-data
+    chmod 0666 /dev/block/sda6
+    chmod 0666 /dev/param
+    write /sys/devices/system/cpu/cpufreq/policy0/scaling_governor walt
+    write /sys/devices/system/cpu/cpufreq/policy3/scaling_governor walt
+    write /sys/devices/system/cpu/cpufreq/policy7/scaling_governor walt
+
+service wcnss-service-f /system/bin/wcnss_service -f
+    class main
+    user root
+    group system wifi radio
+    oneshot
+    disabled
+
+service factory /my_engineering/bin/factory
+    class late_start
+    disabled
+
+service pcba_diag /my_engineering/bin/pcba_diag
+    class late_start
+    disabled
+
+service ftm_power_config /vendor/bin/sh /vendor/bin/ftm_power_config.sh
+    class late_start
+    user root
+    disabled
+    oneshot
+
+service at-post-boot /vendor/bin/sh /vendor/bin/init.at.post_boot.sh
+    class late_start
+    user root
+    oneshot
+
+on oem_ftm
+    write /proc/charger_cycle dis808
+    write /sys/bus/platform/devices/1d84000.ufshc/clkgate_enable 1
+    #start qcom-sh
+    #start vendor.qmuxd
+    #start ptt_ffbm
+    start ftm_power_config
+    #start cnss-daemon
+    #start qcom-c_main-sh
+    write /dev/kmsg "factory boot mode is:${ro.vendor.factory.mode}"
+    #start vendor.mdm_launcher
+
+on property:sys.oplus_boot_mode=ftm_at
+#ifdef OPLUS_FEATURE_FINGERPRINT
+    start fps_hal
+#endif
+    start factory
+    trigger oem_ftm
+    start at-post-boot
+
+#bingham.fang@CONNECTIVITY.WIFI.HARDWARE.FTM.1065227, 2021/06/24, add for wlan mode
+service wififtm /odm/bin/wififtm
+    class late_start
+    user root
+    group root vendor_qti_diag
+    disabled
+    oneshot
+
+#ifdef OPLUS_FEATURE_FINGERPRINT
+#//PengNan@BSP.FTM.Factory, 2019/01/21, add enterning vddmin,
+service fps_hal /odm/bin/hw/vendor.oplus.hardware.biometrics.fingerprint@2.1-service_uff
+    # "class hal" causes a race condition on some devices due to files created
+    # in /data. As a workaround, postpone startup until later in boot once
+    # /data is mounted.
+    class late_start
+    user root
+    group root
+#endif
+
+on boot
+
+on boot && property:oplus.wifi.ftm=1
+     start vendor.diag-router
+     start wififtm
+     setprop persist.sys.addevdiag 1
+     setprop ro.wandrfmode 1
+     setprop persist.sys.adb.engineermode 0
+     start pcba_diag
+     setprop sys.usb.config diag,adb
+
+#ifdef OPLUS_BUG_STABILITY
+#LiFenfen@CONNECTIVITY.WIFI.HARDWARE.FTM.1776184, 2021/03/31,
+#Add for :wlan_ftm mode, turn off charge via USB, turn off cpu4~7
+     write /proc/charger_cycle "dis808"
+     write /sys/devices/system/cpu/cpu0/online 1
+     write /sys/devices/system/cpu/cpu1/online 1
+     write /sys/devices/system/cpu/cpu2/online 1
+     write /sys/devices/system/cpu/cpu3/online 1
+     write /sys/devices/system/cpu/cpu4/online 0
+     write /sys/devices/system/cpu/cpu5/online 0
+     write /sys/devices/system/cpu/cpu6/online 0
+     write /sys/devices/system/cpu/cpu7/online 0
+#endif /* OPLUS_BUG_STABILITY */
+
+#sea.yang@NETWORK.RF, 2021/03/31, CPU enter idle to optimize XO fail issue in wififtm
+     write /sys/devices/system/cpu/qcom_lpm/parameters/sleep_disabled 0
+
+on property:oplus.wifi.ftm=0
+     stop wififtm
+on property:sys.oplus_boot_mode=ftm_at
+     stop vendor.qwesd
+
+service wifi_action_remove_driver /vendor/bin/sh /odm/bin/init.vendor.wifiaction.sh remove_driver
+    user root
+    group root system misc wifi
+    class late_start
+    disabled
+    oneshot
+
+on property:vendor.oplus.wififtm.action=1
+    start wifi_action_remove_driver

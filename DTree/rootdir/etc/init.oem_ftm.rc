@@ -1,0 +1,6 @@
+#factory load rc
+
+import /vendor/etc/init/hw/vendor.oem_ftm_svc_disable.rc
+import /system/etc/init/hw/init.rc
+import /vendor/etc/init/hw/vendor.oem_ftm.rc
+

@@ -1,0 +1,208 @@
+#=============================================================================
+# Copyright (c) 2019-2022 Qualcomm Technologies, Inc.
+# All Rights Reserved.
+# Confidential and Proprietary - Qualcomm Technologies, Inc.
+#
+# Copyright (c) 2009-2012, 2014-2019, The Linux Foundation. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above copyright
+#       notice, this list of conditions and the following disclaimer in the
+#       documentation and/or other materials provided with the distribution.
+#     * Neither the name of The Linux Foundation nor
+#       the names of its contributors may be used to endorse or promote
+#       products derived from this software without specific prior written
+#       permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+# NON-INFRINGEMENT ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+# CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+# EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+# PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+# OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+# OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+# ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#=============================================================================
+import /vendor/etc/init/hw/init.qti.kernel.test.rc
+
+on early-init
+    # Set the console loglevel to < KERN_WARN
+    # Set the default message loglevel to KERN_INFO
+    write /proc/sys/kernel/printk "4 6 1 7"
+
+    start gki.modprobe
+    start vendor.modprobe
+
+    # Mount tracefs in /sys/kernel/tracing as CONFIG_DEBUG_FS might be
+    # disabled and /sys/kernel/debug/tracing might not be available
+    mount tracefs tracefs /sys/kernel/tracing
+    chmod 0755 /sys/kernel/tracing
+
+    chown root system /dev/kmsg
+    chmod 0620 /dev/kmsg
+
+    write /proc/sys/kernel/sched_boost 1
+
+    write /proc/sys/kernel/firmware_config/force_sysfs_fallback 1
+
+on post-fs
+    wait_for_prop vendor.all.modules.ready 1
+
+    # Create cgroup mount point for memory
+    mkdir /sys/fs/cgroup/memory/bg 0750 root system
+    write /sys/fs/cgroup/memory/bg/memory.swappiness 140
+    write /sys/fs/cgroup/memory/bg/memory.move_charge_at_immigrate 1
+    chown root system /sys/fs/cgroup/memory/bg/tasks
+    chmod 0660 /sys/fs/cgroup/memory/bg/tasks
+
+    # update scheduler tunables
+    write /dev/cpuctl/foreground/cpu.uclamp.sched_boost_no_override 1
+    write /dev/cpuctl/top-app/cpu.uclamp.sched_boost_no_override 1
+    write /dev/cpuctl/background/cpu.uclamp.colocate 0
+    write /dev/cpuctl/foreground/cpu.uclamp.colocate 0
+    write /dev/cpuctl/top-app/cpu.uclamp.colocate 1
+
+    # set aggressive read ahead for dm-0 and dm-1 during boot up
+    write /sys/block/dm-0/queue/read_ahead_kb 2048
+    write /sys/block/dm-1/queue/read_ahead_kb 2048
+    write /sys/block/dm-2/queue/read_ahead_kb 2048
+
+on early-boot
+    # Allow subsystem (modem etc) debugging
+    exec_background u:r:vendor_qti_init_shell_bg:s0 -- /vendor/bin/init.qti.write.sh /sys/kernel/boot_adsp/boot 1
+    exec_background u:r:vendor_qti_init_shell_bg:s0 -- /vendor/bin/init.qti.write.sh /sys/kernel/boot_cdsp/boot 1
+    exec_background u:r:vendor_qti_init_shell_bg:s0 -- /vendor/bin/init.qti.write.sh /sys/devices/virtual/cvp/cvp/boot 1
+
+on boot
+    # Allow access to dload sysfs node
+    chown root system /sys/kernel/dload/emmc_dload
+    chmod 0660 /sys/kernel/dload/emmc_dload
+    chown root system /dev/block/bootdevice/by-name/ramdump
+    chmod 0660 /dev/block/bootdevice/by-name/ramdump
+    chown root system /sys/kernel/dload/dload_mode
+    chmod 0660 /sys/kernel/dload/dload_mode
+
+    # set the io-scheduler to bfq on all mq support devices
+    write /sys/block/sda/queue/scheduler bfq
+    write /sys/block/sdb/queue/scheduler bfq
+    write /sys/block/sdc/queue/scheduler bfq
+    write /sys/block/sdd/queue/scheduler bfq
+    write /sys/block/sde/queue/scheduler bfq
+    write /sys/block/sdf/queue/scheduler bfq
+    write /sys/block/sdg/queue/scheduler bfq
+    write /sys/block/sdh/queue/scheduler bfq
+    write /sys/class/block/mmcblk0/queue/scheduler bfq
+    write /sys/class/block/mmcblk1/queue/scheduler bfq
+
+    # update io-scheduler tunables
+    write /sys/block/sda/queue/iosched/slice_idle 0
+    write /sys/block/sdb/queue/iosched/slice_idle 0
+    write /sys/block/sdc/queue/iosched/slice_idle 0
+    write /sys/block/sdd/queue/iosched/slice_idle 0
+    write /sys/block/sde/queue/iosched/slice_idle 0
+    write /sys/block/sdf/queue/iosched/slice_idle 0
+    write /sys/block/sdg/queue/iosched/slice_idle 0
+    write /sys/block/sdh/queue/iosched/slice_idle 0
+    write /sys/class/block/mmcblk0/queue/iosched/slice_idle 0
+    write /sys/class/block/mmcblk1/queue/iosched/slice_idle 0
+
+    # Allow access to memory hotplug device attributes
+    chown system system /sys/kernel/mem-offline/anon_migrate
+
+    #ifdef CONFIG_OPLUS_OMRG
+    write /dev/cpuset/display/cpus 3-6
+    #endif
+
+on post-fs-data
+    # Create directory used for dump collection
+    mkdir /data/vendor/ssrdump 0770 root system
+
+#ifdef OPLUS_FEATURE_CPUFREQ_BOUNCING
+    chown system system /sys/module/cpufreq_bouncing/parameters/enable
+    chown system system /sys/module/cpufreq_bouncing/parameters/config
+#endif
+
+#ifdef CONFIG_OPLUS_OMRG
+    chown system system /sys/devices/platform/soc/soc:oplus-omrg/oplus-omrg0/ruler_enable
+#endif
+
+on property:persist.sys.ssr.enable_debug=*
+    write /sys/module/subsys_pil_tz/parameters/enable_debug ${persist.sys.ssr.enable_debug}
+
+on property:persist.sys.mba_boot_timeout=*
+    write /sys/module/pil_msa/parameters/pbl_mba_boot_timeout_ms ${persist.sys.mba_boot_timeout}
+
+on property:persist.sys.modem_auth_timeout=*
+    write /sys/module/pil_msa/parameters/modem_auth_timeout_ms ${persist.sys.modem_auth_timeout}
+
+on property:persist.sys.pil_proxy_timeout=*
+    write /sys/module/peripheral_loader/parameters/proxy_timeout_ms ${persist.sys.pil_proxy_timeout}
+
+on property:persist.vendor.ssr.enable_ramdumps=1
+    write /sys/module/subsystem_restart/parameters/enable_ramdumps 1
+
+on property:persist.vendor.ssr.enable_ramdumps=0
+    write /sys/module/subsystem_restart/parameters/enable_ramdumps 0
+
+on property:persist.vendor.sys.rawdump_copy=1
+    write /sys/kernel/dload/emmc_dload 1
+
+on property:persist.vendor.sys.rawdump_copy=0
+    write /sys/kernel/dload/emmc_dload 0
+
+service kernel-boot /vendor/bin/sh /vendor/bin/init.qti.kernel.sh
+    class core
+    user root
+    group root
+    disabled
+    oneshot
+
+service kernel-post-boot /vendor/bin/sh /vendor/bin/init.kernel.post_boot.sh
+    class core
+    user root
+    group root system wakelock graphics
+    disabled
+    oneshot
+
+on property:sys.boot_completed=1
+    write /dev/kmsg "Boot completed "
+    #Reset read ahead for dm-0, dm-1 and dm-2 to 512kb
+    write /sys/block/dm-0/queue/read_ahead_kb 512
+    write /sys/block/dm-1/queue/read_ahead_kb 512
+    write /sys/block/dm-2/queue/read_ahead_kb 512
+    write /proc/sys/vm/page-cluster 0
+    start kernel-boot
+    start kernel-post-boot
+
+on charger
+    start kernel-post-boot
+
+service vendor.msm_irqbalance /vendor/bin/msm_irqbalance -f /system/vendor/etc/msm_irqbalance.conf
+    class core
+    user root
+    group root
+    disabled
+
+service gki.modprobe /vendor/bin/system_dlkm_modprobe.sh
+    class main
+    user root
+    group root system
+    disabled
+    stdio_to_kmsg
+    seclabel u:r:vendor_modprobe:s0
+    oneshot
+
+service vendor.modprobe /vendor/bin/vendor_modprobe.sh
+    class main
+    user root
+    group root system
+    disabled
+    stdio_to_kmsg
+    seclabel u:r:vendor_modprobe:s0
+    oneshot

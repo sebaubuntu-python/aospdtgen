@@ -1,0 +1,277 @@
+
+# Copyright (c) 2018-2019, The Linux Foundation. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are
+# met:
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above
+#       copyright notice, this list of conditions and the following
+#       disclaimer in the documentation and/or other materials provided
+#       with the distribution.
+#     * Neither the name of The Linux Foundation nor the names of its
+#       contributors may be used to endorse or promote products derived
+#       from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED
+# WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT
+# ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS
+# BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+# CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+# SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+# BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+# OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
+# IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+#
+
+on early-init
+#ifndef 
+#xiaoke.Zhi@PSW.MM.AudioDriver.SmartPA, 2019/06/26, Add for Max98937
+#    exec u:r:vendor_modprobe:s0 -- /vendor/bin/modprobe -a -d /vendor/lib/modules audio_q6_pdr audio_q6_notifier audio_snd_event audio_apr audio_adsp_loader audio_q6 audio_native audio_usf audio_pinctrl_wcd audio_pinctrl_lpi audio_swr audio_platform audio_hdmi audio_stub audio_wcd_core audio_wsa881x audio_bolero_cdc audio_wsa_macro audio_va_macro audio_rx_macro audio_tx_macro audio_wcd938x audio_wcd938x_slave audio_machine_kona
+#else
+    exec u:r:vendor_modprobe:s0 -- /vendor/bin/modprobe -a -d /vendor/lib/modules q6_pdr_dlkm q6_notifier_dlkm snd_event_dlkm apr_dlkm adsp_loader_dlkm q6_dlkm native_dlkm pinctrl_wcd_dlkm pinctrl_lpi_dlkm swr_dlkm platform_dlkm hdmi_dlkm stub_dlkm wcd_core_dlkm wsa883x_dlkm bolero_cdc_dlkm wsa_macro_dlkm va_macro_dlkm rx_macro_dlkm tx_macro_dlkm bt_fm_slim wcd938x_dlkm wcd938x_slave_dlkm swr_dmic_dlkm swr_haptics_dlkm machine_dlkm radio-i2c-rtc6226-qca mmc_core mmc_block sdhci sdhci-pltfm sdhci-msm cdsprm tfa98xx-v6_dlkm
+#endif
+    write /proc/sys/kernel/sched_boost 1
+
+on init
+    write /dev/stune/foreground/schedtune.sched_boost_no_override 1
+    write /dev/stune/top-app/schedtune.sched_boost_no_override 1
+    write /dev/stune/schedtune.colocate 0
+    write /dev/stune/background/schedtune.colocate 0
+    write /dev/stune/system-background/schedtune.colocate 0
+    write /dev/stune/foreground/schedtune.colocate 0
+    write /dev/stune/top-app/schedtune.colocate 1
+    wait /dev/block/platform/soc/1d84000.ufshc
+    symlink /dev/block/platform/soc/1d84000.ufshc /dev/block/bootdevice
+    start logd
+
+on early-fs
+    start vold
+
+on fs
+    start hwservicemanager
+    mkdir /mnt/vendor/spunvm 0660 system system
+    #ifdef 
+    #Xuefeng.Peng@PSW.AD.Storage.0, 2019/01/27, Add for remove 5G dump mountpoint to fstab
+    mkdir /mnt/vendor/modemdump 0771 system system
+    #endif /**/
+    #ifdef 
+    #Fuchun.Liao@BSP.CHG.Basic 2019/01/01 modify for not mount userdata in wlan mode because of FBE
+    #mount_all /vendor/etc/fstab.qcom --early
+    #else
+    mount_all /vendor/etc/fstab-wlan.qcom --early
+    #endif
+
+    #ifdef 
+    #Xuefeng.Peng@PSW.AD.Storage.0, 2018/11/21, Add for 5G dump mountpoint
+    #wait /dev/block/bootdevice/by-name/modemdump
+    #mount ext4 /dev/block/bootdevice/by-name/modemdump /mnt/vendor/modemdump nosuid nodev barrier=1
+    chown root system /mnt/vendor/modemdump
+    chmod 0771 /mnt/vendor/modemdump
+    restorecon_recursive /mnt/vendor/modemdump
+    #endif/**/
+
+    chown root system /mnt/vendor/persist
+    chmod 0771 /mnt/vendor/persist
+    restorecon_recursive /mnt/vendor/persist
+    mkdir /mnt/vendor/persist/data 0700 system system
+
+on post-fs
+    # set RLIMIT_MEMLOCK to 64MB
+    setrlimit 8 67108864 67108864
+    write /dev/ipa 1
+
+on late-fs
+    wait_for_prop hwservicemanager.ready true
+    exec_start wait_for_keymaster
+    #ifdef 
+    #Fuchun.Liao@BSP.CHG.Basic 2019/01/01 modify for not mount userdata in wlan mode because of FBE
+    #mount_all /vendor/etc/fstab.qcom --late
+    #else
+    mount_all /vendor/etc/fstab-wlan.qcom --late
+    #endif
+
+on post-fs-data
+    mkdir /vendor/data/tombstones 0771 system system
+    # Enable WLAN cold boot calibration
+    write /sys/devices/platform/soc/b0000000.qcom,cnss-qca6490/fs_ready 1
+    #ifdef 
+    # JunQian.Lin@PSW.MM.AudioServer.Dolby, 2019/09/18, add for dolby
+    #mkdir /data/vendor/dolby 0770 media media
+    #endif /**/
+
+on early-boot
+    start vendor.sensors
+
+on boot
+    chown system system /sys/kernel/hbtp/display_pwr
+    start rmt_storage
+    start rfs_access
+    write /dev/cpuset/audio-app/cpus 1-2
+    write /dev/cpuset/top-app/cpus 0-7
+    write /dev/cpuset/foreground/cpus 0-7
+    write /dev/cpuset/foreground/boost/cpus 0-7
+    write /dev/cpuset/background/cpus 0-7
+    write /dev/cpuset/system-background/cpus 0-7
+    # Add a cpuset for the camera daemon
+    # We want all cores for camera
+    mkdir /dev/cpuset/camera-daemon
+    write /dev/cpuset/camera-daemon/cpus 0-3
+    write /dev/cpuset/camera-daemon/mems 0
+    chown cameraserver cameraserver /dev/cpuset/camera-daemon
+    chown cameraserver cameraserver /dev/cpuset/camera-daemon/tasks
+    chmod 0660 /dev/cpuset/camera-daemon/tasks
+    write /sys/devices/system/cpu/cpu0/online 1
+    write /sys/devices/system/cpu/cpu1/online 1
+    write /sys/devices/system/cpu/cpu2/online 1
+    write /sys/devices/system/cpu/cpu3/online 1
+    write /sys/devices/system/cpu/cpu4/online 0
+    write /sys/devices/system/cpu/cpu5/online 0
+    write /sys/devices/system/cpu/cpu6/online 0
+    write /sys/devices/system/cpu/cpu7/online 0
+
+#Load WLAN driver
+    exec_background u:r:vendor_modprobe:s0 -- /vendor/bin/modprobe -a -d /vendor/lib/modules/ qca_cld3_wlan       #20200812 - delete it for temp because of crash issue
+	exec_background u:r:vendor_modprobe:s0 -- /vendor/bin/modprobe -a -d /vendor/lib/modules/5.4-gki qca_cld3_wlan
+
+    ####Regionalization config and prop files####
+    chmod 0644 /persist/speccfg/spec
+    chmod 0644 /persist/speccfg/devicetype
+    chmod 0644 /persist/speccfg/mbnversion
+    chmod 0644 /persist/speccfg/.not_triggered
+    chmod 0644 /persist/speccfg/vendor_ro.prop
+    chmod 0644 /persist/speccfg/vendor_persist.prop
+    chmod 0644 /persist/speccfg/submask
+    chmod 0644 /persist/speccfg/partition
+    chown system system /persist/speccfg/spec
+    chown system system /persist/speccfg/devicetype
+    chown system system /persist/speccfg/mbnversion
+    chown system system /persist/speccfg/.not_triggered
+    chown system system /persist/speccfg/vendor_ro.prop
+    chown system system /persist/speccfg/vendor_persist.prop
+    chown system system /persist/speccfg/submask
+    chown system system /persist/speccfg/partition
+
+#USB controller configuration
+    setprop vendor.usb.rndis.func.name "gsi"
+    setprop vendor.usb.rmnet.func.name "gsi"
+    setprop vendor.usb.rmnet.inst.name "rmnet"
+    setprop vendor.usb.dpl.inst.name "dpl"
+    setprop vendor.usb.qdss.inst.name "qdss"
+    setprop vendor.usb.controller a600000.dwc3
+
+on property:vendor.display.lcd_density=560
+   setprop dalvik.vm.heapgrowthlimit 256m
+
+on property:vendor.display.lcd_density=640
+   setprop dalvik.vm.heapgrowthlimit 512m
+
+on boot && property:persist.vendor.usb.controller.default=*
+    setprop vendor.usb.controller ${persist.vendor.usb.controller.default}
+
+on property:vendor.usb.controller=*
+    setprop sys.usb.controller ${vendor.usb.controller}
+
+on charger
+    start vendor.power_off_alarm
+    setprop sys.usb.controller a600000.dwc3
+    setprop sys.usb.configfs 1
+
+service vendor.lowi /vendor/bin/sscrpcd
+   class core
+   user system
+   group system wakelock
+   capabilities BLOCK_SUSPEND
+
+#pd-mapper
+service vendor.pd_mapper /vendor/bin/pd-mapper
+    class core
+    user system
+    group system
+
+#Peripheral manager
+service vendor.per_mgr /vendor/bin/pm-service
+    class core
+    user system
+    group system
+    ioprio rt 4
+
+service vendor.per_proxy /vendor/bin/pm-proxy
+    class core
+    user system
+    group system
+    disabled
+
+service vendor.mdm_helper /vendor/bin/mdm_helper
+    class core
+    group system wakelock
+    disabled
+
+service vendor.mdm_launcher /vendor/bin/sh /vendor/bin/init.mdm.sh
+    class core
+    oneshot
+
+on property:init.svc.vendor.per_mgr=running
+    start vendor.per_proxy
+
+on property:sys.shutdown.requested=*
+    stop vendor.per_proxy
+
+#ifndef 
+#Pan.Zhang@PSW.CN.WiFi.Basic.Log.1072015, 2016/08/03,
+#Remove for wifi log enhance function
+#on property:vold.decrypt=trigger_restart_framework
+#   start vendor.cnss_diag
+#endif
+
+#service vendor.cnss_diag /system/vendor/bin/cnss_diag -q -f -b 128 -t HELIUM
+#   class main
+#   user system
+#   group system wifi inet sdcard_rw media_rw diag
+#ifdef 
+#Pan.Zhang@PSW.CN.WiFi.Basic.Log.1072015, 2016/08/03,
+#Add for wifi log enhance function
+    #oneshot
+#else
+#    disabled
+
+
+#Yuan.Huang@PSW.CN.WiFi.Network.internet.1140781, 2017/12/21,
+#Modify for data stall enable log by default
+#on property:persist.sys.assert.panic=true
+#    stop cnss_diag_b
+#    start vendor.cnss_diag
+
+#on property:persist.sys.assert.panic=false
+#    stop vendor.cnss_diag
+#    start cnss_diag_b
+
+#on property:oplus.wifi.ftm=1
+#    stop vendor.cnss_diag
+#    stop cnss_diag_b
+
+#service cnss_diag_b /system/vendor/bin/cnss_diag -q -u -w -b 4096
+#    class main
+#    user system
+#    group system wifi inet net_admin sdcard_rw media_rw diag
+#    disabled
+#endif
+
+#on property:vold.decrypt=trigger_restart_framework && property:persist.sys.assert.panic=true
+#    start vendor.cnss_diag
+#endif /*  */   
+
+
+#ifdef 
+#Xiao.Liang@PSW.CN.WiFi.Basic.Switch.2078149, 2019/10/12
+#Add for: we allow to do driver reload when trigger disable / restart wifi
+on property:vendor.oplus.wifi.reload.wlandriver=*
+    setprop oplus.wifi.reload.wlandriver ${vendor.oplus.wifi.reload.wlandriver}
+
+on property:vendor.oplus.wifi.driver.insmod=*
+    setprop oplus.wifi.driver.insmod ${vendor.oplus.wifi.driver.insmod}
+#endif  /*  */

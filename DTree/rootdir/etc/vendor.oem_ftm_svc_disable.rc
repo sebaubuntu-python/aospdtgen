@@ -1,0 +1,130 @@
+# this file should import init.rc and then add some oem defined service
+
+#this service is a non-use service and just use to duplicate real console service
+service console /system/bin/xxx
+    class core
+    console
+    disabled
+    user root
+    group shell log
+    oneshot
+    seclabel u:r:shell:s0
+
+#this service is a non-use service and just use to duplicate real surfaceflinger service
+service surfaceflinger /system/bin/xxx
+    class core
+    oneshot
+    disabled
+
+#disable below services to solve AT current peaks issue start
+service zygote /system/bin/xxx
+    class main
+    user system
+    disabled
+
+service zygote_secondary /system/bin/xxx
+    class main
+    user root
+    group root readproc reserved_disk
+    disabled
+
+service vendor.cdsprpcd /vendor/bin/xxx
+    class main
+    user system
+    disabled
+
+service cameraserver /system/bin/xxx
+    class late_start
+    user cameraserver
+    disabled
+
+service iorapd /system/bin/xxx
+    class main
+    user iorapd
+    disabled
+
+service feature_enabler_client /vendor/bin/xxx
+    class late_start
+    user system
+    disabled
+
+service vendor.vppservice /vendor/bin/XXX
+    class hal
+    user media
+    group camera system
+    disabled
+
+service biometrics_face_service /vendor/bin/hw/xxx
+    class hal
+    user system
+    disabled
+#disable below services to solve AT current peaks issue end
+
+service oemasserttip /system/bin/xxx
+     class main
+     user system
+     disabled
+
+service vendor.oneplus.cwb-1-0 /vendor/bin/hw/xxx
+    oneshot
+    disabled
+
+service vendor.qti.hardware.display.composer /vendor/bin/hw/xxx
+    oneshot
+    disabled
+
+service vendor.light-hal-2-0 /vendor/bin/hw/xxx
+    oneshot
+    disabled
+
+service vendor.imsdaemon /vendor/bin/imsdaemon
+    class main
+    user radio
+    group radio wifi inet vendor_qti_diag log
+    disabled
+
+service audioserver /system/bin/xxx
+    class core
+    user audioserver
+    group audio camera drmrpc media mediadrm net_bt net_bt_admin net_bw_acct wakelock
+    disabled
+
+service pasr-hal /vendor/bin/hw/xxx
+    class hal
+    user system
+    group system
+    disabled
+
+service tcmd /system/system_ext/bin/xxx
+    class late_start
+    socket tcmd  stream 660 root inet
+    group system readproc inet radio wakelock oem_2901
+    user system
+    disabled
+
+service media.transcoding /apex/com.android.media/bin/xxx
+    class main
+    user media
+    group media
+    ioprio rt 4
+    task_profiles ProcessCapacityHigh HighPerformance
+    disabled
+
+service gnss_service /vendor/bin/hw/xxx
+    class hal
+    user gps
+    group system gps radio vendor_qti_diag
+    disabled
+
+service vendor.camera-provider-2-4 /vendor/bin/hw/xxx
+    interface android.hardware.camera.provider@2.4::ICameraProvider legacy/0
+    class hal
+    user cameraserver
+    group audio camera input drmrpc
+    disabled
+
+service vendor.ipacm /system/vendor/bin/xxx
+    class main
+    user radio
+    group radio inet
+    disabled
