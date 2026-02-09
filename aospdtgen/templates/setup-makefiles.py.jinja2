@@ -4,6 +4,15 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+import sys
+from pathlib import Path
+
+# Setup ANDROID_ROOT and add extract-utils to path
+MY_DIR = Path(__file__).resolve().parent
+ANDROID_ROOT = MY_DIR.parents[2]
+
+sys.path.insert(0, str(ANDROID_ROOT / 'tools' / 'extract-utils'))
+
 from extract_utils.extract import ExtractUtils, ExtractUtilsModule
 
 namespace_imports = [
