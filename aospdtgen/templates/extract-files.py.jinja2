@@ -1,19 +1,13 @@
-#!/usr/bin/env python3
+#!/usr/bin/env -S PYTHONPATH=../../../tools/extract-utils python3
 #
 # SPDX-FileCopyrightText: The LineageOS Project
 # SPDX-License-Identifier: Apache-2.0
 #
 
-import sys
-from pathlib import Path
-
-# Setup ANDROID_ROOT and add extract-utils to path
-MY_DIR = Path(__file__).resolve().parent
-ANDROID_ROOT = MY_DIR.parents[2]
-
-sys.path.insert(0, str(ANDROID_ROOT / 'tools' / 'extract-utils'))
-
-from extract_utils.main import ExtractUtils, ExtractUtilsModule
+from extract_utils.main import (
+    ExtractUtils,
+    ExtractUtilsModule,
+)
 
 namespace_imports = [
     'hardware/lineage/interfaces',
@@ -27,4 +21,5 @@ module = ExtractUtilsModule(
 )
 
 if __name__ == '__main__':
-    ExtractUtils.run(module)
+    utils = ExtractUtils.device(module)
+    utils.run()
