@@ -87,7 +87,7 @@ class BootConfiguration:
 	) -> Tuple[Optional[AIKManager], Optional[AIKImageInfo]]:
 		if not image:
 			return None, None
-		
+
 		aik_manager = AIKManager()
 		image_info = aik_manager.unpackimg(image, ignore_ramdisk_errors=True)
 

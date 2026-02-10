@@ -39,7 +39,7 @@ def dump_partition_build_prop(build_prop: BuildProp, destination_file_path: Path
 
 		if section_props:
 			section_to_props[section.name] = section_props
-	
+
 	# Add the non matched props to a "Miscellaneous" section
 	if filtered_build_props:
 		section_to_props["Miscellaneous"] = filtered_build_props
