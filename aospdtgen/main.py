@@ -25,13 +25,21 @@ def main():
 	parser.add_argument("-c", "--codename", type=str, default=None,
 	                    help="override the device codename (e.g., re5c33)")
 
+	extract_group = parser.add_mutually_exclusive_group()
+	extract_group.add_argument("--python", action="store_true", default=True,
+	                           help="generate Python-based extract scripts (LineageOS >= 23.0, default)")
+	extract_group.add_argument("--shell", action="store_true",
+	                           help="generate shell-based extract scripts (LineageOS <= 22.x)")
+
 	args = parser.parse_args()
+
+	# If --shell is specified, python should be False
+	extract_mode = "shell" if args.shell else "python"
 
 	setup_locale()
 
 	dump = DeviceTree(args.dump_path, codename_override=args.codename)
-	dump.dump_to_folder(args.output)
+	dump.dump_to_folder(args.output, extract_mode=extract_mode)
 	dump.cleanup()
 
 	print(f"\nDone! You can find the device tree in {str(args.output)}")
-
