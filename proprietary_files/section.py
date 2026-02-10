@@ -107,72 +107,84 @@ class Section:
 		if self.name == "Miscellaneous":
 			return True
 
-		# Interfaces
+		return (self._match_interfaces(file)
+		        or self._match_hardware_modules(file)
+		        or self._match_apexes(file)
+		        or self._match_apps(file)
+		        or self._match_binaries(file)
+		        or self._match_init_scripts(file)
+		        or self._match_libraries(file)
+		        or self._match_filenames(file)
+		        or self._match_folders(file)
+		        or self._match_patterns(file))
+
+	def _match_interfaces(self, file: Path):
+		"""Match files against known interfaces."""
 		for interface in self.interfaces:
-			# Service binary (we try)
 			if is_relative_to(file, "bin") and interface in file.name:
 				return True
-
-			# Service init script (we try)
 			if is_relative_to(file, "etc/init") and interface in file.name:
 				return True
-
-			# VINTF fragment (again, we try)
 			if is_relative_to(file, "etc/vintf/manifest") and interface in file.name:
 				return True
-
-			# Passthrough impl (only HIDL)
 			if (is_relative_to(file, "lib/hw") or is_relative_to(file, "lib64/hw")) and match(f"{interface}@[0-9]+\\.[0-9]+-impl\\.so", file.name):
 				return True
-
-			# Interface libs (AIDL and HIDL)
 			if (is_relative_to(file, "lib") or is_relative_to(file, "lib64")) and match(f"{interface}(@[0-9]+\\.[0-9]+|-).*\\.so", file.name):
 				return True
+		return False
 
-		# Hardware modules
+	def _match_hardware_modules(self, file: Path):
+		"""Match files against hardware module IDs."""
 		if is_relative_to(file, "lib/hw") or is_relative_to(file, "lib64/hw"):
 			for hardware_module in self.hardware_modules:
 				if file.name.startswith(f"{hardware_module}.") and file.suffix == ".so":
 					return True
+		return False
 
-		# APEXes
-		if is_relative_to(file, "apex") and file.suffix == ".apex" and file.stem in self.apexes:
-			return True
+	def _match_apexes(self, file: Path):
+		"""Match APEX files."""
+		return (is_relative_to(file, "apex")
+		        and file.suffix == ".apex"
+		        and file.stem in self.apexes)
 
-		# Apps
-		if is_relative_to(file, "app") or is_relative_to(file, "priv-app"):
-			if file.suffix == ".apk" and file.stem in self.apps:
-				return True
+	def _match_apps(self, file: Path):
+		"""Match app APK files."""
+		return ((is_relative_to(file, "app") or is_relative_to(file, "priv-app"))
+		        and file.suffix == ".apk"
+		        and file.stem in self.apps)
 
-		# Binaries
-		if is_relative_to(file, "bin") and file.name in self.binaries:
-			return True
+	def _match_binaries(self, file: Path):
+		"""Match binary files."""
+		return is_relative_to(file, "bin") and file.name in self.binaries
 
-		# Init scripts
+	def _match_init_scripts(self, file: Path):
+		"""Match init scripts for known binaries."""
 		if is_relative_to(file, "etc/init"):
 			for binary in self.binaries:
 				if match(f"(init)?(.)?{binary}\\.rc", file.name):
 					return True
+		return False
 
-		# Libraries
-		if is_relative_to(file, "lib/") or is_relative_to(file, "lib64/"):
-			if file.suffix == ".so" and file.stem in self.libraries:
-				return True
+	def _match_libraries(self, file: Path):
+		"""Match shared library files."""
+		return ((is_relative_to(file, "lib/") or is_relative_to(file, "lib64/"))
+		        and file.suffix == ".so"
+		        and file.stem in self.libraries)
 
-		# Filenames
-		if file.name in self.filenames:
-			return True
+	def _match_filenames(self, file: Path):
+		"""Match files by exact filename."""
+		return file.name in self.filenames
 
-		# Folders
+	def _match_folders(self, file: Path):
+		"""Match files by parent folder."""
 		for folder in [str(folder) for folder in file.parents]:
 			if folder in self.folders:
 				return True
-
-		# Patterns
-		if [pattern for pattern in self.patterns if match(pattern, str(file))]:
-			return True
-
 		return False
+
+	def _match_patterns(self, file: Path):
+		"""Match files against regex patterns."""
+		return any(match(pattern, str(file)) for pattern in self.patterns)
 
 	def property_match(self, prop: str):
 		"""Check if the property matches the prefixes."""

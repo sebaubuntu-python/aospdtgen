@@ -161,3 +161,8 @@ cython_debug/
 
 # Ignore output folder
 /output
+
+# Node.js (playwright, etc.)
+node_modules/
+package.json
+package-lock.json

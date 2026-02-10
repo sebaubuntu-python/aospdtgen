@@ -3,7 +3,6 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-from datetime import datetime
 from os import chmod
 from pathlib import Path
 from sebaubuntu_libs.libandroid.device_info import DeviceInfo
