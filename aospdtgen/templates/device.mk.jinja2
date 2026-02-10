@@ -42,11 +42,19 @@ PRODUCT_PACKAGES += \
     otapreopt_script
 
 {% endif %}
-{% if device_info.board_shipping_api_level
+{% if device_info.board_api_level
+      or device_info.board_shipping_api_level
       or device_info.first_api_level %}
 # API levels
 {% if device_info.board_shipping_api_level %}
 BOARD_SHIPPING_API_LEVEL := {{ device_info.board_shipping_api_level }}
+{% endif %}
+{% if device_info.board_api_level %}
+{% if platform_sdk_version >= 36 %}
+# BOARD_API_LEVEL is not allowed in Android 16+ (SDK {{ platform_sdk_version }}), skipped
+{% else %}
+BOARD_API_LEVEL := {{ device_info.board_api_level }}
+{% endif %}
 {% endif %}
 {% if device_info.first_api_level %}
 PRODUCT_SHIPPING_API_LEVEL := {{ device_info.first_api_level }}

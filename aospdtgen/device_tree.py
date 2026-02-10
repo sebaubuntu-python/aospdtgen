@@ -10,7 +10,7 @@ from sebaubuntu_libs.libandroid.device_info import DeviceInfo
 from sebaubuntu_libs.libandroid.fstab import Fstab
 from sebaubuntu_libs.libandroid.partitions.partitions import Partitions
 from sebaubuntu_libs.libandroid.props import BuildProp
-from sebaubuntu_libs.liblogging import LOGI
+from sebaubuntu_libs.liblogging import LOGI, LOGW
 from sebaubuntu_libs.libpath import is_relative_to
 from sebaubuntu_libs.libreorder import strcoll_files_key
 from shutil import rmtree
@@ -43,6 +43,14 @@ class DeviceTree:
 		if codename_override:
 			LOGI(f"Overriding codename: {self.device_info.codename} -> {codename_override}")
 			self.device_info.codename = codename_override
+
+		# Detect platform SDK version
+		self.platform_sdk_version = int(
+			self.build_prop.get_prop("ro.build.version.sdk") or "0"
+		)
+		if self.platform_sdk_version >= 36 and self.device_info.board_api_level:
+			LOGW(f"Android 16+ (SDK {self.platform_sdk_version}) detected: "
+			     f"BOARD_API_LEVEL will be skipped (not allowed in Android 16+)")
 
 		LOGI("Parsing fstab")
 		fstabs = [
@@ -168,6 +176,7 @@ class DeviceTree:
 			comment_prefix=comment_prefix,
 			device_info=self.device_info,
 			fstab=self.fstab,
+			platform_sdk_version=self.platform_sdk_version,
 			rootdir_bin_files=self.rootdir_bin_files,
 			rootdir_etc_files=self.rootdir_etc_files,
 			rootdir_recovery_etc_files=self.rootdir_recovery_etc_files,
