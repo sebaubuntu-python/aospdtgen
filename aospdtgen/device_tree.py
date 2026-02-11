@@ -105,16 +105,16 @@ class DeviceTree:
         self._render_template(folder, "AndroidProducts.mk")
         self._render_template(folder, "BoardConfig.mk")
         self._render_template(folder, "device.mk")
-        self._render_template(folder, "extract-files.sh")
+        self._render_template(folder, "extract-files.py")
         self._render_template(
             folder, "lineage_device.mk", out_file=f"lineage_{self.device_info.codename}.mk"
         )
         self._render_template(folder, "README.md")
-        self._render_template(folder, "setup-makefiles.sh")
+        self._render_template(folder, "setup-makefiles.py")
 
         # Set permissions
-        chmod(folder / "extract-files.sh", S_IRWXU | S_IRGRP | S_IROTH)
-        chmod(folder / "setup-makefiles.sh", S_IRWXU | S_IRGRP | S_IROTH)
+        chmod(folder / "extract-files.py", S_IRWXU | S_IRGRP | S_IROTH)
+        chmod(folder / "setup-makefiles.py", S_IRWXU | S_IRGRP | S_IROTH)
 
         # Proprietary files list
         (folder / "proprietary-files.txt").write_text(
