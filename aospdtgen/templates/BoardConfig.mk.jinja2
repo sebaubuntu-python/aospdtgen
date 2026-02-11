@@ -193,7 +193,9 @@ BOARD_AVB_VENDOR_KERNEL_BOOT_ROLLBACK_INDEX_LOCATION := 1
 {% endif %}
 # VINTF
 DEVICE_MANIFEST_FILE += $(DEVICE_PATH)/manifest.xml
+{% if proprietary_files_list is not none %}
 
 # Inherit the proprietary files
 include vendor/{{ device_info.manufacturer }}/{{ device_info.codename }}/BoardConfigVendor.mk
+{% endif %}
 

@@ -20,12 +20,17 @@ def main():
     parser.add_argument(
         "-o", "--output", type=Path, default=current_path / "output", help="custom output folder"
     )
+    parser.add_argument(
+        "--no-proprietary-files",
+        action="store_true",
+        help="Don't generate the proprietary files list and the extract-files script",
+    )
 
     args = parser.parse_args()
 
     setup_locale()
 
-    dump = DeviceTree(args.dump_path)
+    dump = DeviceTree(args.dump_path, no_proprietary_files=args.no_proprietary_files)
     dump.dump_to_folder(args.output)
     dump.cleanup()
 

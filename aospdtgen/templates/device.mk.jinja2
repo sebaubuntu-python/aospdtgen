@@ -117,7 +117,9 @@ PRODUCT_COPY_FILES += \
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
     $(LOCAL_PATH)
+{% if proprietary_files_list is not none %}
 
 # Inherit the proprietary files
 $(call inherit-product, vendor/{{ device_info.manufacturer }}/{{ device_info.codename }}/{{ device_info.codename }}-vendor.mk)
+{% endif %}
 

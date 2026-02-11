@@ -14,6 +14,7 @@ from sebaubuntu_libs.libpath import is_relative_to
 from sebaubuntu_libs.libreorder import strcoll_files_key
 from shutil import rmtree
 from stat import S_IRWXU, S_IRGRP, S_IROTH
+from typing import Optional
 
 from aospdtgen.proprietary_files.proprietary_files_list import ProprietaryFilesList
 from aospdtgen.templates import render_template
@@ -24,7 +25,7 @@ from aospdtgen.utils.format_props import dump_partition_build_prop
 class DeviceTree:
     """Class representing an Android device tree."""
 
-    def __init__(self, path: Path):
+    def __init__(self, path: Path, no_proprietary_files: bool = False):
         """Given a path to a dumpyara dump path, generate a device tree by parsing it."""
         self.path = path
 
@@ -88,10 +89,12 @@ class DeviceTree:
         ]
         self.rootdir_recovery_etc_files.sort(key=strcoll_files_key)
 
-        LOGI("Generating proprietary files list")
-        self.proprietary_files_list = ProprietaryFilesList(
-            [value for value in self.partitions.get_all_partitions()]
-        )
+        self.proprietary_files_list: Optional[ProprietaryFilesList] = None
+        if not no_proprietary_files:
+            LOGI("Generating proprietary files list")
+            self.proprietary_files_list = ProprietaryFilesList(
+                [value for value in self.partitions.get_all_partitions()]
+            )
 
     def dump_to_folder(self, folder: Path):
         """Dump all makefiles, blueprint and prebuilts to a folder."""
@@ -105,22 +108,22 @@ class DeviceTree:
         self._render_template(folder, "AndroidProducts.mk")
         self._render_template(folder, "BoardConfig.mk")
         self._render_template(folder, "device.mk")
-        self._render_template(folder, "extract-files.py")
         self._render_template(
             folder, "lineage_device.mk", out_file=f"lineage_{self.device_info.codename}.mk"
         )
         self._render_template(folder, "README.md")
-        self._render_template(folder, "setup-makefiles.py")
 
-        # Set permissions
-        chmod(folder / "extract-files.py", S_IRWXU | S_IRGRP | S_IROTH)
-        chmod(folder / "setup-makefiles.py", S_IRWXU | S_IRGRP | S_IROTH)
+        # Proprietary files list and extract utils
+        if self.proprietary_files_list:
+            self._render_template(folder, "extract-files.py")
+            self._render_template(folder, "setup-makefiles.py")
+            chmod(folder / "extract-files.py", S_IRWXU | S_IRGRP | S_IROTH)
+            chmod(folder / "setup-makefiles.py", S_IRWXU | S_IRGRP | S_IROTH)
 
-        # Proprietary files list
-        (folder / "proprietary-files.txt").write_text(
-            self.proprietary_files_list.get_formatted_list(self.device_info.build_description),
-            encoding="utf-8",
-        )
+            (folder / "proprietary-files.txt").write_text(
+                self.proprietary_files_list.get_formatted_list(self.device_info.build_description),
+                encoding="utf-8",
+            )
 
         # Dump build props
         for partition in self.partitions.get_all_partitions():
@@ -173,6 +176,7 @@ class DeviceTree:
             comment_prefix=comment_prefix,
             device_info=self.device_info,
             fstab=self.fstab,
+            proprietary_files_list=self.proprietary_files_list,
             rootdir_bin_files=self.rootdir_bin_files,
             rootdir_etc_files=self.rootdir_etc_files,
             rootdir_recovery_etc_files=self.rootdir_recovery_etc_files,

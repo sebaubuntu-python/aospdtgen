@@ -18,19 +18,20 @@ pip install aospdtgen
 ## Instructions
 
 ```
-$ python3 -m aospdtgen -h
-Android device tree generator
-Version 0.1.0
+$ python -m aospdtgen --help
+usage: python -m aospdtgen [-h] [-o OUTPUT] [--no-proprietary-files] dump_path
 
-usage: python3 -m aospdtgen [-h] [-o OUTPUT] dump_path
+Android device tree generator
 
 positional arguments:
   dump_path             path to an Android dump made with dumpyara
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
-  -o OUTPUT, --output OUTPUT
-                        custom output folder
+  -o, --output OUTPUT   custom output folder
+  --no-proprietary-files
+                        Don't generate the proprietary files list and the
+                        extract-files script
 ```
 
 ## License
