@@ -8,16 +8,13 @@ from pathlib import Path
 from sebaubuntu_libs.liblocale import setup_locale
 from sebaubuntu_libs.liblogging import setup_logging
 
-from aospdtgen import __version__ as version, current_path
+from aospdtgen import current_path
 from aospdtgen.device_tree import DeviceTree
 
 def main():
 	setup_logging()
 
-	print(f"Android device tree generator\n"
-	      f"Version {version}\n")
-
-	parser = ArgumentParser(prog='python3 -m aospdtgen')
+	parser = ArgumentParser(description="Android device tree generator")
 	parser.add_argument("dump_path", type=Path,
 	                    help="path to an Android dump made with dumpyara")
 	parser.add_argument("-o", "--output", type=Path, default=current_path / "output",
