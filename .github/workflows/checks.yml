@@ -1,0 +1,58 @@
+#
+# SPDX-FileCopyrightText: The LineageOS Project
+# SPDX-License-Identifier: Apache-2.0
+#
+
+name: checks
+
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  ruff-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: ruff check
+        uses: astral-sh/ruff-action@v3
+
+  ruff-format:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: ruff check
+        uses: astral-sh/ruff-action@v3
+        with:
+          args: "format --check --diff"
+
+  pyright:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install Poetry
+        shell: bash
+        run: pipx install poetry
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          cache: 'poetry'
+
+      - name: Install dependencies
+        shell: bash
+        run: poetry install
+
+      - name: Add Poetry to PATH
+        shell: bash
+        run: echo "$(poetry env info --path)/bin" >> $GITHUB_PATH
+
+      - name: pyright
+        uses: jakebailey/pyright-action@v2
