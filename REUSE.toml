@@ -1,0 +1,15 @@
+#
+# SPDX-FileCopyrightText: The LineageOS Project
+# SPDX-License-Identifier: Apache-2.0
+#
+
+version = 1
+SPDX-PackageName = "aospdtgen"
+SPDX-PackageSupplier = "The LineageOS Project"
+SPDX-PackageDownloadLocation = "https://github.com/sebaubuntu-python/aospdtgen"
+
+[[annotations]]
+path = ["aospdtgen/templates/*.jinja2", "poetry.lock"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "The LineageOS Project"
+SPDX-License-Identifier = "Apache-2.0"

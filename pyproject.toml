@@ -1,3 +1,8 @@
+#
+# SPDX-FileCopyrightText: The LineageOS Project
+# SPDX-License-Identifier: Apache-2.0
+#
+
 [tool.poetry]
 name = "aospdtgen"
 version = "1.2.0"
