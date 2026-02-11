@@ -8,7 +8,7 @@ from pathlib import Path
 
 from aospdtgen.proprietary_files.section import register_sections
 
-__version__ = "1.2.0"
+__version__ = "1.2.1"
 
 module_path = Path(__file__).parent
 sections_path = module_path / "proprietary_files" / "sections"

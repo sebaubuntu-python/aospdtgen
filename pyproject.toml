@@ -5,7 +5,7 @@
 
 [tool.poetry]
 name = "aospdtgen"
-version = "1.2.0"
+version = "1.2.1"
 description = "Create an Android device tree from a device dump"
 authors = ["Sebastiano Barezzi <seba@sebaubuntu.dev>"]
 license = "Apache-2.0"
