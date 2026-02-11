@@ -5,10 +5,12 @@
 
 from aospdtgen.proprietary_files.section import Section, register_section
 
+
 class QxrSection(Section):
-	name = "QXR"
-	interfaces = [
-		"vendor.qti.hardware.qxr",
-	]
+    name = "QXR"
+    interfaces = [
+        "vendor.qti.hardware.qxr",
+    ]
+
 
 register_section(QxrSection)

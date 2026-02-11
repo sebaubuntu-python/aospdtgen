@@ -28,13 +28,19 @@ IGNORED_PROPS.extend(get_partition_props("ro.{}build.version.all_codenames", add
 IGNORED_PROPS.extend(get_partition_props("ro.{}build.version.base_os", add_empty=True))
 IGNORED_PROPS.extend(get_partition_props("ro.{}build.version.codename", add_empty=True))
 IGNORED_PROPS.extend(get_partition_props("ro.{}build.version.incremental", add_empty=True))
-IGNORED_PROPS.extend(get_partition_props("ro.{}build.version.min_supported_target_sdk", add_empty=True))
+IGNORED_PROPS.extend(
+    get_partition_props("ro.{}build.version.min_supported_target_sdk", add_empty=True)
+)
 IGNORED_PROPS.extend(get_partition_props("ro.{}build.version.preview_sdk", add_empty=True))
-IGNORED_PROPS.extend(get_partition_props("ro.{}build.version.preview_sdk_fingerprint", add_empty=True))
+IGNORED_PROPS.extend(
+    get_partition_props("ro.{}build.version.preview_sdk_fingerprint", add_empty=True)
+)
 IGNORED_PROPS.extend(get_partition_props("ro.{}build.version.known_codenames", add_empty=True))
 IGNORED_PROPS.extend(get_partition_props("ro.{}build.version.release", add_empty=True))
 IGNORED_PROPS.extend(get_partition_props("ro.{}build.version.release_or_codename", add_empty=True))
-IGNORED_PROPS.extend(get_partition_props("ro.{}build.version.release_or_preview_display", add_empty=True))
+IGNORED_PROPS.extend(
+    get_partition_props("ro.{}build.version.release_or_preview_display", add_empty=True)
+)
 IGNORED_PROPS.extend(get_partition_props("ro.{}build.version.sdk", add_empty=True))
 IGNORED_PROPS.extend(get_partition_props("ro.{}build.version.security_patch", add_empty=True))
 

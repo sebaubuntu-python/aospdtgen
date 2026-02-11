@@ -5,22 +5,24 @@
 
 from aospdtgen.proprietary_files.section import Section, register_section
 
+
 class NeuralNetworksSection(Section):
-	name = "Neural networks"
-	interfaces = [
-		"android.hardware.neuralnetworks",
-		"vendor.mediatek.hardware.mmagent",
-	]
-	binaries = [
-		"nn_device_test",
-		"npu_launcher",
-	]
-	libraries = [
-		"libhexagon_nn_stub",
-	]
-	patterns = [
-		"lib(64)?/libhta(_.*.)?\.so",
-		"lib(64)?/unnhal.*.\.so",
-	]
+    name = "Neural networks"
+    interfaces = [
+        "android.hardware.neuralnetworks",
+        "vendor.mediatek.hardware.mmagent",
+    ]
+    binaries = [
+        "nn_device_test",
+        "npu_launcher",
+    ]
+    libraries = [
+        "libhexagon_nn_stub",
+    ]
+    patterns = [
+        "lib(64)?/libhta(_.*.)?\.so",
+        "lib(64)?/unnhal.*.\.so",
+    ]
+
 
 register_section(NeuralNetworksSection)

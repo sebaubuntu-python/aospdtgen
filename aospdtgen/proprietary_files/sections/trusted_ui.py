@@ -5,21 +5,23 @@
 
 from aospdtgen.proprietary_files.section import Section, register_section
 
+
 class TrustedUiSection(Section):
-	name = "Trusted UI"
-	interfaces = [
-		"vendor.qti.hardware.trustedui",
-		"vendor.qti.hardware.tui_comm",
-		"vendor.trustonic.tee.tui",
-	]
-	binaries = [
-		"TrustedUISampleTest",
-	]
-	libraries = [
-		"libTrustedUI",
-		"libTrustedUIAIDL",
-		"libTrustedUITZ",
-		"libTrustedUIVM",
-	]
+    name = "Trusted UI"
+    interfaces = [
+        "vendor.qti.hardware.trustedui",
+        "vendor.qti.hardware.tui_comm",
+        "vendor.trustonic.tee.tui",
+    ]
+    binaries = [
+        "TrustedUISampleTest",
+    ]
+    libraries = [
+        "libTrustedUI",
+        "libTrustedUIAIDL",
+        "libTrustedUITZ",
+        "libTrustedUIVM",
+    ]
+
 
 register_section(TrustedUiSection)

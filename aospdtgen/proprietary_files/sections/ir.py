@@ -5,13 +5,15 @@
 
 from aospdtgen.proprietary_files.section import Section, register_section
 
+
 class IrSection(Section):
-	name = "IR"
-	interfaces = [
-		"android.hardware.ir",
-	]
-	hardware_modules = [
-		"consumerir",
-	]
+    name = "IR"
+    interfaces = [
+        "android.hardware.ir",
+    ]
+    hardware_modules = [
+        "consumerir",
+    ]
+
 
 register_section(IrSection)
