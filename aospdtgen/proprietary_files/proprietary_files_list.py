@@ -4,7 +4,7 @@
 #
 
 from sebaubuntu_libs.libandroid.partitions.partition import AndroidPartition
-from sebaubuntu_libs.libandroid.partitions.partition_model import TREBLE
+from sebaubuntu_libs.libandroid.partitions.partition_model import PartitionGroup
 from typing import List, Optional
 
 from aospdtgen.proprietary_files.ignore import is_blob_allowed
@@ -33,7 +33,7 @@ class ProprietaryFilesList:
             for section in self.sections:
                 files = section.add_files(files, partition)
 
-            if partition.model.group != TREBLE:
+            if partition.model.group != PartitionGroup.TREBLE:
                 continue
 
             misc_section.add_files(files, partition)
