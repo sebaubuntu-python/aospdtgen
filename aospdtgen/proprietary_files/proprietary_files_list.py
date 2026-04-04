@@ -5,8 +5,8 @@
 
 from pathlib import Path
 from sebaubuntu_libs.libandroid.partitions.partition import AndroidPartition
-from sebaubuntu_libs.libandroid.partitions.partition_model import PartitionGroup
-from typing import List, Optional
+from sebaubuntu_libs.libreorder import strcoll_files_key
+from typing import Dict, List, Optional
 
 from aospdtgen.proprietary_files.ignore import is_blob_allowed
 from aospdtgen.proprietary_files.section import Section, sections
@@ -19,8 +19,7 @@ class ProprietaryFilesList:
         """Initialize a new ProprietaryFilesList object."""
         self.partitions = partitions
 
-        self.sections = sections
-        misc_section = Section()
+        self.section_to_files: Dict[Section, List[Path]] = {section: [] for section in sections}
 
         for partition in self.partitions:
             files: List[Path] = []
@@ -31,15 +30,15 @@ class ProprietaryFilesList:
                 if is_blob_allowed(file_relative):
                     files.append(file)
 
-            for section in self.sections:
-                files = section.add_files(files, partition)
+            for section in sections:
+                matched, not_matched = section.add_files(files, partition)
 
-            if partition.model.group != PartitionGroup.TREBLE:
-                continue
+                self.section_to_files[section].extend(
+                    partition.model.proprietary_files_prefix / file.relative_to(partition.path)
+                    for file in matched
+                )
 
-            misc_section.add_files(files, partition)
-
-        self.sections.append(misc_section)
+                files = not_matched
 
     def __str__(self) -> str:
         return self.get_formatted_list()
@@ -49,12 +48,16 @@ class ProprietaryFilesList:
         if build_description:
             result += f"# Unpinned blobs from {build_description}\n"
 
-        for section in self.sections:
-            if not section.files:
+        for section, files in self.section_to_files.items():
+            if not files:
                 continue
 
             result += f"\n# {section.name}\n"
-            result += "\n".join(str(file) for file in section.get_files())
+            result += "\n".join(str(file) for file in self._sort_files(files))
             result += "\n"
 
         return result
+
+    @staticmethod
+    def _sort_files(files: List[Path]) -> List[Path]:
+        return sorted(files, key=strcoll_files_key)

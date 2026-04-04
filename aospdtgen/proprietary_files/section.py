@@ -12,9 +12,8 @@ from sebaubuntu_libs.libandroid.partitions.partition import AndroidPartition
 from sebaubuntu_libs.libexception import format_exception
 from sebaubuntu_libs.liblogging import LOGE
 from sebaubuntu_libs.libpath import is_relative_to
-from sebaubuntu_libs.libreorder import strcoll_files_key
 from sebaubuntu_libs.libstring import removesuffix
-from typing import Dict, List, Type
+from typing import Dict, List, Tuple, Type
 
 from aospdtgen.proprietary_files.elf import get_shared_libs
 
@@ -22,7 +21,7 @@ from aospdtgen.proprietary_files.elf import get_shared_libs
 class Section:
     """Class representing a proprietary files list section."""
 
-    name: str = "Miscellaneous"
+    name: str
     """Name of the section"""
     interfaces: List[str] = []
     """List of interfaces"""
@@ -45,17 +44,22 @@ class Section:
     properties_prefixes: Dict[str, bool] = {}
     """List of properties prefix to whether it's an exact match"""
 
-    def __init__(self):
-        """Initialize the section."""
-        self.files: List[Path] = []
-
-    def add_files(self, files: List[Path], partition: AndroidPartition):
+    @classmethod
+    def add_files(
+        cls,
+        files: List[Path],
+        partition: AndroidPartition,
+    ) -> Tuple[List[Path], List[Path]]:
+        """
+        Return the list of files matching the section and the list of files not matching the section
+        (after handling shared libs for the matched files).
+        """
         matched: List[Path] = []
         not_matched: List[Path] = []
 
         for file in files:
             file_relative = file.relative_to(partition.path)
-            (matched if self.file_match(file_relative) else not_matched).append(file)
+            (matched if cls.file_match(file_relative) else not_matched).append(file)
 
         # Handle shared libs
         for file in matched:
@@ -95,24 +99,12 @@ class Section:
                     not_matched.remove(file)
                     matched.append(file)
 
-        self.files.extend(
-            partition.model.proprietary_files_prefix / file.relative_to(partition.path)
-            for file in matched
-        )
+        return (matched, not_matched)
 
-        return not_matched
-
-    def get_files(self):
-        """Returns the ordered list of files."""
-        self.files.sort(key=strcoll_files_key)
-        return self.files
-
-    def file_match(self, file: Path):
-        if self.name == "Miscellaneous":
-            return True
-
+    @classmethod
+    def file_match(cls, file: Path):
         # Interfaces
-        for interface in self.interfaces:
+        for interface in cls.interfaces:
             # Service binary (we try)
             if is_relative_to(file, "bin") and interface in file.name:
                 return True
@@ -139,52 +131,53 @@ class Section:
 
         # Hardware modules
         if is_relative_to(file, "lib/hw") or is_relative_to(file, "lib64/hw"):
-            for hardware_module in self.hardware_modules:
+            for hardware_module in cls.hardware_modules:
                 if file.name.startswith(f"{hardware_module}.") and file.suffix == ".so":
                     return True
 
         # APEXes
-        if is_relative_to(file, "apex") and file.suffix == ".apex" and file.stem in self.apexes:
+        if is_relative_to(file, "apex") and file.suffix == ".apex" and file.stem in cls.apexes:
             return True
 
         # Apps
         if is_relative_to(file, "app") or is_relative_to(file, "priv-app"):
-            if file.suffix == ".apk" and file.stem in self.apps:
+            if file.suffix == ".apk" and file.stem in cls.apps:
                 return True
 
         # Binaries
-        if is_relative_to(file, "bin") and file.name in self.binaries:
+        if is_relative_to(file, "bin") and file.name in cls.binaries:
             return True
 
         # Init scripts
         if is_relative_to(file, "etc/init"):
-            for binary in self.binaries:
+            for binary in cls.binaries:
                 if match(f"(init)?(.)?{binary}\\.rc", file.name):
                     return True
 
         # Libraries
         if is_relative_to(file, "lib/") or is_relative_to(file, "lib64/"):
-            if file.suffix == ".so" and file.stem in self.libraries:
+            if file.suffix == ".so" and file.stem in cls.libraries:
                 return True
 
         # Filenames
-        if file.name in self.filenames:
+        if file.name in cls.filenames:
             return True
 
         # Folders
         for folder in [str(folder) for folder in file.parents]:
-            if folder in self.folders:
+            if folder in cls.folders:
                 return True
 
         # Patterns
-        if [pattern for pattern in self.patterns if match(pattern, str(file))]:
+        if [pattern for pattern in cls.patterns if match(pattern, str(file))]:
             return True
 
         return False
 
-    def property_match(self, prop: str):
+    @classmethod
+    def property_match(cls, prop: str):
         """Check if the property matches the prefixes."""
-        for prefix, exact_match in self.properties_prefixes.items():
+        for prefix, exact_match in cls.properties_prefixes.items():
             if prop == prefix if exact_match else prop.startswith(prefix):
                 return True
 
@@ -215,3 +208,8 @@ def register_sections(sections_path: Path):
             import_module(f"aospdtgen.proprietary_files.sections.{section_name}")
         except Exception as e:
             LOGE(f"Error importing section {section_name}:\n{format_exception(e)}")
+
+    # After all sections are registered, now register miscellaneous section
+    from aospdtgen.proprietary_files.sections.miscellaneous import MiscellaneousSection
+
+    register_section(MiscellaneousSection)
