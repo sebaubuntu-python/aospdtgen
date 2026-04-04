@@ -28,7 +28,7 @@ class GnssSection(Section):
         "xtwifi-inet-agent",
     ]
     patterns = [
-        "etc/init/mtk_agps.*\.rc",
+        r"etc/init/mtk_agps.*\.rc",
     ]
     properties_prefixes = {
         "persist.sys.gps.": False,

@@ -59,12 +59,12 @@ class AudioConfigsSection(Section):
         "etc/audio",
     ]
     patterns = [
-        "etc/audio_configs.*\.xml",
-        "etc/audio_effects.*\.(conf|xml)",
-        "etc/audio_platform_info.*\.xml",
-        "etc/.*audio_policy.*\.xml",
-        "etc/mixer_paths.*\.xml",
-        "etc/sound_trigger_.*\.xml",
+        r"etc/audio_configs.*\.xml",
+        r"etc/audio_effects.*\.(conf|xml)",
+        r"etc/audio_platform_info.*\.xml",
+        r"etc/.*audio_policy.*\.xml",
+        r"etc/mixer_paths.*\.xml",
+        r"etc/sound_trigger_.*\.xml",
     ]
 
 
@@ -77,7 +77,7 @@ class AudioCalibrationSection(Section):
         "etc/spatializer",
     ]
     patterns = [
-        "(.*/)?firmware/tfa98xx\..*",
+        r"(.*/)?firmware/tfa98xx\..*",
     ]
 
 

@@ -23,7 +23,7 @@ class SensorsSection(Section):
         "sscrpcd",
     ]
     patterns = [
-        "lib(64)?/sensors\..*\.so",
+        r"lib(64)?/sensors\..*\.so",
     ]
     properties_prefixes = {
         "persist.vendor.sensor.": False,

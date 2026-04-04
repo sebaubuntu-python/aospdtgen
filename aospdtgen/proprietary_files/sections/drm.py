@@ -60,7 +60,7 @@ class DrmFirmwareSection(Section):
         "etc/firmware/drm",
     ]
     patterns = [
-        "(.*/)?firmware/widevine\..*",
+        r"(.*/)?firmware/widevine\..*",
     ]
 
 

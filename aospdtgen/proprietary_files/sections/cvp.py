@@ -16,8 +16,8 @@ class CvpSection(Section):
 class CvpFirmwareSection(Section):
     name = "CVP firmware"
     patterns = [
-        "(.*/)?firmware/evass\..*",
-        "(.*/)?firmware/evass-lt\..*",
+        r"(.*/)?firmware/evass\..*",
+        r"(.*/)?firmware/evass-lt\..*",
     ]
 
 

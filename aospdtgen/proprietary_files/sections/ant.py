@@ -18,7 +18,7 @@ class AntSection(Section):
 class AntFirmwareSection(Section):
     name = "ANT firmware"
     patterns = [
-        "(.*/)?firmware/antdtx\..*",
+        r"(.*/)?firmware/antdtx\..*",
     ]
 
 

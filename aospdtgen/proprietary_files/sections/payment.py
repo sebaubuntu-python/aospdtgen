@@ -42,19 +42,19 @@ class PaymentXiaomiSection(Section):
         "vendor.xiaomi.hardware.tidaservice",
     ]
     patterns = [
-        "bin/fidoca(@[0-9]+\.[0-9]+)?$",
-        "bin/mlipayd(@[0-9]+\.[0-9]+)?$",
-        "bin/mtd(@[0-9]+\.[0-9]+)?$",
-        "bin/tidad(@[0-9]+\.[0-9]+)?$",
+        r"bin/fidoca(@[0-9]+\.[0-9]+)?$",
+        r"bin/mlipayd(@[0-9]+\.[0-9]+)?$",
+        r"bin/mtd(@[0-9]+\.[0-9]+)?$",
+        r"bin/tidad(@[0-9]+\.[0-9]+)?$",
     ]
 
 
 class PaymentFirmwareSection(Section):
     name = "Payment firmware"
     patterns = [
-        "(.*/)?firmware/alipay\..*",
-        "(.*/)?firmware/fidoctap\..*",
-        "(.*/)?firmware/fidotap\..*",
+        r"(.*/)?firmware/alipay\..*",
+        r"(.*/)?firmware/fidoctap\..*",
+        r"(.*/)?firmware/fidotap\..*",
     ]
 
 

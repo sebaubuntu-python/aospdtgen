@@ -27,9 +27,9 @@ class VibratorFirmwareSection(Section):
         "etc/vibrator",
     ]
     patterns = [
-        "(.*/)?firmware/.*(rtp|RTP)\.bin",
-        "(.*/)?firmware/aw8622x.*\.bin",
-        "(.*/)?firmware/aw8697.*\.bin",
+        r"(.*/)?firmware/.*(rtp|RTP)\.bin",
+        r"(.*/)?firmware/aw8622x.*\.bin",
+        r"(.*/)?firmware/aw8697.*\.bin",
     ]
 
 

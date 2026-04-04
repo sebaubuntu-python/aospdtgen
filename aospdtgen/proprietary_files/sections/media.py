@@ -27,10 +27,10 @@ class MediaSection(Section):
         "mediacodec.policy",
     ]
     patterns = [
-        "etc/seccomp_policy/codec2.vendor.*.-arm\.policy",
-        "lib(64)?/libMtkOmx.*\.so",
-        "lib(64)?/libOmx.*\.so",
-        "lib(64)?/libstagefright.*\.so",
+        r"etc/seccomp_policy/codec2.vendor.*.-arm\.policy",
+        r"lib(64)?/libMtkOmx.*\.so",
+        r"lib(64)?/libOmx.*\.so",
+        r"lib(64)?/libstagefright.*\.so",
     ]
     properties_prefixes = {
         "debug.stagefright.": False,
@@ -58,7 +58,7 @@ class MediaDolbySection(Section):
         "etc/dolby",
     ]
     patterns = [
-        "lib(64)?/libdolby.*\.so",
+        r"lib(64)?/libdolby.*\.so",
     ]
     properties_prefixes = {
         "ro.vendor.dolby.": False,
@@ -75,8 +75,8 @@ class MediaOZOAudioSection(Section):
 class MediaConfigsSection(Section):
     name = "Media configs"
     patterns = [
-        "etc/media_codecs.*\.xml",
-        "etc/media_profiles.*\.xml",
+        r"etc/media_codecs.*\.xml",
+        r"etc/media_profiles.*\.xml",
     ]
 
 

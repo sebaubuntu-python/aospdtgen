@@ -23,7 +23,7 @@ class GatekeeperSection(Section):
         "libSoftGatekeeper",
     ]
     patterns = [
-        "etc/init/microtrust.*\.rc",
+        r"etc/init/microtrust.*\.rc",
     ]
     properties_prefixes = {
         "vendor.gatekeeper.": False,

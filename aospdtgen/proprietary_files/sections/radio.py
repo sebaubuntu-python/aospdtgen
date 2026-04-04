@@ -73,9 +73,9 @@ class RadioSection(Section):
         "radio/qcril_database",
     ]
     patterns = [
-        "etc/init/init.ccci.*\.rc",
-        "etc/init/data.*.\.rc",
-        "etc/seccomp_policy/atfwd(@[0-9]+\.[0-9]+)?.policy",
+        r"etc/init/init.ccci.*\.rc",
+        r"etc/init/data.*.\.rc",
+        r"etc/seccomp_policy/atfwd(@[0-9]+\.[0-9]+)?.policy",
     ]
     properties_prefixes = {
         "persist.radio.": False,
@@ -139,7 +139,7 @@ class RadioImsSection(Section):
         "init.wod.rc",
     ]
     patterns = [
-        "lib(64)?/lib-ims.*.\.so",
+        r"lib(64)?/lib-ims.*.\.so",
     ]
     properties_prefixes = {
         "persist.vendor.ims.": False,

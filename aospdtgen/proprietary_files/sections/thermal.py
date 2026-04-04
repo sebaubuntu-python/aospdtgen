@@ -43,7 +43,7 @@ class ThermalConfigsSection(Section):
     name = "Thermal configs"
     folders = ["etc/temperature_profile"]
     patterns = [
-        "etc/thermal.*.\.conf",
+        r"etc/thermal.*.\.conf",
     ]
 
 

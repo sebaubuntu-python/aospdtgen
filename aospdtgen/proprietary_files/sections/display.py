@@ -91,7 +91,7 @@ class DisplayPixelworksSection(Section):
         "vendor.pixelworks.hardware.feature.irisfeature",
     ]
     patterns = [
-        "(.*/)?firmware/pxlw_.*\..*",
+        r"(.*/)?firmware/pxlw_.*\..*",
     ]
 
 
@@ -102,9 +102,9 @@ class DisplayConfigsSection(Section):
         "etc/inparm",
     ]
     patterns = [
-        "etc/ltm_*",
-        "etc/mdss_*",
-        "etc/qdcm_*",
+        r"etc/ltm_*",
+        r"etc/mdss_*",
+        r"etc/qdcm_*",
     ]
 
 
@@ -114,8 +114,8 @@ class DisplayFirmwareSection(Section):
         "gpu/kbc",
     ]
     patterns = [
-        "(.*/)?firmware/a[0-9]+_.*\..*",
-        "(.*/)?firmware/iris.*\..*",
+        r"(.*/)?firmware/a[0-9]+_.*\..*",
+        r"(.*/)?firmware/iris.*\..*",
     ]
 
 

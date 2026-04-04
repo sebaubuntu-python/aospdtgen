@@ -30,7 +30,7 @@ class WifiDisplaySection(Section):
         "wifidisplayhalservice.policy",
     ]
     patterns = [
-        "etc/seccomp_policy/wfd.*.service\.policy",
+        r"etc/seccomp_policy/wfd.*.service\.policy",
     ]
     properties_prefixes = {
         "persist.debug.wfd.": False,

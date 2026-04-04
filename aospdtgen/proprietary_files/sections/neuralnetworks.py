@@ -20,8 +20,8 @@ class NeuralNetworksSection(Section):
         "libhexagon_nn_stub",
     ]
     patterns = [
-        "lib(64)?/libhta(_.*.)?\.so",
-        "lib(64)?/unnhal.*.\.so",
+        r"lib(64)?/libhta(_.*.)?\.so",
+        r"lib(64)?/unnhal.*.\.so",
     ]
 
 

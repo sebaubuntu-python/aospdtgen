@@ -62,16 +62,16 @@ class CameraSection(Section):
         "lib64/camera",
     ]
     patterns = [
-        "lib(64)?/com.qti.feature2\..*\.so",
-        "lib(64)?/libCamera_.*\.so",
-        "lib(64)?/libactuator_.*\.so",
-        "lib(64)?/libarcsoft_.*\.so",
-        "lib(64)?/libcamx.*\.so",
-        "lib(64)?/libchromatix_.*\.so",
-        "lib(64)?/libmmcamera_.*\.so",
-        "lib(64)?/libmmcamera2_.*\.so",
-        "lib(64)?/libmtkcam_.*\.so",
-        "lib(64)?/libois_.*\.so",
+        r"lib(64)?/com.qti.feature2\..*\.so",
+        r"lib(64)?/libCamera_.*\.so",
+        r"lib(64)?/libactuator_.*\.so",
+        r"lib(64)?/libarcsoft_.*\.so",
+        r"lib(64)?/libcamx.*\.so",
+        r"lib(64)?/libchromatix_.*\.so",
+        r"lib(64)?/libmmcamera_.*\.so",
+        r"lib(64)?/libmmcamera2_.*\.so",
+        r"lib(64)?/libmtkcam_.*\.so",
+        r"lib(64)?/libois_.*\.so",
     ]
     properties_prefixes = {
         "camera.": False,
@@ -91,11 +91,11 @@ class CameraConfigsSection(Section):
 class CameraFirmwareSection(Section):
     name = "Camera firmware"
     patterns = [
-        "(.*/)?firmware/CAMERA_ICP.*",
-        "bin/lib3a.*",
-        "bin/libccu_.*",
-        "firmware/lib3a.*",
-        "firmware/libccu_.*",
+        r"(.*/)?firmware/CAMERA_ICP.*",
+        r"bin/lib3a.*",
+        r"bin/libccu_.*",
+        r"firmware/lib3a.*",
+        r"firmware/libccu_.*",
     ]
 
 
@@ -111,7 +111,7 @@ class CameraMotorSection(Section):
         "etc/step_motor",
     ]
     patterns = [
-        "lib(64)?/libmivendor_module_.*\.so",
+        r"lib(64)?/libmivendor_module_.*\.so",
     ]
 
 
