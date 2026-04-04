@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+from pathlib import Path
 from sebaubuntu_libs.libandroid.partitions.partition import AndroidPartition
 from sebaubuntu_libs.libandroid.partitions.partition_model import PartitionGroup
 from typing import List, Optional
@@ -22,7 +23,7 @@ class ProprietaryFilesList:
         misc_section = Section()
 
         for partition in self.partitions:
-            files = []
+            files: List[Path] = []
 
             for file in partition.files:
                 file_relative = file.relative_to(partition.path)

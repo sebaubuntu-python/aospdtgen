@@ -14,7 +14,7 @@ from sebaubuntu_libs.libpath import is_relative_to
 from sebaubuntu_libs.libreorder import strcoll_files_key
 from shutil import rmtree
 from stat import S_IRWXU, S_IRGRP, S_IROTH
-from typing import Optional
+from typing import Any, Optional
 
 from aospdtgen.proprietary_files.proprietary_files_list import ProprietaryFilesList
 from aospdtgen.templates import render_template
@@ -169,7 +169,12 @@ class DeviceTree:
         """
         self.boot_configuration.cleanup()
 
-    def _render_template(self, *args, comment_prefix: str = "#", **kwargs):
+    def _render_template(
+        self,
+        *args: Any,
+        comment_prefix: str = "#",
+        **kwargs: Any,
+    ):
         return render_template(
             *args,
             boot_configuration=self.boot_configuration,

@@ -6,7 +6,7 @@
 
 from jinja2 import Environment, FileSystemLoader
 from pathlib import Path
-from typing import Optional
+from typing import Any, Optional
 
 from aospdtgen import module_path
 
@@ -19,7 +19,11 @@ jinja_env = Environment(
 
 
 def render_template(
-    path: Optional[Path], template_file: str, out_file: str = "", to_file=True, **kwargs
+    path: Optional[Path],
+    template_file: str,
+    out_file: str = "",
+    to_file: bool = True,
+    **kwargs: Any,
 ):
     template = jinja_env.get_template(f"{template_file}.jinja2")
     rendered_template = template.render(**kwargs)

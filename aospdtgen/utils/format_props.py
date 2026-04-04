@@ -4,8 +4,8 @@
 #
 
 from pathlib import Path
-from typing import Dict
 from sebaubuntu_libs.libandroid.props import BuildProp
+from typing import Dict
 
 from aospdtgen.proprietary_files.section import sections
 from aospdtgen.utils.ignored_props import IGNORED_PROPS
